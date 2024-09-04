@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增活動</title>
+    <style>
+        .event {
+            background-color: #e6f3ff;
+            width: 80%;
+            margin: auto;
+            padding: 10px;
+        }
+        .session {
+            background-color: #cce7ff;
+            margin: 30px;
+            padding: 10px;
+        }
+        .ticketType {
+            background-color: #b3dbff;
+            margin: 30px;
+            padding: 10px;
+        }
+        .eventInput, .sessionInput, .ticketTypeInput{
+            margin: 5px;
+        }
+        .mustMark {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <form id="form" action="../event/CreateEvent" method="POST">
+        <input type="hidden" id="structure" name="structure">
+        <div class="event" id="event">
+            <h1>新增活動</h1>
+            <div class="eventInput">
+                <label for="eventName"><span class="mustMark">*</span>活動名稱：</label>
+                <input type="text" id="eventName" name="eventName" autofocus>
+            </div>
+            <div class="eventInput">
+                <label>活動主圖：</label>
+                <input disabled type="file" id="eventPic" name="eventPic" accept=".jpg, .jpeg, .png">
+            </div>
+            <div class="eventInput">
+                <label><span class="mustMark">*</span>活動類別：</label>
+                <select id="eventType" name="eventType">
+                    <option value="" selected>（請選擇）</option>
+                    <option value="exhibition">展覽</option>
+                    <option value="lecture">講座</option>
+                    <option value="forum">論壇</option>
+                    <option value="experience">體驗</option>
+                    <option value="other">其他</option>
+                    <!-- TODO 改為從資料庫取出活動類別 -->
+                </select>
+            </div>
+            <div class="eventInput">
+                <label for="eventDesc">活動介紹：</label>
+                <textarea id="eventDesc" name="eventDesc" cols="40" rows="5"></textarea>
+            </div>
+            <button type="button" id="addSessionButton">新增場次</button>
+
+            <div class="sessionContainer"></div>
+            <button type="submit">送出</button>
+            <!-- <button type="button" id="test">顯示目前的 countAry</button> -->
+        </div>
+        </form>
+    </main>
+    <script src="../jslib/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            class SessionInfo {
+                htmlIdNo;  // 在此網頁上的元素 id 編號
+                positionNo;  // 送出表單時，是活動內的第幾個場次
+                ticketTypesInfo = new Array;  // 存放此場次的票種資訊
+                constructor(htmlIdNo) {
+                    this.htmlIdNo = htmlIdNo;
+                }
+            }
+            class TicketTypeInfo {
+                htmlIdNo;  // 在此網頁上的元素 id 編號
+                sessionNo;  // 屬於的場次，在此網頁上的元素 id 編號
+                positionNo;  // 送出表單時，是活動內的第幾個場次
+                constructor(htmlIdNo, sessionNo) {
+                    this.htmlIdNo = htmlIdNo;
+                    this.sessionNo = sessionNo;
+                }
+            }
+            let countAry = new Array();  // 此 Array 用來存放場次資訊、其內又包含票種資訊
+
+
+            $("#addSessionButton").click(addSession);  // 繫結「新增場次」的 EventListener
+            
+            // 初始，觸發一次「新增場次」
+            $("#addSessionButton").trigger("click");
+
+
+            // 新增場次
+            function addSession() {
+                let newSessionCount = countAry.length + 1;  // 取得目前將要新增的場次，該要的元素 id 編號
+                let sessionInfo = new SessionInfo(newSessionCount);  // 產生目前將要新增的場次之 SessionInfo 物件
+                countAry.push(sessionInfo);  // 將 SessionInfo 物件存入 countAry
+
+                let newSession = `<div class="session" id="session${newSessionCount}">
+                        <h2>新增場次</h2>
+                        <div class="sessionInput">
+                            <label for="session${newSessionCount}Name"><span class="mustMark">*</span>場次名稱：</label>
+                            <input type="text" id="session${newSessionCount}Name" name="session${newSessionCount}Name">
+                        </div>
+                        <div class="sessionInput">
+                            <label for="session${newSessionCount}Desc">場次說明：</label>
+                            <textarea id="session${newSessionCount}Desc" name="session${newSessionCount}Desc" cols="40" rows="5"></textarea>
+                        </div>
+                        <div class="sessionInput">
+                            <label for="session${newSessionCount}Place">場地名稱：</label>
+                            <input type="text" id="session${newSessionCount}Place" name="session${newSessionCount}Place">
+                        </div>
+                        <div class="sessionInput">
+                            <label for="session${newSessionCount}Address"><span class="mustMark">*</span>場地地址：</label>
+                            <input type="text" id="session${newSessionCount}Address" name="session${newSessionCount}Address">
+                            <!-- TODO 縣市與鄉鎮市區下拉式選單 -->
+                        </div>
+                        <div class="sessionInput">
+                            <label><span class="mustMark">*</span>開放購買總數量：</label>
+                            <input type="number" id="session${newSessionCount}totalQuantity" name="session${newSessionCount}totalQuantity">
+                        </div>
+                        <div class="sessionInput">
+                            <label><span class="mustMark">*</span>場次開始時間：</label>
+                            <input type="datetime-local" id="session${newSessionCount}StartDatetime" name="session${newSessionCount}StartDatetime" min="2024-01-01T00:00">
+                        </div>
+                        <div class="sessionInput">
+                            <label><span class="mustMark">*</span>場次開始入場時間：</label>
+                            <input type="datetime-local" id="session${newSessionCount}StartEntryDatetime" name="session${newSessionCount}StartEntryDatetime" min="2024-01-01T00:00">
+                        </div>
+                        <div class="sessionInput">
+                            <label><span class="mustMark">*</span>場次結束入場時間：</label>
+                            <input type="datetime-local" id="session${newSessionCount}EndEntryDatetime" name="session${newSessionCount}EndEntryDatetime" min="2024-01-01T00:00">
+                        </div>
+                        <button type="button" class="addTicketTypeButton" id="addTicketType${newSessionCount}Button">新增票種</button>
+                        <button type="button" id="removeSession${newSessionCount}">刪除此場次</button>
+                        <div class="ticketTypeContainer"></div>
+                    </div>`;
+
+                this.nextElementSibling.insertAdjacentHTML("beforeend", newSession);  // 插入於 SessionContainer 末尾
+                // $(this).next().append(newSession);  // jQuery append() 寫法
+                $(`#addTicketType${newSessionCount}Button`).click(addTicketType);  // 繫結「新增票種」的 EventListener
+                $(`#removeSession${newSessionCount}`).click(removeThisSession);  // 繫結「刪除場次」的 EventListener
+                $(`#addTicketType${newSessionCount}Button`).trigger("click");  // 觸發一次「新增票種」
+            }
+
+            // 新增票種
+            function addTicketType() {
+                let thisSession = parseInt(this.parentElement.id.substring(7));  // 取得目前所屬場次的元素 id 編號
+                let thisSessionInfo = countAry.find(item => item.htmlIdNo == thisSession);  // 取得目前所屬場次在 countAry 的 SessionInfo 物件
+                let newTicketTypeCount = thisSessionInfo.ticketTypesInfo.length + 1;  // 取得目前將要新增的票種，該要的元素 id 編號
+                let ticketTypeInfo = new TicketTypeInfo(newTicketTypeCount, thisSession);  // 產生目前將要新增的票種之 TicketTypeInfo 物件
+                thisSessionInfo.ticketTypesInfo.push(ticketTypeInfo);  // 將 TicketTypeInfo 物件存入 SessionInfo.ticketTypesInfo
+                
+                let newTicketType = `<div class="ticketType" id="ticketType${thisSession}_${newTicketTypeCount}">
+                        <h3>新增票種</h3>
+                        <div class="ticketTypeInput">
+                            <label for="ticketType${thisSession}_${newTicketTypeCount}Name"><span class="mustMark">*</span>票種名稱：</label>
+                            <input type="text" id="ticketType${thisSession}_${newTicketTypeCount}Name" name="ticketType${thisSession}_${newTicketTypeCount}Name">
+                        </div>
+                        <div class="ticketTypeInput">
+                            <label for="ticketType${thisSession}_${newTicketTypeCount}Desc">票種說明：</label>
+                            <textarea id="ticketType${thisSession}_${newTicketTypeCount}Desc" name="ticketType${thisSession}_${newTicketTypeCount}Desc" cols="40" rows="5"></textarea>
+                        </div>
+                        <div class="ticketTypeInput">
+                            <label for="ticketType${thisSession}_${newTicketTypeCount}Price"><span class="mustMark">*</span>票種價格：</label>
+                            <input type="number" id="ticketType${thisSession}_${newTicketTypeCount}Price" name="ticketType${thisSession}_${newTicketTypeCount}Price">
+                        </div>
+                        <div class="ticketTypeInput">
+                            <label for="ticketType${thisSession}_${newTicketTypeCount}Quantity">票種數量限制：</label>
+                            <input type="checkbox" id="ticketType${thisSession}_${newTicketTypeCount}QuantityControl">
+                            <input type="number" id="ticketType${thisSession}_${newTicketTypeCount}Quantity" name="ticketType${thisSession}_${newTicketTypeCount}Quantity" disabled>
+                        </div>
+                        <div class="ticketTypeInput">
+                            <label for="ticketType${thisSession}_${newTicketTypeCount}StartSale"><span class="mustMark">*</span>開始售票時間：</label>
+                            <input type="datetime-local" min="2024-01-01T00:00" id="ticketType${thisSession}_${newTicketTypeCount}StartSale" name="ticketType${thisSession}_${newTicketTypeCount}StartSale">
+                        </div>
+                        <div class="ticketTypeInput">
+                            <label for="ticketType${thisSession}_${newTicketTypeCount}EndSale"><span class="mustMark">*</span>結束售票時間：</label>
+                            <input type="datetime-local" min="2024-01-01T00:00" id="ticketType${thisSession}_${newTicketTypeCount}EndSale" name="ticketType${thisSession}_${newTicketTypeCount}EndSale">
+                        </div>
+                        <button type="button" id="removeTicketType${thisSession}_${newTicketTypeCount}">刪除此票種</button>
+                    </div>`;
+                
+                this.parentElement.lastElementChild.insertAdjacentHTML("beforeend", newTicketType);  // 插入於 ticketTypeContainer 末尾
+                $(`#removeTicketType${thisSession}_${newTicketTypeCount}`).click(removeThisTicketType);  // 繫結「刪除票種」的 EventListener
+                $(`#ticketType${thisSession}_${newTicketTypeCount}QuantityControl`).change(ticketTypeQuantityControl)  // 繫結 ticketTypeQuantityControl 的 EventListener
+            }
+
+
+            // 「刪除場次」的 EventListener
+            function removeThisSession() {
+                if (this.parentElement.parentElement.children.length === 1) {
+                    alert("為活動中唯一的場次，無法刪除。");
+                } else {
+                    let sessionId = this.parentElement.id;
+                    let sessionIdNo = sessionId.substring(7);  // 將要刪除的場次，其場次的 idNo
+
+                    let thisSessionInfo = countAry.find(item => item.htmlIdNo == sessionIdNo);  // 將要刪除的場次，其場次在 countAry 裡的 sessionInfo
+                    let index = countAry.indexOf(thisSessionInfo);  // 將要刪除的場次，在 countAry 的索引值
+                    countAry.splice(index, 1);  // 把將要刪除的場次的 sessionInfo 移除
+                    
+                    this.parentElement.remove();
+                }
+            }
+
+            // 「刪除票種」的 EventListener
+            function removeThisTicketType() {
+                if (this.parentElement.parentElement.children.length === 1) {
+                    alert("為場次中唯一的票種，無法刪除。");
+                } else {
+                    let ticketTypeId = this.parentElement.id;
+                    let sessionIdNo = ticketTypeId.substring(10, ticketTypeId.indexOf("_"));  // 將要刪除的票種，其場次的 idNo
+                    let ticketTypeIdno = ticketTypeId.substring(ticketTypeId.indexOf("_") + 1);  // 將要刪除的票種，其票種的 idNo
+
+                    let thisSessionInfo = countAry.find(item => item.htmlIdNo == sessionIdNo);  // 將要刪除的票種，其場次在 countAry 裡的 sessionInfo
+                    let thisTicketTypeInfo = thisSessionInfo.ticketTypesInfo.find(item => item.htmlIdNo == ticketTypeIdno);  // 將要刪除的票種，其票種在 sessionInfo.ticketTypesInfo 裡的 ticketTypeInfo
+                    let index = thisSessionInfo.ticketTypesInfo.indexOf(thisTicketTypeInfo);  // 將要刪除的票種，其票種在 sessionInfo.ticketTypesInfo 裡的 ticketTypeInfo 的索引值
+                    thisSessionInfo.ticketTypesInfo.splice(index, 1);  // 把將要刪除的票種的 ticketTypeInfo 移除
+                    
+                    this.parentElement.remove();
+                }
+            }
+
+            function ticketTypeQuantityControl() {
+                $(this).next().prop("disabled", !$(this).prop("checked"))
+            }
+
+
+            // 送出表單前，設定 countAry 的 position
+            // $("#test").click(function() {
+            //     for (sessionInfo of countAry) {
+            //         sessionInfo.positionNo = getElementPosition($(`#session${sessionInfo.htmlIdNo}`)[0]);
+            //         for (ticketTypeInfo of sessionInfo.ticketTypesInfo) {
+            //             ticketTypeInfo.positionNo = getElementPosition($(`#ticketType${ticketTypeInfo.sessionNo}_${ticketTypeInfo.htmlIdNo}`)[0]);
+            //         }
+            //     }
+            //     console.log(countAry);
+            // });
+
+            // 工具：取得參數元素是父元素下的第幾個元素；用於取得 position
+            function getElementPosition(element) {
+                let position = 1;
+                let sibling = element.previousElementSibling;
+                
+                while (sibling) {
+                    position++;
+                    sibling = sibling.previousElementSibling;
+                }
+    
+                return position;
+            } 
+
+            // 工具：判斷字串是否為空
+            function isEmpty(str) {
+                return (!str || str.trim().length === 0);
+            }
+
+            // 送出表單觸發事件
+            // 記得要 return true（可以送出）或 false（不能送出）
+            function onsubmit(event) {
+                let ary = $(".mustMark").parent().next().toArray();
+                for(mustInput of ary) {
+                    if (isEmpty(mustInput.value)) {
+                        alert("有必填欄位未填");
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+
+                // 設定 countAry 的 position
+                for (sessionInfo of countAry) {
+                    sessionInfo.positionNo = getElementPosition($(`#session${sessionInfo.htmlIdNo}`)[0]);
+                    for (ticketTypeInfo of sessionInfo.ticketTypesInfo) {
+                        ticketTypeInfo.positionNo = getElementPosition($(`#ticketType${ticketTypeInfo.sessionNo}_${ticketTypeInfo.htmlIdNo}`)[0]);
+                    }
+                }
+                // JSON.stringify、存入表單
+                $("#structure").val(JSON.stringify(countAry));
+
+                // console.log(countAry);
+                // console.log(JSON.stringify(countAry));
+                console.log($("#structure").val());
+                // event.preventDefault();
+                // return false;
+            }
+            $("#form").on("submit", onsubmit);
+        });
+    </script>
+</body>
+</html>

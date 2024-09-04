@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊 - TickitEasy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- 添加 Font Awesome 圖標庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-10 p-4">
+        <h1 class="text-3xl font-bold mb-6">註冊新帳號</h1>
+        <!-- 添加一鍵填入按鈕 -->
+        <button id="autofillBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4">
+            一鍵填入 (DEMO用)
+        </button>
+        <form id="registerForm" action="register" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                    電子郵件
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" required>
+                <p id="emailError" class="text-red-500 text-xs italic hidden">請輸入有效的電子郵件地址</p>
+            </div>
+           <div class="mb-4 relative">
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+        密碼
+    </label>
+    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline pr-10" id="password" name="password" type="password" required>
+    <span class="absolute inset-y-0 right-0 flex items-center pr-3 pt-6 cursor-pointer" id="togglePassword">
+        <i class="fas fa-eye text-gray-500"></i>
+    </span>
+    <p id="passwordError" class="text-red-500 text-xs italic hidden">密碼必須至少包含8個字符，包括大小寫字母、數字和特殊字符</p>
+    <!-- 新增密碼規則說明 -->
+    <ul class="text-xs text-gray-600 mt-1 list-disc list-inside">
+        <li>至少8個字符</li>
+        <li>至少包含一個大寫字母</li>
+        <li>至少包含一個小寫字母</li>
+        <li>至少包含一個數字</li>
+        <li>至少包含一個特殊字符 (@$!%*?&)</li>
+    </ul>
+</div>
+ 
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                    姓名
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" name="name" type="text" required>
+                <p id="nameError" class="text-red-500 text-xs italic hidden">姓名不能為空</p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="nickname">
+                    暱稱
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nickname" name="nickname" type="text" required>
+                <p id="nicknameError" class="text-red-500 text-xs italic hidden">暱稱不能為空</p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="birthDate">
+                    生日
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="birthDate" name="birthDate" type="date" required>
+                <p id="birthDateError" class="text-red-500 text-xs italic hidden">請選擇有效的生日日期</p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">
+                    電話號碼
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" name="phone" type="tel" required>
+                <p id="phoneError" class="text-red-500 text-xs italic hidden">請輸入有效的電話號碼（例如：0912345678）</p>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    註冊
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // 添加一鍵填入功能
+        document.getElementById('autofillBtn').addEventListener('click', function() {
+            document.getElementById('email').value = 'demo1@example.com';
+            document.getElementById('password').value = 'Demo123';//未符合密碼規則demo
+            document.getElementById('name').value = '李四';
+            document.getElementById('nickname').value = '小李';
+            document.getElementById('birthDate').value = '2003-08-07';
+            document.getElementById('phone').value = '091234569';//未符合電話號碼規則demo
+        });
+
+        // 密碼可視切換功能
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const password = document.getElementById('password');
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+		// 驗證表單
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // 驗證電子郵件
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                emailError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                emailError.classList.add('hidden');
+            }
+
+            // 驗證密碼
+            const password = document.getElementById('password');
+            const passwordError = document.getElementById('passwordError');
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password.value)) {
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            // 驗證姓名
+            const name = document.getElementById('name');
+            const nameError = document.getElementById('nameError');
+            if (name.value.trim() === '') {
+                nameError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                nameError.classList.add('hidden');
+            }
+
+            // 驗證暱稱
+            const nickname = document.getElementById('nickname');
+            const nicknameError = document.getElementById('nicknameError');
+            if (nickname.value.trim() === '') {
+                nicknameError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                nicknameError.classList.add('hidden');
+            }
+
+            // 驗證生日
+            const birthDate = document.getElementById('birthDate');
+            const birthDateError = document.getElementById('birthDateError');
+            const today = new Date();
+            const selectedDate = new Date(birthDate.value);
+            if (selectedDate >= today || selectedDate.getFullYear() < 1900) {
+                birthDateError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                birthDateError.classList.add('hidden');
+            }
+
+            // 驗證電話號碼
+            const phone = document.getElementById('phone');
+            const phoneError = document.getElementById('phoneError');
+            const phoneRegex = /^09\d{8}$/;
+            if (!phoneRegex.test(phone.value)) {
+                phoneError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                phoneError.classList.add('hidden');
+            }
+
+            if (!isValid) {
+                e.preventDefault(); // 如果驗證失敗，阻止表單提交
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主題列表後台</title>
+    <link rel="stylesheet" href="css/post.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .button {
+            padding: 4px 8px;
+            margin: 2px;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .delete-button {
+            background-color: red;
+        }
+        .edit-button {
+            background-color: blue;
+        }
+        .search-container, .add-topic-container {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>主題列表</h1>
+    
+    <div class="search-container">
+        <label for="search-id">搜尋 ID：</label>
+        <input type="text" id="search-id" placeholder="輸入 ID 搜尋">
+        <button class="button search-button">搜尋</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>主題名稱</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 範例資料，這裡應該用伺服器端語言生成 -->
+            <tr>
+                <td>1</td>
+                <td>主題 A</td>
+                <td>
+                    <button class="button edit-button">修改</button>
+                    <button class="button delete-button">刪除</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>主題 B</td>
+                <td>
+                    <button class="button edit-button">修改</button>
+                    <button class="button delete-button">刪除</button>
+                </td>
+            </tr>
+            <!-- 更多資料 -->
+        </tbody>
+    </table>
+
+    <div class="add-topic-container">
+        <label for="new-topic">新增主題：</label>
+        <input type="text" id="new-topic" placeholder="輸入新主題名稱">
+        <button class="button add-button">新增</button>
+    </div>
+
+    <script>
+        // 簡單的按鈕事件處理
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', () => {
+                if (confirm('確定要刪除這筆資料嗎？')) {
+                    // 實際刪除操作
+                }
+            });
+        });
+
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // 實際編輯操作
+            });
+        });
+
+        document.querySelector('.search-button').addEventListener('click', () => {
+            const id = document.getElementById('search-id').value;
+            // 執行搜尋操作
+        });
+
+        document.querySelector('.add-button').addEventListener('click', () => {
+            const newTopic = document.getElementById('new-topic').value;
+            // 執行新增主題操作
+        });
+    </script>
+</body>
+</html>

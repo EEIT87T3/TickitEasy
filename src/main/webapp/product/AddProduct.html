@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>新增商品</title>
+    <script>
+        function previewImage() {
+            var file = document.getElementById('productPic').files[0];
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                var img = document.getElementById('imagePreview');
+                img.src = reader.result;
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                var img = document.getElementById('imagePreview');
+                img.src = "";
+            }
+        }
+        window.onload = function() {
+            document.getElementById('autofillBtn').addEventListener('click', function() {
+                document.getElementById('category').value = '動漫';
+                document.getElementById('name').value = '你的名字';
+                document.getElementById('description').value = '你的名字電影周邊商品';
+                document.getElementById('price').value = '500';
+                document.getElementById('stock').value = '150';
+                document.getElementById('status').value = '上架';
+                document.getElementById('reviews').value = '0';
+                document.getElementById('score').value = '0';
+            });
+        };
+    </script>
+</head>
+<body style="background-color:#fdf5e6">
+<div align="center">
+    <h2>新增商品</h2>
+    <!-- 使用 enctype="multipart/form-data" 來允許文件上傳 -->
+    <form method="post" action="../AddProduct" enctype="multipart/form-data">
+        <table>
+            <tr><td>分類：</td><td><input id="category" type="text" name="category" required></td></tr>
+            <tr><td>商品名稱：</td><td><input id="name" type="text" name="productName" required></td></tr>
+            <tr><td>商品圖片：</td>
+                <td>
+                    <!-- 使用 file 類型的輸入來上傳圖片 -->
+                    <input type="file" value="上傳商品圖片" name="productPic" id="productPic" accept="image/*" required onchange="previewImage()">
+                    <br />
+                    <img id="imagePreview" src="" alt="商品圖片預覽" width="200" />
+                </td>
+            </tr>
+            <tr><td>商品描述：</td><td><input id="description" type="text" name="productDesc" required></td></tr>
+            <tr><td>價格：</td><td><input id="price" type="number" name="price" required></td></tr>
+            <tr><td>庫存：</td><td><input id="stock" type="number" name="stock" required></td></tr>
+            <tr><td>狀態：</td><td><input id="status" type="text" name="status" required></td></tr>
+            <tr><td>評論總數：</td><td><input id="reviews" type="number" name="prodTotalReviews" required></td></tr>
+            <tr><td>總評分：</td><td><input  id="score" type="number" name="prodTotalScore" required></td></tr>
+        </table>
+        <!-- 提交按鈕 -->
+        <input type="submit" value="新增商品">
+        <button id="autofillBtn" >一鍵填入(DEMO用)
+		</button> 
+    </form>
+</div>
+</body>
+</html>

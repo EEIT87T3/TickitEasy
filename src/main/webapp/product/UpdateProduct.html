@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>更新商品資料</title>
+    <style>
+        /* 樣式用於展示預覽圖片 */
+        #preview {
+            margin-top: 10px;
+            max-width: 200px;
+        }
+    </style>
+    <script>
+        function previewImage() {
+            var fileInput = document.getElementById('productPicFile');
+            var preview = document.getElementById('preview');
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            
+            // 當文件讀取完畢後
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // 顯示圖片預覽
+            };
+            
+            // 讀取文件
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+                preview.style.display = 'none'; // 隱藏圖片預覽
+            }
+        }
+    </script>
+</head>
+<body style="background-color:#fdf5e6">
+    <div align="center">
+        <h2>更新商品資料</h2>
+        <form method="post" action="../UpdateProduct" enctype="multipart/form-data">
+            商品編號: <input type="text" name="productID" required /><br><br>
+            <input type="submit" value="顯示商品資料" />
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  padding-top: 56px; /* 預留空間給固定的 navbar */
+  background-color: #f4f4f4;
+}
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #e65c00; /* 更深的橘色 */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 56px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+.navbar-brand {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-right: 20px; /* 確保標誌與導航項目之間有間隔 */
+}
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
+}
+.nav-item {
+  margin: 0;
+}
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+}
+.nav-link:hover {
+  background-color: #cc5200; /* 更深橘色 */
+}
+.active .nav-link {
+  background-color: #b34700; /* 更深橘色 */
+}
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+.auth-button {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  background-color: #cc5200; /* 登入登出按鈕背景色 */
+}
+.auth-button:hover {
+  background-color: #b34700; /* 深橘色 */
+}
+main {
+  padding: 20px;
+}
