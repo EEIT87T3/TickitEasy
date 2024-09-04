@@ -10,8 +10,8 @@ public class FundOrderBean {
 	private String status;
 	private String comment;
 	private String commentDate;
-	
-	
+
+
 	public int getOrderID() {
 		return orderID;
 	}
@@ -66,6 +66,6 @@ public class FundOrderBean {
 	public void setCommentDate(String commentDate) {
 		this.commentDate = commentDate;
 	}
-	
+
 
 }

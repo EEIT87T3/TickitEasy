@@ -5,7 +5,7 @@ public class AdminBean {
 	private String email;
 	private String password;
 	private String name;
-	
+
 	public AdminBean(int adminID, String email, String password, String name) {
 		super();
 		this.adminID = adminID;
@@ -13,7 +13,7 @@ public class AdminBean {
 		this.password = password;
 		this.name = name;
 	}
-	
+
 	public AdminBean(String email, String password, String name) {
 		super();
 		this.email = email;
@@ -45,5 +45,5 @@ public class AdminBean {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 }

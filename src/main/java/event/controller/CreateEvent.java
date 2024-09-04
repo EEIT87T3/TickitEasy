@@ -1,12 +1,5 @@
 package event.controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import util.JsonUtil;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -17,19 +10,25 @@ import event.object.dto.createevent.TicketTypeDTO;
 import event.object.dto.createevent.TicketTypeInfoDTO;
 import event.service.CreateEventService;
 import event.util.TimestampUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import util.JsonUtil;
 
 
 @WebServlet ("/event/CreateEvent")
 public class CreateEvent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	private TimestampUtil timestampUtil;
 	private CreateEventService createEventService;
-       
+
     public CreateEvent() {
         super();
     }
-    
+
     @Override
     public void init() throws ServletException {
     	super.init();
@@ -37,15 +36,17 @@ public class CreateEvent extends HttpServlet {
     	createEventService = new CreateEventService();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		
+
 		// 1. 從 request getParameter("structure")，判斷出結構
 		// 2. request getParameter，包裝為三種 DTO
 		// 3. validate 使用者輸入的資訊
@@ -54,23 +55,23 @@ public class CreateEvent extends HttpServlet {
 			// 4.2 呼叫 DAO，傳入 EventsPO, List<SessionsPO>, List<TicketTypesPO>
 			// 4.3 回傳 boolean 或是自定義 Exception
 		// 5. setAttribute(成功／失敗)，forward 給下一個網頁顯示結果
-		
-		
-		
+
+
+
 		// 1. 從 request getParameter("structure")，判斷出結構
-		
+
 		String structureString = request.getParameter("structure");
 		List<SessionInfoDTO> sessionInfoList = JsonUtil.jsonStringToListBean(structureString, SessionInfoDTO.class);
-		
-		
+
+
 		// 2. request getParameter，包裝為三種 DTO
-		
+
 		EventDTO eventDTO = new EventDTO();
 		eventDTO.setEventName(request.getParameter("eventName"));
 //		eventDTO.setEventPic(request.getParameter("eventPic"));
 		eventDTO.setEventType(request.getParameter("eventType"));
 		eventDTO.setEventDesc(request.getParameter("eventDesc"));
-		
+
 		for (SessionInfoDTO sessionInfo : sessionInfoList) {
 			SessionDTO sessionDTO = new SessionDTO();
 			sessionDTO.setSessionNo((short) sessionInfo.getPositionNo());
@@ -107,26 +108,26 @@ public class CreateEvent extends HttpServlet {
 				}
 				ticketTypeDTO.setStartSaleTime(timestampUtil.inputStringToTimestamp(request.getParameter(ticketTypeInfo.getIdString() + "StartSale")));
 				ticketTypeDTO.setEndSaleTime(timestampUtil.inputStringToTimestamp(request.getParameter(ticketTypeInfo.getIdString() + "EndSale")));
-			
+
 				sessionDTO.getTicketTypeList().add(ticketTypeDTO);
 			}
-			
+
 			eventDTO.getSessionList().add(sessionDTO);
 		}
-		
-		
+
+
 		// 3. validate 使用者輸入的資訊
 		String validate = createEventService.validate(eventDTO);
 		if (!(validate == "")) {
 			request.setAttribute("result", validate);
 			request.getRequestDispatcher("/event/CreateEventResult.jsp").forward(request, response);
 		}
-		
-		
+
+
 		// 4. 呼叫 service，傳入 EventDTO
 		boolean createEventResult = createEventService.createEvent(eventDTO);
-		
-		
+
+
 		// 5. forward 給結果顯示網頁
 		if (createEventResult) {
 			request.setAttribute("result", "新增成功！");

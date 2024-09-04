@@ -3,15 +3,15 @@ package order.bean;
 import java.sql.Date;
 
 public class ProdOrderDetailsBean {
-	
+
 //封裝prodOrderDetails的數據
 	int prodOrderDetailID;
     int prodOrderID;
-    int productID; 
+    int productID;
     int price;
-    int quantity; 
-    String content; 
-    Date reviewTime; 
+    int quantity;
+    String content;
+    Date reviewTime;
     int score;
     //配合購物車
     public ProdOrderDetailsBean(int productID, int price, int quantity) {
@@ -107,6 +107,6 @@ public class ProdOrderDetailsBean {
 				+ ", productID=" + productID + ", price=" + price + ", quantity=" + quantity + ", content=" + content
 				+ ", reviewTime=" + reviewTime + ", score=" + score + "]" + "\n";
 	}
-    
-    
+
+
 }

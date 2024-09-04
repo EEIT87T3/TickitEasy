@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class TicketTypesPO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer ticketTypeID;  // IDENTITY(1,1)
 	private Integer sessionID;  // FK, NOT NULL
 	private Short ticketTypeNo;  // NOT NULL
@@ -16,7 +16,7 @@ public class TicketTypesPO implements Serializable {
 	private Integer quantityPurchased;
 	private Timestamp startSaleTime;  // NOT NULL
 	private Timestamp endSaleTime;  // NOT NULL
-	
+
 	public Integer getTicketTypeID() {
 		return ticketTypeID;
 	}
@@ -77,7 +77,7 @@ public class TicketTypesPO implements Serializable {
 	public void setEndSaleTime(Timestamp endSaleTime) {
 		this.endSaleTime = endSaleTime;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "TicketTypesPO [ticketTypeID=" + ticketTypeID + ", sessionID=" + sessionID + ", ticketTypeNo="

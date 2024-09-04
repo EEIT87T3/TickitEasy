@@ -14,8 +14,8 @@ public class TicketOrderDetailsBean {
 	    String content;
 	    Date reviewTime;
 	    int score;
-	    
-	    
+
+
 	    public TicketOrderDetailsBean(int ticketOrderDetailID, int ticketOrderID, int ticketTypeID,
 				String ticketCollectionMethod, int price, String ticketUUID, int ticketStatus, String content,
 				Date reviewTime, int score) {
@@ -31,7 +31,7 @@ public class TicketOrderDetailsBean {
 			this.reviewTime = reviewTime;
 			this.score = score;
 		}
-	    
+
 		public int getTicketOrderDetailID() {
 			return ticketOrderDetailID;
 		}
@@ -100,7 +100,7 @@ public class TicketOrderDetailsBean {
 					+ ticketCollectionMethod + ", price=" + price + ", ticketUUID=" + ticketUUID + ", ticketStatus="
 					+ ticketStatus + ", content=" + content + ", reviewTime=" + reviewTime + ", score=" + score + "]";
 		}
-		
-	  
-	    
+
+
+
 }

@@ -83,5 +83,5 @@ public class FundProjBean implements java.io.Serializable{
 		return serialVersionUID;
 	}
 
-	
+
 }

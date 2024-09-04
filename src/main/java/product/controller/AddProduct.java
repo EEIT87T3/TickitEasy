@@ -1,5 +1,10 @@
 package product.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,13 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import product.bean.Products;
 import product.dao.ProductDao;
-import util.ConnectionUtil;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.SQLException;
 @MultipartConfig
 @WebServlet("/AddProduct")
 public class AddProduct extends HttpServlet {
@@ -50,7 +48,7 @@ public class AddProduct extends HttpServlet {
             uploadDir.mkdirs(); // 如果目錄不存在，則創建目錄
         }
 
-        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); 
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         String filePath = uploadPath + File.separator + fileName;
         filePart.write(filePath);
 

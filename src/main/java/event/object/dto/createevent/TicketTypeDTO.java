@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class TicketTypeDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Short ticketTypeNo;  // NOT NULL
 	private String typeName;  // NOT NULL
 	private String typeDesc;
@@ -13,7 +13,7 @@ public class TicketTypeDTO implements Serializable {
 	private Integer quantityAvailable;
 	private Timestamp startSaleTime;  // NOT NULL
 	private Timestamp endSaleTime;  // NOT NULL
-	
+
 	public Short getTicketTypeNo() {
 		return ticketTypeNo;
 	}
@@ -56,7 +56,7 @@ public class TicketTypeDTO implements Serializable {
 	public void setEndSaleTime(Timestamp endSaleTime) {
 		this.endSaleTime = endSaleTime;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "TicketTypeDTO [ticketTypeNo=" + ticketTypeNo + ", typeName=" + typeName + ", typeDesc=" + typeDesc

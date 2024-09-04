@@ -1,5 +1,8 @@
 package product.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,12 +12,6 @@ import product.bean.Cart;
 import product.bean.CartItem;
 import product.bean.Products;
 import product.dao.ProductDao;
-import util.ConnectionUtil;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 
 @WebServlet("/CartServlet")
 public class CartServlet extends HttpServlet {
@@ -22,7 +19,8 @@ public class CartServlet extends HttpServlet {
 	    ProductDao productDao = new ProductDao();
 	    Products products = new Products();
 
-	    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    @Override
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	        String action = request.getParameter("action");
 	        if ("addItem".equals(action)) {
 	            addItem(request, response);

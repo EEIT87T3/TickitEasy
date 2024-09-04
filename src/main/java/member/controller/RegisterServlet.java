@@ -1,5 +1,8 @@
 package member.controller;
 
+import java.io.IOException;
+import java.time.LocalDate;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,23 +11,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import member.bean.MemberBean;
 import member.service.MemberService;
 
-import java.io.IOException;
-import java.time.LocalDate;
-
 
 @WebServlet("/member/register")
 public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private MemberService memberService;
 
-    public void init() {
+    @Override
+	public void init() {
         memberService = new MemberService();
     }
     //處理POST請求
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    @Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String name = request.getParameter("name");

@@ -1,6 +1,11 @@
 package member.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +64,7 @@ public class MemberDAO {
         }
         return -1;//如果一切正常，方法會返回新插入記錄的 ID。如果發生異常，則返回 -1。
     }
-	 
+
 
 	// 更新會員資料
 	public void updateMember(MemberBean member) {
@@ -155,11 +160,11 @@ public class MemberDAO {
                      "WHERE registerDate >= DATEADD(MONTH, -6, GETDATE()) " +
                      "GROUP BY DATEPART(MONTH, registerDate) " +
                      "ORDER BY DATEPART(MONTH, registerDate)";//查詢選出過去六個月內，會員在每個月份的註冊人數
-        
+
         try (Connection conn = ConnectionUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
-            
+
             while (rs.next()) {
                 trend.put(rs.getString("month"), rs.getInt("count"));//將每個月份的註冊人數存入Map
             }
@@ -168,7 +173,7 @@ public class MemberDAO {
         }
         return trend;//最後返回這個 Map<String, Integer>，包含過去六個月的會員註冊數趨勢。
     }
-	
+
 
 }
 

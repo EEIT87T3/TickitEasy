@@ -64,11 +64,11 @@ public class MemberService {
     // 取得會員統計資料
     public Map<String, Object> getMemberStatistics() {
         Map<String, Object> statistics = new HashMap<>();
-        
+
         // 取得註冊趨勢DAO
         statistics.put("registrationTrend", memberDAO.getRegistrationTrend());
-        
-        
+
+
         // 取得年齡分佈
         Map<String, Integer> ageDistribution = new HashMap<>();
         for (MemberBean member : memberDAO.getAllMembers()) {
@@ -79,16 +79,26 @@ public class MemberService {
             }
         }
         statistics.put("ageDistribution", ageDistribution);// 將年齡分佈存入統計資料
-        
+
         return statistics;// 返回統計資料
     }
     // 計算年齡分佈
     private String getAgeGroup(int age) {
-        if (age < 18) return "未滿18歲";
-        if (age < 25) return "18-24歲";
-        if (age < 35) return "25-34歲";
-        if (age < 45) return "35-44歲";
-        if (age < 55) return "45-54歲";
+        if (age < 18) {
+			return "未滿18歲";
+		}
+        if (age < 25) {
+			return "18-24歲";
+		}
+        if (age < 35) {
+			return "25-34歲";
+		}
+        if (age < 45) {
+			return "35-44歲";
+		}
+        if (age < 55) {
+			return "45-54歲";
+		}
         return "55歲以上";
     }
 

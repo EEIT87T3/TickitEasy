@@ -1,8 +1,8 @@
 package member.bean;
 
-import java.time.LocalDate;
 import java.sql.Date;
-	
+import java.time.LocalDate;
+
 
 
 public class MemberBean {
@@ -22,7 +22,7 @@ public class MemberBean {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public MemberBean(String email, String password, String name, String nickname, LocalDate birthDate, String phone,
 			LocalDate registerDate, String status, String profilePic) {
 		super();

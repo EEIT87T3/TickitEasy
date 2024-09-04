@@ -1,12 +1,6 @@
 package cwdfunding.controller;
 
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.beans.Statement;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,11 +18,16 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import cwdfunding.bean.FundOrderBean;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet ("/GetAllOrders")
 public class FundOrderController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 
     public FundOrderController() {
         super();
@@ -38,19 +37,20 @@ public class FundOrderController extends HttpServlet {
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			Context context = new InitialContext();
 			DataSource ds = (DataSource)context.lookup("java:/comp/env/jdbc/EEIT87-T3");
 			conn = ds.getConnection();
-			//設定資料庫資訊			
+			//設定資料庫資訊
 			boolean status = !conn.isClosed();
 			System.out.println("連線狀態:"+status);
 			//取得連線物件
 			String sql = "SELECT * FROM fundingOrder";
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			
+
 			ResultSet rs = stmt.executeQuery();
 			List<FundOrderBean> orders = new ArrayList<>();
 			FundOrderBean order = null;
@@ -72,7 +72,7 @@ public class FundOrderController extends HttpServlet {
 			request.setAttribute("orders", orders);
 			stmt.close();
 			request.getRequestDispatcher("/cwdfunding/GetAllFundOrders.jsp").forward(request, response);
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,6 +104,7 @@ public class FundOrderController extends HttpServlet {
 	}
 
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

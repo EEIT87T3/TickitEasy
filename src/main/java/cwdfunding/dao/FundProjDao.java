@@ -2,7 +2,6 @@ package cwdfunding.dao;
 
 import java.beans.Statement;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,18 +18,15 @@ import javax.sql.DataSource;
 
 import cwdfunding.bean.FundProjBean;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
 
 public class FundProjDao {
 
-	
+
 	FileInputStream fileInputStream = null;
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	
+
 	public List<FundProjBean> getAllFundProjs() {
 		List<FundProjBean> projs = new ArrayList<>();
 		try {
@@ -95,7 +91,7 @@ public class FundProjDao {
 		String threshold = proj.getThreshold();
 		String postponeDate = proj.getPostponeDate();
 		String category = proj.getCategory();
-		
+
 		System.out.println("title:"+title);
 		System.out.println("description:"+description);
 
@@ -150,7 +146,7 @@ public class FundProjDao {
 		String threshold = proj.getThreshold();
 		String postponeDate = proj.getPostponeDate();
 		String category = proj.getCategory();
-	    	    
+
 
 	    try {
 	        Context context = new InitialContext();
@@ -207,7 +203,7 @@ public class FundProjDao {
 			String sql = "DELETE FROM fundingProj WHERE projectID=?";
 			PreparedStatement delStmt = conn.prepareStatement(sql);
 			delStmt.setInt(1, projectID);
-			
+
 			delStmt.execute();
 			delStmt.close();
 
@@ -226,5 +222,5 @@ public class FundProjDao {
 		}
 
 	}
-	
+
 }

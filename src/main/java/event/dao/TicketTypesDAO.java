@@ -14,7 +14,7 @@ import event.util.SQLUtil;
 import util.ConnectionUtil;
 
 public class TicketTypesDAO {
-	
+
 	/*
 	 * method 名稱：readAll
 	 * 用途：查詢所有票種的實際執行 DAO
@@ -23,11 +23,11 @@ public class TicketTypesDAO {
 	 * Caller：webapp/event/ReadAllTicketTypes.jsp
 	*/
 	public List<ReadAllTicketTypesVO> readAll() {
-		List<ReadAllTicketTypesVO> ticketTypeslist = new ArrayList<ReadAllTicketTypesVO>();
+		List<ReadAllTicketTypesVO> ticketTypeslist = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		
+
 		String sqlSelectAll = """
 				SELECT t.ticketTypeID, e.eventName, s.sessionName, t.typeName, t.price, t.quantityAvailable, t.startSaleTime, t.endSaleTime
 				FROM ticketTypes AS t
@@ -38,7 +38,7 @@ public class TicketTypesDAO {
 			connection = ConnectionUtil.getConnection();
 			preparedStatement = connection.prepareStatement(sqlSelectAll);
 			resultSet = preparedStatement.executeQuery();
-			
+
 			while (resultSet.next()) {
 				ReadAllTicketTypesVO readAllTicketTypesVO = new ReadAllTicketTypesVO();
 				readAllTicketTypesVO.setTicketTypeID(resultSet.getInt("ticketTypeID"));
@@ -59,10 +59,10 @@ public class TicketTypesDAO {
 		} finally {
 			ConnectionUtil.closeResource(connection, preparedStatement, resultSet);
 		}
-		
+
 		return ticketTypeslist;
 	}
-	
+
 	/*
 	 * method 名稱：selectOneTicketTypeById
 	 * 用途：以 ID 查詢單一票種
@@ -75,7 +75,7 @@ public class TicketTypesDAO {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		
+
 		String sqlSelectOneById = """
 				SELECT t.ticketTypeID, e.eventName, s.sessionName, t.typeName, t.typeDesc, t.price, t.quantityAvailable, t.quantityPurchased, t.startSaleTime, t.endSaleTime
 				FROM ticketTypes AS t
@@ -88,7 +88,7 @@ public class TicketTypesDAO {
 			preparedStatement = connection.prepareStatement(sqlSelectOneById);
 			preparedStatement.setInt(1, ticketTypeId);
 			resultSet = preparedStatement.executeQuery();
-			
+
 			if (resultSet.next()) {
 				oneTicketTypeDTO.setTicketTypeID(resultSet.getInt("ticketTypeID"));
 				oneTicketTypeDTO.setEventName(resultSet.getString("eventName"));
@@ -110,7 +110,7 @@ public class TicketTypesDAO {
 		}
 		return oneTicketTypeDTO;
 	}
-	
+
 	/*
 	 * method 名稱：selectIfOnlyTicketTypeByDTO
 	 * 用途：以 ID 查詢該票種是否為該場次的唯一票種
@@ -123,7 +123,7 @@ public class TicketTypesDAO {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		
+
 		String sqlSelectOneById = """
 				SELECT COUNT(t.ticketTypeID) AS count
 				FROM ticketTypes AS t
@@ -137,7 +137,7 @@ public class TicketTypesDAO {
 			preparedStatement.setString(1, oneTicketTypeDTO.getEventName());
 			preparedStatement.setString(2, oneTicketTypeDTO.getSessionName());
 			resultSet = preparedStatement.executeQuery();
-			
+
 			if (resultSet.next()) {
 				if (resultSet.getInt("count") > 1) {
 					result = false;
@@ -152,7 +152,7 @@ public class TicketTypesDAO {
 		}
 		return result;
 	}
-	
+
 	/*
 	 * method 名稱：deleteTicketTypeById
 	 * 用途：以 ID 刪除單一票種的資料庫互動
@@ -164,7 +164,7 @@ public class TicketTypesDAO {
 		Boolean result = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		
+
 		String sqlSelectOneById = """
 				DELETE FROM ticketTypes
 				WHERE ticketTypeID = ?
@@ -174,7 +174,7 @@ public class TicketTypesDAO {
 			preparedStatement = connection.prepareStatement(sqlSelectOneById);
 			preparedStatement.setInt(1, ticketTypeID);
 			int executeUpdate = preparedStatement.executeUpdate();
-			
+
 			if (executeUpdate == 1) {
 				result = true;
 			} else {
@@ -187,7 +187,7 @@ public class TicketTypesDAO {
 		}
 		return result;
 	}
-	
+
 	/*
 	 * method 名稱：updateTicketTypeById
 	 * 用途：以 ID 修改票種得資料庫互動
@@ -201,7 +201,7 @@ public class TicketTypesDAO {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		SQLUtil sqlUtil = new SQLUtil();
-		
+
 		try {
 			connection =  ConnectionUtil.getConnection();
 			String sqlUpdateTicketType = """
@@ -219,7 +219,7 @@ public class TicketTypesDAO {
 			preparedStatement.setTimestamp(6, ticketTypesPO.getStartSaleTime());
 			preparedStatement.setTimestamp(7, ticketTypesPO.getEndSaleTime());
 			int executeUpdate = preparedStatement.executeUpdate();
-			
+
 			if (executeUpdate == 1) {
 				result = true;
 			} else {

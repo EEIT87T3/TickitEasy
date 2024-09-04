@@ -1,5 +1,9 @@
 package product.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -7,12 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import product.bean.Products;
 import product.dao.ProductDao;
-import util.ConnectionUtil;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 
 @WebServlet("/GetProduct")
 public class GetProduct extends HttpServlet {
@@ -22,7 +20,8 @@ public class GetProduct extends HttpServlet {
         super();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		String productName = request.getParameter("productName");
 
@@ -35,6 +34,7 @@ public class GetProduct extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

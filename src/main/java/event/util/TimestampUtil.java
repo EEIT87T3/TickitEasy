@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class TimestampUtil {
-	
+
 	/*
 	 * method 名稱：inputStringToTimestamp
 	 * 用途：將「2024-08-24T22:00」或「2024-08-24T22:00:00」格式的 datetime 字串轉換為 Timestamp
@@ -26,7 +26,7 @@ public class TimestampUtil {
 		}
 		return Timestamp.valueOf(localDateTime);
 	}
-	
+
 	/*
 	 * method 名稱：timestampToString
 	 * 用途：將 Timestamp 轉換為「2024-08-24T22:00」格式的 datetime 字串
@@ -41,7 +41,7 @@ public class TimestampUtil {
 			return rawString;
 		}
 	}
-	
+
 	/*
 	 * method 名稱：timestampToIncludeSecondsString
 	 * 用途：將 Timestamp 轉換為「2024-08-24T22:00:00」格式的 datetime 字串
@@ -56,7 +56,7 @@ public class TimestampUtil {
 			return rawString;
 		}
 	}
-	
+
 	// 測試用
 //	public static void main(String[] args) {
 //		String inputString = "2024-08-24T09:47:00";
@@ -64,7 +64,7 @@ public class TimestampUtil {
 //		try {
 //			Timestamp timestamp = timestampUtil.inputStringToTimestamp(inputString);
 //			System.out.println("Timestamp 為 " + timestamp);
-//			
+//
 //			String timestampToString = timestampUtil.timestampToString(timestamp);
 //			System.out.println("輸出字串為" + timestampToString);
 //		} catch (DateTimeParseException e) {

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class SessionsPO implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer sessionID;  // IDENTITY(1,1)
 	private Integer eventID;  // FK, NOT NULL
 	private Short sessionNo;  // NOT NULL
@@ -18,7 +18,7 @@ public class SessionsPO implements Serializable{
 	private Timestamp endEntryTime;  // NOT NULL
 	private Integer quantityTotalAvailable;  // NOT NULL
 	private Integer quantityTotalPurchased;  // NOT NULL
-	
+
 	public Integer getSessionID() {
 		return sessionID;
 	}
@@ -91,7 +91,7 @@ public class SessionsPO implements Serializable{
 	public void setQuantityTotalPurchased(Integer quantityTotalPurchased) {
 		this.quantityTotalPurchased = quantityTotalPurchased;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "SessionsPO [sessionID=" + sessionID + ", eventID=" + eventID + ", sessionNo=" + sessionNo

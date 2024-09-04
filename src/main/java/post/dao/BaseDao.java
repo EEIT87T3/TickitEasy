@@ -3,8 +3,8 @@ package post.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import util.ConnectionUtil;
-import jakarta.servlet.annotation.WebServlet;
 
 
 //@WebServlet("/BaseDao") //url-pattern//difference
@@ -21,7 +21,7 @@ public class BaseDao  {
 			for(int i = 0; i < args.length;i++) {
 				stmt.setObject(i+1,args[i]);
 			}
-			
+
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				t= (T) rs.getObject(1);
@@ -30,14 +30,13 @@ public class BaseDao  {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-		
+
 			ConnectionUtil.closeResource(connection, stmt, rs);
 		}
 		return t;
 	}
 }
-	
-       
 
-	
- 	
+
+
+

@@ -1,5 +1,11 @@
 package admin.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,12 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import member.bean.MemberBean;
 import member.service.MemberService;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Servlet implementation class AdminMemberManagementServlet
@@ -28,14 +28,15 @@ import java.util.UUID;
 public class AdminMemberManagementServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MemberService memberService;
-	
+
 	 @Override
 	    public void init() throws ServletException {
 	        super.init();
 	        memberService = new MemberService();
 	    }
 	 	//處理GET請求
-	    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    @Override
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	        String action = request.getParameter("action");//獲取要執行的動作
 	        if ("edit".equals(action)) {//編輯會員
 	            int memberId = Integer.parseInt(request.getParameter("memberId"));//獲取要編輯的會員ID
@@ -49,7 +50,8 @@ public class AdminMemberManagementServlet extends HttpServlet {
 	        }
 	    }
 	    //處理POST請求
-	    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    @Override
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	        String action = request.getParameter("action");//獲取要執行的動作
 	        if ("update".equals(action)) {//更新會員
 	            updateMember(request, response);
@@ -95,15 +97,17 @@ public class AdminMemberManagementServlet extends HttpServlet {
 	                if (!contentType.startsWith("image/")) {
 	                    throw new IllegalArgumentException("只能上傳圖片文件");
 	                }
-	                
+
 	                String fileName = UUID.randomUUID().toString() + getFileExtension(filePart.getSubmittedFileName());
 	                String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
 	                File uploadDir = new File(uploadPath);
-	                if (!uploadDir.exists()) uploadDir.mkdir();
-	                
+	                if (!uploadDir.exists()) {
+						uploadDir.mkdir();
+					}
+
 	                String filePath = uploadPath + File.separator + fileName;
 	                filePart.write(filePath);
-	                
+
 	                member.setProfilePic("uploads" + File.separator + fileName);
 	            }
 
@@ -131,9 +135,13 @@ public class AdminMemberManagementServlet extends HttpServlet {
 	    }
 	    //獲取檔案副檔名
 	    private String getFileExtension(String fileName) {
-	        if (fileName == null) return "";
+	        if (fileName == null) {
+				return "";
+			}
 	        int lastIndexOf = fileName.lastIndexOf(".");
-	        if (lastIndexOf == -1) return "";
+	        if (lastIndexOf == -1) {
+				return "";
+			}
 	        return fileName.substring(lastIndexOf);
 	    }
 	}

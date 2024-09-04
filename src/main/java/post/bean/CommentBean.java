@@ -11,10 +11,10 @@ public class CommentBean implements java.io.Serializable  {
 	private String content;
 	private Timestamp commentDate;
 	private String name;
-	
+
 	public CommentBean() {
 		super();
-		
+
 	}
 
 	public Integer getPostCommentID() {
@@ -40,7 +40,7 @@ public class CommentBean implements java.io.Serializable  {
 		return commentDate;
 	}
 
-	
+
 
 	public void setPostID(int postID) {
 		this.postID = postID;
@@ -54,7 +54,7 @@ public class CommentBean implements java.io.Serializable  {
 		this.content = content;
 	}
 
-	
+
 	public void setCommentDate(Timestamp commentDate) {
 		this.commentDate = commentDate;
 	}
@@ -67,8 +67,8 @@ public class CommentBean implements java.io.Serializable  {
 		this.name = name;
 	}
 
-	
-	
+
+
 
 
 }

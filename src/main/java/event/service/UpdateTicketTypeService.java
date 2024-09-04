@@ -41,7 +41,7 @@ public class UpdateTicketTypeService {
 		}
 		return "";
 	}
-	
+
 	/*
 	 * method 名稱：updateTicketType
 	 * 用途：修改票種的實際執行 Service
@@ -59,7 +59,7 @@ public class UpdateTicketTypeService {
 		ticketTypesPO.setQuantityPurchased(oneTicketTypeDTO.getQuantityPurchased());
 		ticketTypesPO.setStartSaleTime(oneTicketTypeDTO.getStartSaleTime());
 		ticketTypesPO.setEndSaleTime(oneTicketTypeDTO.getEndSaleTime());
-		
+
 		// 3.2 呼叫 DAO，傳入 TicketTypesPO
 		TicketTypesDAO ticketTypesDAO = new TicketTypesDAO();
 		try {
@@ -72,9 +72,9 @@ public class UpdateTicketTypeService {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		// 3.3 回傳結果
 		return true;
 	}
-	
+
 }

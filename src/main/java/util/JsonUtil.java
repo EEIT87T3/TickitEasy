@@ -52,7 +52,7 @@ public class JsonUtil {
             return null;
         }
     }
-    
+
     /*
 	 * method 名稱：ListBeanToJsonString
 	 * 用途：將 List<Bean> 轉換為 JsonString
@@ -69,7 +69,7 @@ public class JsonUtil {
             return "";
         }
     }
-    
+
     /*
 	 * method 名稱：JsonStringToListBean
 	 * 用途：將 JsonString 轉換為 List<Bean>
