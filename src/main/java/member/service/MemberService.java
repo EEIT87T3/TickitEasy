@@ -117,6 +117,7 @@ public class MemberService {
     public int registerMember(MemberBean member) {
         member.setPassword(PasswordUtil.hashPassword(member.getPassword()));
         member.setStatus("已驗證"); // 由於沒有郵箱驗證，我們直接設置為已驗證
+        member.setRegisterDate(LocalDate.now());
         return memberDAO.addMember(member);
     }
     // 重設密碼
