@@ -2,22 +2,66 @@ package event.object.po;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity @Table(name = "sessions")
 public class SessionsPO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
+	@Id @Column(name = "sessionID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer sessionID;  // IDENTITY(1,1)
-	private Integer eventID;  // FK, NOT NULL
+	
+//	private Integer eventID;  // FK, NOT NULL
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "eventID")
+	private EventsPO event;
+	
+	@Column(name = "sessionNo", nullable = false)
 	private Short sessionNo;  // NOT NULL
+	
+	@Column(name = "sessionName", nullable = false)
 	private String sessionName;  // NOT NULL
+	
+	@Column(name = "sessionDesc")
 	private String sessionDesc;
+	
+	@Column(name = "place")
 	private String place;
+	
+	@Column(name = "address", nullable = false)
 	private String address;  // NOT NULL
+	
+	@Column(name = "sessionStartTime", nullable = false)
 	private Timestamp sessionStartTime;  // NOT NULL
+	
+	@Column(name = "startEntryTime", nullable = false)
 	private Timestamp startEntryTime;  // NOT NULL
+	
+	@Column(name = "endEntryTime", nullable = false)
 	private Timestamp endEntryTime;  // NOT NULL
+	
+	@Column(name = "quantityTotalAvailable", nullable = false)
 	private Integer quantityTotalAvailable;  // NOT NULL
+	
+	@Column(name = "quantityTotalPurchased", nullable = false)
 	private Integer quantityTotalPurchased;  // NOT NULL
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "session", cascade = CascadeType.ALL)
+	private List<TicketTypesPO> ticketTypes = new ArrayList<TicketTypesPO>(1);
 
 	public Integer getSessionID() {
 		return sessionID;
@@ -25,11 +69,11 @@ public class SessionsPO implements Serializable{
 	public void setSessionID(Integer sessionID) {
 		this.sessionID = sessionID;
 	}
-	public Integer getEventID() {
-		return eventID;
+	public EventsPO getEvent() {
+		return event;
 	}
-	public void setEventID(Integer eventID) {
-		this.eventID = eventID;
+	public void setEvent(EventsPO event) {
+		this.event = event;
 	}
 	public Short getSessionNo() {
 		return sessionNo;
@@ -91,10 +135,16 @@ public class SessionsPO implements Serializable{
 	public void setQuantityTotalPurchased(Integer quantityTotalPurchased) {
 		this.quantityTotalPurchased = quantityTotalPurchased;
 	}
-
+	public List<TicketTypesPO> getTicketTypes() {
+		return ticketTypes;
+	}
+	public void setTicketTypes(List<TicketTypesPO> ticketTypes) {
+		this.ticketTypes = ticketTypes;
+	}
+	
 	@Override
 	public String toString() {
-		return "SessionsPO [sessionID=" + sessionID + ", eventID=" + eventID + ", sessionNo=" + sessionNo
+		return "SessionsPO [sessionID=" + sessionID + ", event=" + event + ", sessionNo=" + sessionNo
 				+ ", sessionName=" + sessionName + ", sessionDesc=" + sessionDesc + ", place=" + place + ", address="
 				+ address + ", sessionStartTime=" + sessionStartTime + ", startEntryTime=" + startEntryTime
 				+ ", endEntryTime=" + endEntryTime + ", quantityTotalAvailable=" + quantityTotalAvailable
