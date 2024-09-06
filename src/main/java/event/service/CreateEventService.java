@@ -16,7 +16,7 @@ import event.object.po.SessionsPO;
 import event.object.po.TicketTypesPO;
 
 public class CreateEventService {
-	
+
 	/*
 	 * method 名稱：validate
 	 * 用途：驗證使用者輸入資料
@@ -75,7 +75,7 @@ public class CreateEventService {
 		}
 		return "";
 	}
-	
+
 	/*
 	 * method 名稱：createEvent
 	 * 用途：新增活動的實際執行 Service
@@ -86,21 +86,21 @@ public class CreateEventService {
 		// 4.1 將三種 DTO 包裝為 PO
 		// 4.2 呼叫 DAO，傳入 EventsPO, Map<Short, SessionsPO>, List<TicketTypesPO>
 		// 4.3 回傳 boolean 或是自定義 Exception
-		
-		
+
+
 		// 4.1 將三種 DTO 包裝為 PO
-		
+
 		EventsPO eventsPO = new EventsPO();
-		Map<Short, SessionsPO> sessionsPOMap = new HashMap<Short, SessionsPO>();;
-		List<TicketTypesPO> ticketTypesPOList = new ArrayList<TicketTypesPO>();
-		
+		Map<Short, SessionsPO> sessionsPOMap = new HashMap<>();
+		List<TicketTypesPO> ticketTypesPOList = new ArrayList<>();
+
 		eventsPO.setEventName(eventDTO.getEventName());
 //		eventsPO.setEventPic(eventDTO.getEventPic());
 		eventsPO.setEventType(eventDTO.getEventType());
 		eventsPO.setEventDesc(eventDTO.getEventDesc());
 		eventsPO.setTotalReviews(0);
 		eventsPO.setTotalScore(0);
-		
+
 		for (SessionDTO sessionDTO : eventDTO.getSessionList()) {
 			SessionsPO sessionsPO = new SessionsPO();
 			sessionsPO.setSessionNo(sessionDTO.getSessionNo());
@@ -114,7 +114,7 @@ public class CreateEventService {
 			sessionsPO.setEndEntryTime(sessionDTO.getEndEntryTime());
 			sessionsPO.setQuantityTotalAvailable(sessionDTO.getQuantityTotalAvailable());
 			sessionsPO.setQuantityTotalPurchased(0);
-			
+
 			if (eventsPO.getEarliestSessionTime() == null && eventsPO.getLatestSessionTime() == null) {
 				eventsPO.setEarliestSessionTime(sessionStartTime);
 				eventsPO.setLatestSessionTime(sessionStartTime);
@@ -126,7 +126,7 @@ public class CreateEventService {
 					eventsPO.setLatestSessionTime(sessionStartTime);
 				}
 			}
-			
+
 			for (TicketTypeDTO ticketTypeDTO : sessionDTO.getTicketTypeList()) {
 				TicketTypesPO ticketTypesPO = new TicketTypesPO();
 				ticketTypesPO.setSessionID(0 - (sessionDTO.getSessionNo()));  // 負數以表示此為暫時儲存 position
@@ -144,11 +144,11 @@ public class CreateEventService {
 
 				ticketTypesPOList.add(ticketTypesPO);
 			}
-			
+
 			sessionsPOMap.put(sessionsPO.getSessionNo(), sessionsPO);
 		}
-		
-		
+
+
 		// 4.2 呼叫 DAO，傳入 EventsPO, List<SessionsPO>, List<TicketTypesPO>
 		CreateEventDAO createEventDAO = new CreateEventDAO();
 		try {

@@ -132,7 +132,7 @@ public class ProdOrdersBean {
 				+ totalAmount + ", shippingStatus=" + shippingStatus + ", shippingID=" + shippingID + ", recipientName="
 				+ recipientName + ", address=" + address + ", phone=" + phone + "]" + "\n";
 	}
-	
-	
-	
+
+
+
 }

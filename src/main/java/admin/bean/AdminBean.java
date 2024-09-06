@@ -1,11 +1,31 @@
 package admin.bean;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity @Table(name = "administrator")
 public class AdminBean {
-	private int adminID;
-	private String email;
-	private String password;
-	private String name;
 	
+	@Id @Column(name = "adminID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int adminID;
+	
+	@Column(name = "email" , unique = true, nullable = false)
+	private String email;
+	
+	@Column(name = "password", nullable = false)
+	private String password;
+	
+	@Column(name = "name", nullable = false)
+	private String name;
+
+	public AdminBean() {
+	}
+
 	public AdminBean(int adminID, String email, String password, String name) {
 		super();
 		this.adminID = adminID;
@@ -13,7 +33,7 @@ public class AdminBean {
 		this.password = password;
 		this.name = name;
 	}
-	
+
 	public AdminBean(String email, String password, String name) {
 		super();
 		this.email = email;
@@ -45,5 +65,5 @@ public class AdminBean {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 }

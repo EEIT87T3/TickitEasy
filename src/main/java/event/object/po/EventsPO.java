@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class EventsPO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer eventID;  // IDENTITY(1,1)
 	private String eventName;  // UNIQUE, NOT NULL
 	private String eventPic;
@@ -15,7 +15,7 @@ public class EventsPO implements Serializable {
 	private Timestamp latestSessionTime;
 	private Integer totalReviews;
 	private Integer totalScore;
-	
+
 	public Integer getEventID() {
 		return eventID;
 	}
@@ -70,7 +70,7 @@ public class EventsPO implements Serializable {
 	public void setTotalScore(Integer totalScore) {
 		this.totalScore = totalScore;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "EventsPO [eventID=" + eventID + ", eventName=" + eventName + ", eventPic=" + eventPic + ", eventType="

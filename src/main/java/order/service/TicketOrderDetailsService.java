@@ -13,27 +13,27 @@ public class TicketOrderDetailsService {
 
 		return TicketOrderDetailsDAO.ticketOrderDetailsSelect(newID);
 	}
-	
+
 	public static TicketOrderDetailsBean delete(TicketOrderDetailsBean ticketOrderDetailsBean) {
 		int ticketOrderDetailID = ticketOrderDetailsBean.getTicketOrderDetailID();
 		TicketOrderDetailsBean ticketOrderDetailsBeanNew = TicketOrderDetailsDAO.ticketOrderDetailsSelect(ticketOrderDetailID);
 		TicketOrderDetailsDAO.ticketOrderDetailsDelete(ticketOrderDetailID);
-			
+
 		return ticketOrderDetailsBeanNew;
 	}
-	
+
 	public static TicketOrderDetailsBean update(TicketOrderDetailsBean ticketOrderDetailsBean) {
 		int ticketOrderDetailID = TicketOrderDetailsDAO.ticketOrderDetailsUpdate(ticketOrderDetailsBean);
-		
+
 		return TicketOrderDetailsDAO.ticketOrderDetailsSelect(ticketOrderDetailID);
 	}
-	
+
 	public static TicketOrderDetailsBean select(TicketOrderDetailsBean ticketOrderDetailsBean) {
 		int ticketOrderDetailID = ticketOrderDetailsBean.getTicketOrderDetailID();
-		
+
 		return TicketOrderDetailsDAO.ticketOrderDetailsSelect(ticketOrderDetailID);
 	}
-	
+
 	public static List<TicketOrderDetailsBean> selectAll() {
 		return TicketOrderDetailsDAO.ticketOrderDetailsSelectAll();
 	}

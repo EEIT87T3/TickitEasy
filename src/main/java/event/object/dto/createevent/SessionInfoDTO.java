@@ -41,7 +41,7 @@ public class SessionInfoDTO implements Serializable {
 		return "SessionInfo [htmlIdNo=" + htmlIdNo + ", positionNo=" + positionNo + ", ticketTypesInfo="
 				+ ticketTypesInfo + "]";
 	}
-	
+
 	/*
 	 * method 名稱：getIdString
 	 * 用途：取得此 SessionInfo 對應的 Session 資料的 HTML 元素 id
@@ -51,5 +51,5 @@ public class SessionInfoDTO implements Serializable {
 	public String getIdString() {
 		return "session" + htmlIdNo;
 	}
-    
+
 }

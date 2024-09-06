@@ -7,7 +7,7 @@ public class FundPlanBean {
 	private String planContent;
 	private int totalAmount;
 	private int buyAmount;
-	
+
 	public int getPlanID() {
 		return planID;
 	}

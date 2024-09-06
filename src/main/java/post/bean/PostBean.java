@@ -18,10 +18,10 @@ public class PostBean implements java.io.Serializable  {
 	private String themeName; // theme
 	private String name; // member
 	private String profilePic; // member
-	
+
 	public PostBean() {
 		super();
-		
+
 	}
 	public Integer getPostID() {return postID;}
 	public Integer getThemeID() {return themeID;}
@@ -56,18 +56,18 @@ public class PostBean implements java.io.Serializable  {
     public void setThemeName(String themeName) {
         this.themeName = themeName;
     }
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
 	}
 
 
-    
-    
+
+
 }
 
 

@@ -3,9 +3,9 @@ package product.bean;
 import java.io.Serializable;
 
 public class Products implements Serializable {
-    
+
 	private static final long serialVersionUID = 1L;
-	private int productID; 
+	private int productID;
     private String category;
     private String productName;
     private String productPic;
@@ -15,11 +15,11 @@ public class Products implements Serializable {
     private String status;
     private int prodTotalReviews;
     private int prodTotalScore;
-    
+
     public Products() {
         super();
     }
-    
+
     public Products(int productID, String category, String productName, String productPic, String productDesc,
 			int price, int stock, String status, int prodTotalReviews, int prodTotalScore) {
 		super();
@@ -34,8 +34,8 @@ public class Products implements Serializable {
 		this.prodTotalReviews = prodTotalReviews;
 		this.prodTotalScore = prodTotalScore;
 	}
-    
-    
+
+
 
 	public Products(String category, String productName, String productPic, String productDesc, int price, int stock,
 			String status, int prodTotalReviews, int prodTotalScore) {
@@ -69,7 +69,7 @@ public class Products implements Serializable {
 		this.prodTotalScore = prodTotalScore;
 	}
 
-	
+
 
     // getter 和 setter 方法
     public int getProductID() {

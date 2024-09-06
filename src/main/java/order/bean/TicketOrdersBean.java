@@ -10,7 +10,7 @@ public class TicketOrdersBean {
 	String payments;
 	String status;
 	int totalAmount;
-	
+
 	//不含tickedOrderID
 	public TicketOrdersBean(int memberID, Date orderDate, String payments, String status, int totalAmount) {
 		super();
@@ -72,6 +72,6 @@ public class TicketOrdersBean {
 		return "TicketOrderBean [tickedOrderID=" + tickedOrderID + ", memberID=" + memberID + ", orderDate=" + orderDate
 				+ ", payments=" + payments + ", status=" + status + ", totalAmount=" + totalAmount + "]" + "\n";
 	}
-	
-	
+
+
 }

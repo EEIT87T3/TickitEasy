@@ -43,12 +43,12 @@ public class ProductDao {
 	        }
 	    }
 	}
-	
+
 	// 查詢所有商品
 	public List<Products> findAll() throws SQLException {
 		Connection connection = ConnectionUtil.getConnection();
 		String sql = "select * from products";
-		ArrayList<Products> productList = new ArrayList<Products>();
+		ArrayList<Products> productList = new ArrayList<>();
 		PreparedStatement preparedStatement=null;
 		ResultSet resultSet=null;
 		try {
@@ -75,7 +75,7 @@ public class ProductDao {
 		}
 		return productList;
 	}
-	
+
 	// 利用 productName 進行模糊查詢商品
     public List<Products> findProductsByName(String productName) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
@@ -85,7 +85,7 @@ public class ProductDao {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, "%" + productName + "%");  
+            preparedStatement.setString(1, "%" + productName + "%");
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -109,7 +109,7 @@ public class ProductDao {
         }
         return productsList;
     }
-    
+
  // 利用 Category 分類進行模糊查詢商品
     public List<Products> findProductsByCategory(String category) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
@@ -119,7 +119,7 @@ public class ProductDao {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, "%" + category + "%");  
+            preparedStatement.setString(1, "%" + category + "%");
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -153,7 +153,7 @@ public class ProductDao {
 	    ResultSet resultSet = null;
 	    try {
 	        preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setInt(1, productID);  
+	        preparedStatement.setInt(1, productID);
 	        resultSet = preparedStatement.executeQuery();
 
 	        if (resultSet.next()) {
@@ -228,13 +228,13 @@ public class ProductDao {
 
 	    try {
 	        connection = ConnectionUtil.getConnection();
-	        
+
 	        // 先查詢商品
 	        String selectSql = "SELECT * FROM products WHERE productID = ?";
 	        selectStmt = connection.prepareStatement(selectSql);
 	        selectStmt.setInt(1, productID);
 	        resultSet = selectStmt.executeQuery();
-	        
+
 	        if (resultSet.next()) {
 	            // 取得原始商品資料
 	            String category = resultSet.getString("category");
@@ -250,7 +250,7 @@ public class ProductDao {
 	            // 用查詢到的資料初始化 product 對象
 	            product = new Products(productID, category, productName, productPic, productDesc, price, stock, status, prodTotalReviews, prodTotalScore);
 	        }
-	        
+
 	        // 更新商品
 	        if (product != null) { // 確保商品存在再進行更新
 	            String updateSql = "UPDATE products SET category = ?, productName = ?, productPic = ?, productDesc = ?, price = ?, stock = ?, status = ?, prodTotalReviews = ?, prodTotalScore = ? WHERE productID = ?";
@@ -274,7 +274,7 @@ public class ProductDao {
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        throw e;  
+	        throw e;
 	    } finally {
 	        ConnectionUtil.closeResource(connection, selectStmt, resultSet);
 	        ConnectionUtil.closeResource(connection, updateStmt);

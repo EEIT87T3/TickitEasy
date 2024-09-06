@@ -1,28 +1,30 @@
 package order.controller;
 
-import jakarta.security.auth.message.callback.PrivateKeyCallback.Request;
-import jakarta.servlet.ServletException;
-
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import order.bean.ProdOrdersBean;
-import order.bean.TicketOrderDetailsBean;
-import order.bean.TicketOrdersBean;
-import order.bean.ProdOrderDetailsBean;
-import order.service.*;
-
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import order.bean.ProdOrderDetailsBean;
+import order.bean.ProdOrdersBean;
+import order.bean.TicketOrderDetailsBean;
+import order.bean.TicketOrdersBean;
+import order.service.ProdOrderDetailsService;
+import order.service.ProdOrdersService;
+import order.service.TicketOrderDetailsService;
+import order.service.TicketOrdersService;
 
 //接收所有客戶端傳來的資料，並分發下去給service
 @WebServlet("/OrderController")
 public class OrderController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
@@ -44,11 +46,11 @@ public class OrderController extends HttpServlet {
 
 				break;
 			}
-			;
+
 		}
 
-		
-		
+
+
 		if (request.getParameter("form") != null) {
 			switch (request.getParameter("form")) {
 			case "prodOrders":
@@ -326,7 +328,7 @@ public class OrderController extends HttpServlet {
 
 	// 購物車專用
 	public List<ProdOrderDetailsBean> encapsulation(List<ProdOrderDetailsBean> list, int newID) {
-		List<ProdOrderDetailsBean> listNew = new ArrayList<ProdOrderDetailsBean>();
+		List<ProdOrderDetailsBean> listNew = new ArrayList<>();
 		for (ProdOrderDetailsBean podbOld : list) {
 			ProdOrderDetailsBean podbNew = new ProdOrderDetailsBean(newID, podbOld.getProductID(), podbOld.getPrice(),
 					podbOld.getQuantity());

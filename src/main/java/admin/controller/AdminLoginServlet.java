@@ -1,16 +1,15 @@
 package admin.controller;
 
+import java.io.IOException;
+
+import admin.bean.AdminBean;
+import admin.service.AdminService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
-
-import admin.bean.AdminBean;
-import admin.service.AdminService;
 
 /**
  * Servlet implementation class AdminLoginServlet
@@ -20,11 +19,13 @@ public class AdminLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private AdminService adminService;
 	//初始化
-    public void init() {
+    @Override
+	public void init() {
         adminService = new AdminService();
     }
     //登入
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    @Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");

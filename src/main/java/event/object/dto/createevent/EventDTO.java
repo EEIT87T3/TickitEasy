@@ -6,13 +6,13 @@ import java.util.List;
 
 public class EventDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String eventName;  // UNIQUE, NOT NULL
 	private String eventPic;
 	private String eventType;  // FK, NOT NULL
 	private String eventDesc;
-	private List<SessionDTO> sessionList = new ArrayList<SessionDTO>();
-	
+	private List<SessionDTO> sessionList = new ArrayList<>();
+
 	public String getEventName() {
 		return eventName;
 	}
@@ -43,7 +43,7 @@ public class EventDTO implements Serializable {
 	public void setSessionList(List<SessionDTO> sessionList) {
 		this.sessionList = sessionList;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "EventDTO [eventName=" + eventName + ", eventPic=" + eventPic + ", eventType=" + eventType

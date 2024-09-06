@@ -6,13 +6,13 @@ public class CartItem implements Serializable{
 
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer id;
 	private String name;
 	private Integer count;
 	private Integer price;
 	private Integer totalPrice;
-	
+
 	public CartItem() {
 		super();
 	}
@@ -54,11 +54,11 @@ public class CartItem implements Serializable{
 	public void setTotalPrice(Integer totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "CartItem [id=" + id + ", name=" + name + ", count=" + count + ", price=" + price + ", totalPrice="
 				+ totalPrice + "]";
 	}
-	
+
 }

@@ -1,25 +1,25 @@
 package cwdfunding.service;
-import cwdfunding.dao.FundProjDao;
-import jakarta.servlet.ServletException;
-import cwdfunding.bean.*;
-
 import java.io.IOException;
 import java.util.List;
 
+import cwdfunding.bean.FundProjBean;
+import cwdfunding.dao.FundProjDao;
+import jakarta.servlet.ServletException;
+
 public class FundProjService {
-	
-	
+
+
 	private FundProjDao fundProjDao;
-	
+
 	public FundProjService() {
 		this.fundProjDao = new FundProjDao();
 	}
-	
+
 	public List<FundProjBean> getAllFundProjs(){
-		List<FundProjBean> allProjs = fundProjDao.getAllFundProjs();		
+		List<FundProjBean> allProjs = fundProjDao.getAllFundProjs();
 		return allProjs;
 	}
-	
+
 	public void insertFundProj(String title, String description, String image, String startDate, String endDate
 			, String targetAmount, String currentAmount, String threshold, String postponeDate, String category) throws IOException, ServletException {
 		FundProjBean proj = new FundProjBean();
@@ -33,7 +33,7 @@ public class FundProjService {
 		proj.setThreshold(threshold);
 		proj.setPostponeDate(postponeDate);
 		proj.setCategory(category);
-		
+
 		fundProjDao.insertFundProj(proj);
 	}
 
@@ -51,12 +51,12 @@ public class FundProjService {
 		proj.setThreshold(threshold);
 		proj.setPostponeDate(postponeDate);
 		proj.setCategory(category);
-		
+
 		fundProjDao.updateFundProj(proj);
 	}
-	
+
 	public void deleteFundProj(int projectID) throws IOException, ServletException {
-		
+
 		fundProjDao.deleteFundProj(projectID);
 	}
 }

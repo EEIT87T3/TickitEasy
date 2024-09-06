@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SessionDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+
 	private Short sessionNo;  // NOT NULL
 	private String sessionName;  // NOT NULL
 	private String sessionDesc;
@@ -17,8 +17,8 @@ public class SessionDTO implements Serializable{
 	private Timestamp sessionStartTime;  // NOT NULL
 	private Timestamp startEntryTime;  // NOT NULL
 	private Timestamp endEntryTime;  // NOT NULL
-	private List<TicketTypeDTO> ticketTypeList = new ArrayList<TicketTypeDTO>();
-	
+	private List<TicketTypeDTO> ticketTypeList = new ArrayList<>();
+
 	public Short getSessionNo() {
 		return sessionNo;
 	}
@@ -79,7 +79,7 @@ public class SessionDTO implements Serializable{
 	public void setTicketTypeList(List<TicketTypeDTO> ticketTypeList) {
 		this.ticketTypeList = ticketTypeList;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "SessionDTO [sessionNo=" + sessionNo + ", sessionName=" + sessionName + ", sessionDesc=" + sessionDesc

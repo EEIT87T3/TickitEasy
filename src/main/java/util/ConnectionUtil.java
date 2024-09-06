@@ -11,7 +11,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class ConnectionUtil {
-	
+
 	/*
 	 * method 名稱：getConnection
 	 * 用途：取得 Connection 物件
@@ -31,7 +31,7 @@ public class ConnectionUtil {
 		}
 		return connection;
 	}
-	
+
 	/*
 	 * method 名稱：closeResource
 	 * 用途：關閉 Connection 物件、Statement 物件與 ResultSet 物件

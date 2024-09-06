@@ -5,12 +5,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import order.bean.ProdOrdersBean;
 import order.bean.TicketOrderDetailsBean;
-import order.bean.TicketOrdersBean;
 import util.ConnectionUtil;
 
 public class TicketOrderDetailsDAO {
@@ -19,11 +18,11 @@ public class TicketOrderDetailsDAO {
 		Connection connection = ConnectionUtil.getConnection();
 		String sql = "INSERT INTO ticketOrderDetails(ticketOrderID,ticketTypeID,ticketCollectionMethod,price,ticketUUID,ticketStatus,content,reviewTime,score)"
 				+ "VALUES(?,?,?,?,?,?,?,?,?)";
-		
+
 		PreparedStatement preparedStatement = null;
-		
+
 		try {
-			preparedStatement = connection.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
+			preparedStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setInt(1, ticketOrderDetailsBean.getTicketOrderID());
 			preparedStatement.setInt(2, ticketOrderDetailsBean.getTicketTypeID());
 			preparedStatement.setString(3, ticketOrderDetailsBean.getTicketCollectionMethod());
@@ -48,35 +47,35 @@ public class TicketOrderDetailsDAO {
 		}
 		throw new RuntimeException("添加資料失敗");
 	}
-	
+
 	public static int ticketOrderDetailsDelete(int ticketOrderDetailID) { //刪除
 		Connection connection = ConnectionUtil.getConnection();
 		String sql = "DELETE FROM ticketOrderDetails WHERE ticketOrderDetailID = ?";
-		
+
 		PreparedStatement prepareStatement = null;
-		
+
 		try {
 			prepareStatement = connection.prepareStatement(sql);
 			prepareStatement.setInt(1, ticketOrderDetailID);
 			int delete = prepareStatement.executeUpdate();
-			
+
 			return delete;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			ConnectionUtil.closeResource(connection,prepareStatement);
 		}
-		
+
 		throw new RuntimeException("刪除資料失敗");
 	}
-	
+
 	public static int ticketOrderDetailsUpdate(TicketOrderDetailsBean ticketOrderDetailsBean) { //修改
 		Connection connection = ConnectionUtil.getConnection();
 		String sql = "UPDATE ticketOrderDetails SET ticketOrderID = ?,ticketTypeID = ?,ticketCollectionMethod = ?,price = ?,ticketUUID = ?,ticketStatus = ?,content = ?,reviewTime = ?,score = ? "
 				+ "WHERE ticketOrderDetailID = ?";
-		
+
 		PreparedStatement preparedStatement = null;
-		
+
 		try {
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, ticketOrderDetailsBean.getTicketOrderID());
@@ -90,9 +89,9 @@ public class TicketOrderDetailsDAO {
 			preparedStatement.setInt(9, ticketOrderDetailsBean.getScore());
 			preparedStatement.setInt(10, ticketOrderDetailsBean.getTicketOrderDetailID());
 			preparedStatement.execute();
-			
+
 			return ticketOrderDetailsBean.getTicketOrderDetailID();
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -100,11 +99,11 @@ public class TicketOrderDetailsDAO {
 		}
 		throw new RuntimeException("修改資料失敗");
 	}
-	
-	public static TicketOrderDetailsBean ticketOrderDetailsSelect(int ticketOrderDetailIDparameter) { //查詢單筆 
+
+	public static TicketOrderDetailsBean ticketOrderDetailsSelect(int ticketOrderDetailIDparameter) { //查詢單筆
 		Connection connection = ConnectionUtil.getConnection();
 		String sql = "SELECT * FROM ticketOrderDetails WHERE ticketOrderDetailID = ?";
-		
+
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		TicketOrderDetailsBean ticketOrderDetailsBean = null;
@@ -131,18 +130,18 @@ public class TicketOrderDetailsDAO {
 		} finally {
 			ConnectionUtil.closeResource(connection,preparedStatement,resultSet);
 		}
-		
+
 		throw new RuntimeException("無法取得資料");
 	}
-	
+
 	public static List<TicketOrderDetailsBean> ticketOrderDetailsSelectAll() { //查詢多筆 未來修改成只顯示該會員的所有訂單顯示
 		Connection connection = ConnectionUtil.getConnection();
 		String sql = "SELECT * FROM ticketOrderDetails";
-		
+
 		ResultSet resultSet = null;
 		PreparedStatement prepareStatement = null;
 		List<TicketOrderDetailsBean> list = new ArrayList<>();
-		
+
 		try {
 			prepareStatement = connection.prepareStatement(sql);
 			resultSet = prepareStatement.executeQuery();
@@ -159,15 +158,15 @@ public class TicketOrderDetailsDAO {
 				int score = resultSet.getInt(10);
 				list.add(new TicketOrderDetailsBean(ticketOrderDetailID, ticketOrderID, ticketTypeID, ticketCollectionMethod, price, ticketUUID, ticketStatus, content, reviewTime, score));
 			}
-			
+
 			return list;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			ConnectionUtil.closeResource(connection,prepareStatement,resultSet);
 		}
-		
+
 		throw new RuntimeException("取得多筆資料失敗");
-		
+
 	}
 }

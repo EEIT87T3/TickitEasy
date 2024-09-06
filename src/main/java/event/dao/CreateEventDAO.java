@@ -28,11 +28,11 @@ public class CreateEventDAO {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		SQLUtil sqlUtil = new SQLUtil();
-		
+
 		try {
 			connection = ConnectionUtil.getConnection();
 			connection.setAutoCommit(false);
-			
+
 			// 1. events
 			// 1-1. INSERT events
 			String sqlInsertEvents = """
@@ -49,7 +49,7 @@ public class CreateEventDAO {
 			preparedStatement.setInt(7, eventsPO.getTotalReviews());
 			preparedStatement.setInt(8, eventsPO.getTotalScore());
 			preparedStatement.executeUpdate();
-			
+
 			// 1-2. SELECT events eventID
 			String sqlSelectEventsId = """
 					SELECT eventID
@@ -62,8 +62,8 @@ public class CreateEventDAO {
 			if (resultSet.next()) {
 				eventsPO.setEventID(resultSet.getInt("eventID"));
 			}
-			
-			
+
+
 			// 2. sessions
 			String sqlInsertSessions = """
 					INSERT INTO sessions(eventID, sessionNo, sessionName, sessionDesc, place, address, sessionStartTime, startEntryTime, endEntryTime, quantityTotalAvailable, quantityTotalPurchased)
@@ -91,7 +91,7 @@ public class CreateEventDAO {
 				preparedStatement.setInt(10, sessionsPO.getQuantityTotalAvailable());
 				preparedStatement.setInt(11, sessionsPO.getQuantityTotalPurchased());
 				preparedStatement.executeUpdate();
-				
+
 				// 2-2. SELECT sessions sessionID
 				preparedStatement = connection.prepareStatement(sqlSelectSessionsId);
 				preparedStatement.setInt(1, sessionsPO.getEventID());
@@ -101,8 +101,8 @@ public class CreateEventDAO {
 					sessionsPO.setSessionID(resultSet.getInt("sessionID"));
 				}
 			}
-			
-			
+
+
 			// 3. ticketTypes
 			// 3.1. INSERT ticketTypes
 			String sqlInsertTicketTypes = """
@@ -122,7 +122,7 @@ public class CreateEventDAO {
 				preparedStatement.setTimestamp(9, ticketTypesPO.getEndSaleTime());
 				preparedStatement.executeUpdate();
 			}
-			
+
 			connection.commit();
 		} catch (SQLException e) {
 	        connection.rollback();

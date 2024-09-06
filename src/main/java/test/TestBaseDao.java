@@ -3,7 +3,7 @@ package test;
 import post.dao.BaseDao;
 
 public class TestBaseDao {
-	
+
 	private BaseDao baseDao;
 
  public void testbaseQueryObject(){
@@ -12,6 +12,6 @@ public class TestBaseDao {
 //	 count存的是long
 	 Long count = baseDao.baseQueryObject(Long.class,sql);
 	 System.out.println(count);
-	 
+
  }
 }

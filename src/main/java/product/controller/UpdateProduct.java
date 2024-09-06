@@ -1,5 +1,10 @@
 package product.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,17 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import product.bean.Products;
 import product.dao.ProductDao;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.SQLException;
 
 @MultipartConfig
 @WebServlet("/UpdateProduct")
 public class UpdateProduct extends HttpServlet {
     private static final long serialVersionUID = 1L;
     ProductDao productDao = new ProductDao();
-    
+
     public UpdateProduct() {
         super();
     }

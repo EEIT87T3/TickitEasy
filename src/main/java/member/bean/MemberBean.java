@@ -1,28 +1,55 @@
 package member.bean;
 
-import java.time.LocalDate;
 import java.sql.Date;
-	
+import java.time.LocalDate;
+
+import jakarta.persistence.*;
 
 
+@Entity @Table(name = "members")
 public class MemberBean {
+	
+	@Id
+	@Column(name = "memberID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int memberID;
+	
+	@Column(name = "email" , unique = true, nullable = false)
     private String email;
+	
+	@Column(name = "password", nullable = false)
     private String password;
+	
+	@Column(name = "name", nullable = false)
     private String name;
+	
+	@Column(name = "nickname")
     private String nickname;
+	
+	@Column(name = "birthDate", nullable = false)
     private LocalDate birthDate;
+	
+	@Column(name = "phone")
     private String phone;
+	
+	@Column(name = "registerDate", nullable = false)
     private LocalDate registerDate;
+	
+	@Column(name = "status", nullable = false)
     private String status;
+	
+	@Column(name = "profilePic")
     private String profilePic;
+	
+	@Column(name = "verificationToken")
     private String verificationToken;
+	
+	@Transient
     private static final String DEFAULT_PROFILE_PIC = "/images/default-avatar.png"; // 預設頭貼路徑
 	public MemberBean() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	
+	}
+
 	public MemberBean(String email, String password, String name, String nickname, LocalDate birthDate, String phone,
 			LocalDate registerDate, String status, String profilePic) {
 		super();
