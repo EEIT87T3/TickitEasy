@@ -15,13 +15,15 @@
 			<artifactId>mssql-jdbc</artifactId>
 			<version>12.8.1.jre11</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
+		<!--
+		https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
 		<dependency>
 			<groupId>jakarta.servlet.jsp.jstl</groupId>
 			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.glassfish.web/jakarta.servlet.jsp.jstl -->
+		<!--
+		https://mvnrepository.com/artifact/org.glassfish.web/jakarta.servlet.jsp.jstl -->
 		<dependency>
 			<groupId>org.glassfish.web</groupId>
 			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
@@ -53,39 +55,39 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
 		<dependency>
-		    <groupId>jakarta.servlet</groupId>
-		    <artifactId>jakarta.servlet-api</artifactId>
-		    <version>6.0.0</version>
-		    <scope>provided</scope>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp/jakarta.servlet.jsp-api -->
 		<dependency>
-		    <groupId>jakarta.servlet.jsp</groupId>
-		    <artifactId>jakarta.servlet.jsp-api</artifactId>
-		    <version>3.1.1</version>
-		    <scope>provided</scope>
+			<groupId>jakarta.servlet.jsp</groupId>
+			<artifactId>jakarta.servlet.jsp-api</artifactId>
+			<version>3.1.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
-<dependency>
-    <groupId>org.hibernate.orm</groupId>
-    <artifactId>hibernate-core</artifactId>
-    <version>6.6.0.Final</version>
-</dependency>
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.6.0.Final</version>
+		</dependency>
 
 	</dependencies>
 	<build>
 		<resources>
-        <resource>
-            <directory>src/main/resources</directory>
-        </resource>
-        <resource>
-            <directory>src/main/java</directory>
-            <excludes>
-                <exclude>**/*.java</exclude>
-            </excludes>
-        </resource>
-    </resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
