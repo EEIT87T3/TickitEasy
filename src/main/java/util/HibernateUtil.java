@@ -7,7 +7,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class HibernateUtil {
 
-	private static final SessionFactory facotry = createSessionFactory();
+	private static final SessionFactory factory = createSessionFactory();
 
 	private static SessionFactory createSessionFactory() {
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
@@ -16,12 +16,12 @@ public class HibernateUtil {
 	}
 	
 	public static SessionFactory getSessionFactory() {
-		return facotry;
+		return factory;
 	}
 	
 	public static void closeSessionFactory() {
-		if(facotry!=null) {
-			facotry.close();
+		if(factory != null) {
+			factory.close();
 		}
 	}
 }

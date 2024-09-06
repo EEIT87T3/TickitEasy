@@ -18,7 +18,4 @@ public class SessionFactoryListener implements ServletContextListener {
 		HibernateUtil.closeSessionFactory();
 		System.out.println("SessionFactory Closed");
 	}
-	
-	
-	
 }
