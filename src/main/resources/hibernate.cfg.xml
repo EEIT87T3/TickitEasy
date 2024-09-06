@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+
+		<!--JNDI 配置 請先設置好Tomcat之context.xml和sever.xml -->
+        <property name="hibernate.connection.datasource">java:comp/env/jdbc/EEIT87-T3</property>
+        <!--Hibernate 方言 -->
+        <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+		
+		<property name="hibernate.current_session_context_class">thread</property>
+
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+
+		<!--在下方添加物件與資料庫表格映射文件 ex.<mapping class="tw.leonchen.model.House"/>-->
+		<mapping class="admin.bean.AdminBean"/>
+		<mapping class="member.bean.MemberBean"/>
+	</session-factory>
+</hibernate-configuration>
