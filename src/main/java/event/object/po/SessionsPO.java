@@ -25,7 +25,9 @@ public class SessionsPO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer sessionID;  // IDENTITY(1,1)
 	
-//	private Integer eventID;  // FK, NOT NULL
+	@Column(name = "eventID", insertable = false, updatable = false)
+	private Integer eventID;  // FK, NOT NULL
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "eventID")
 	private EventsPO event;
@@ -68,6 +70,12 @@ public class SessionsPO implements Serializable{
 	}
 	public void setSessionID(Integer sessionID) {
 		this.sessionID = sessionID;
+	}
+	public Integer getEventID() {
+		return eventID;
+	}
+	public void setEventID(Integer eventID) {
+		this.eventID = eventID;
 	}
 	public EventsPO getEvent() {
 		return event;

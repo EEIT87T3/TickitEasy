@@ -21,7 +21,9 @@ public class TicketTypesPO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ticketTypeID;  // IDENTITY(1,1)
 	
-//	private Integer sessionID;  // FK, NOT NULL
+	@Column(name = "sessionID", insertable = false, updatable = false)
+	private Integer sessionID;  // FK, NOT NULL
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sessionID")
 	private SessionsPO session;
@@ -55,6 +57,12 @@ public class TicketTypesPO implements Serializable {
 	}
 	public void setTicketTypeID(Integer ticketTypeID) {
 		this.ticketTypeID = ticketTypeID;
+	}
+	public Integer getSessionID() {
+		return sessionID;
+	}
+	public void setSessionID(Integer sessionID) {
+		this.sessionID = sessionID;
 	}
 	public SessionsPO getSession() {
 		return session;

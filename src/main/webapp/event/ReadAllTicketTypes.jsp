@@ -1,7 +1,7 @@
 <%@page import="event.dao.TicketTypesDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="event.object.vo.ReadAllTicketTypesVO" %>
+<%@ page import="event.object.po.TicketTypesPO" %>
 <%@ page import="event.dao.TicketTypesDAO" %>
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
@@ -141,13 +141,13 @@
                             <tbody class="text-gray-700">
                                 <%
 	                                TicketTypesDAO ticketTypesDAO = new TicketTypesDAO();
-	                                List<ReadAllTicketTypesVO> ticketTypeslist = ticketTypesDAO.readAll();
+                                	List<TicketTypesPO> ticketTypeslist = ticketTypesDAO.readAll();
 	                                if (ticketTypeslist != null) {
-	                                    for (ReadAllTicketTypesVO ticketType : ticketTypeslist) {
+	                                    for (TicketTypesPO ticketType : ticketTypeslist) {
                                 %>
                                 <tr>
-                                    <td class="py-3 px-4"><%= ticketType.getEventName() %></td>
-                                    <td class="py-3 px-4"><%= ticketType.getSessionName() %></td>
+                                    <td class="py-3 px-4"><%= "（活動名稱）" %></td>
+                                    <td class="py-3 px-4"><%= "（場次名稱）" %></td>
                                     <td class="py-3 px-4"><%= ticketType.getTypeName() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getPrice() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getQuantityAvailable() == null ? "（未限制）" : ticketType.getQuantityAvailable() %></td>
