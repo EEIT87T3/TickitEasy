@@ -25,20 +25,9 @@ public class TicketTypesDAO {
 	 * Caller：webapp/event/ReadAllTicketTypes.jsp
 	*/
 	public List<TicketTypesPO> readAll() {
-		List<TicketTypesPO> ticketTypeslist = null;
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		
-		try {
-			ticketTypeslist = session.createQuery("FROM TicketTypesPO", TicketTypesPO.class).list();
-			
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-		    throw e;
-		}
 
-		return ticketTypeslist;
+		return session.createQuery("FROM TicketTypesPO", TicketTypesPO.class).list();
 	}
 
 	/*
@@ -49,22 +38,11 @@ public class TicketTypesDAO {
 	 * Caller：java.event.controller.ReadOneTicketType doGet()
 	*/
 	public TicketTypesPO selectOneTicketTypeById(Integer ticketTypeID) {
-		TicketTypesPO ticketTypesPO = null;
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		
-		try {
-			ticketTypesPO = session.createQuery("FROM TicketTypesPO WHERE ticketTypeID = :ticketTypeID", TicketTypesPO.class)
-					.setParameter("ticketTypeID", ticketTypeID)
-					.uniqueResult();
-			
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		}
-		
-		return ticketTypesPO;
+		return session.createQuery("FROM TicketTypesPO WHERE ticketTypeID = :ticketTypeID", TicketTypesPO.class)
+				.setParameter("ticketTypeID", ticketTypeID)
+				.uniqueResult();
 	}
 
 	/*
@@ -76,28 +54,13 @@ public class TicketTypesDAO {
 	*/
 	public Boolean selectIfOnlyTicketTypeByPO(TicketTypesPO ticketType) {
 		Boolean result = null;
-		
-		// 懶得寫在樓上了
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		
-		try {
-			TicketTypesPO ticketTypesPO = session.createQuery("FROM TicketTypesPO WHERE ticketTypeID = :ticketTypeID", TicketTypesPO.class)
-					.setParameter("ticketTypeID", ticketType.getTicketTypeID())
-					.uniqueResult();
 			
-			if (ticketTypesPO.getSession().getTicketTypes().size() == 1) {
-				result = true;
-			} else if (ticketTypesPO.getSession().getTicketTypes().size() == 0) {
-				result = null;
-			} else {
-				result = false;
-			}
-			
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
+		if (ticketType.getSession().getTicketTypes().size() == 1) {
+			result = true;
+		} else if (ticketType.getSession().getTicketTypes().size() == 0) {
+			result = null;
+		} else {
+			result = false;
 		}
 		
 		return result;
@@ -113,7 +76,6 @@ public class TicketTypesDAO {
 	public Boolean deleteTicketTypeById(Integer ticketTypeID) {
 		Boolean result = null;
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		
 		try {
 			TicketTypesPO ticketTypesPO = session.createQuery("FROM TicketTypesPO WHERE ticketTypeID = :ticketTypeID", TicketTypesPO.class)
@@ -123,9 +85,7 @@ public class TicketTypesDAO {
 			session.remove(ticketTypesPO);
 			
 			result = true;
-			session.getTransaction().commit();
 		} catch (Exception e) {
-			session.getTransaction().rollback();
 			result = false;
 			e.printStackTrace();
 		}
@@ -143,20 +103,17 @@ public class TicketTypesDAO {
 	public Boolean updateTicketTypeById(TicketTypesPO updatedTicketTypesPO) throws SQLException {
 		Boolean result = null;
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		
 		try {
 			TicketTypesPO ticketTypesPO = session.createQuery("FROM TicketTypesPO WHERE ticketTypeID = :ticketTypeID", TicketTypesPO.class)
 					.setParameter("ticketTypeID", updatedTicketTypesPO.getTicketTypeID())
 					.uniqueResult();
 			updatedTicketTypesPO.setTicketTypeNo(ticketTypesPO.getTicketTypeNo());
+			updatedTicketTypesPO.setSession(ticketTypesPO.getSession());
 			session.merge(updatedTicketTypesPO);
 			
 			result = true;
-			
-			session.getTransaction().commit();
 		} catch (Exception e) {
-			session.getTransaction().rollback();
 			result = false;
 			e.printStackTrace();
 		}

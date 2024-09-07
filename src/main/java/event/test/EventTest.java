@@ -5,11 +5,7 @@ import java.io.IOException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import event.object.po.EventTypesPO;
-import event.object.po.EventsPO;
 import event.object.po.TicketTypesPO;
-import event.service.CreateEventService;
-import event.util.TimestampUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,20 +16,6 @@ import util.HibernateUtil;
 @WebServlet ("/event/EventTest")
 public class EventTest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	private TimestampUtil timestampUtil;
-	private CreateEventService createEventService;
-
-    public EventTest() {
-        super();
-    }
-
-    @Override
-    public void init() throws ServletException {
-    	super.init();
-    	timestampUtil = new TimestampUtil();
-    	createEventService = new CreateEventService();
-    }
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -31,11 +31,9 @@ public class EventsPO implements Serializable {
 	@Column(name = "eventPic")
 	private String eventPic;
 
-	@Column(name = "eventType", insertable = false, updatable = false)
-	private String eventTypeString;  // FK, NOT NULL
-	
+//	private String eventTypeString;  // FK, NOT NULL
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "eventType")
+	@JoinColumn(name = "eventType", nullable = false)
 	private EventTypesPO eventType;
 
 	@Column(name = "eventDesc")
@@ -73,12 +71,6 @@ public class EventsPO implements Serializable {
 	}
 	public void setEventPic(String eventPic) {
 		this.eventPic = eventPic;
-	}
-	public String getEventTypeString() {
-		return eventTypeString;
-	}
-	public void setEventTypeString(String eventTypeString) {
-		this.eventTypeString = eventTypeString;
 	}
 	public EventTypesPO getEventType() {
 		return eventType;

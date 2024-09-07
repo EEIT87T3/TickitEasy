@@ -146,8 +146,8 @@
 	                                    for (TicketTypesPO ticketType : ticketTypeslist) {
                                 %>
                                 <tr>
-                                    <td class="py-3 px-4"><%= "（活動名稱）" %></td>
-                                    <td class="py-3 px-4"><%= "（場次名稱）" %></td>
+                                    <td class="py-3 px-4"><%= ticketType.getSession().getEvent().getEventName() %></td>
+                                    <td class="py-3 px-4"><%= ticketType.getSession().getSessionName() %></td>
                                     <td class="py-3 px-4"><%= ticketType.getTypeName() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getPrice() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getQuantityAvailable() == null ? "（未限制）" : ticketType.getQuantityAvailable() %></td>

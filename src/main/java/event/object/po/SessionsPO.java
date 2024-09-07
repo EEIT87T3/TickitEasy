@@ -24,12 +24,10 @@ public class SessionsPO implements Serializable{
 	@Id @Column(name = "sessionID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer sessionID;  // IDENTITY(1,1)
-	
-	@Column(name = "eventID", insertable = false, updatable = false)
-	private Integer eventID;  // FK, NOT NULL
-	
+
+//	private Integer eventID;  // FK, NOT NULL
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "eventID")
+	@JoinColumn(name = "eventID", nullable = false)
 	private EventsPO event;
 	
 	@Column(name = "sessionNo", nullable = false)
@@ -70,12 +68,6 @@ public class SessionsPO implements Serializable{
 	}
 	public void setSessionID(Integer sessionID) {
 		this.sessionID = sessionID;
-	}
-	public Integer getEventID() {
-		return eventID;
-	}
-	public void setEventID(Integer eventID) {
-		this.eventID = eventID;
 	}
 	public EventsPO getEvent() {
 		return event;

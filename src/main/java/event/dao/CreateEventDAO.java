@@ -23,18 +23,10 @@ public class CreateEventDAO {
 	 * @return：（無）
 	 * Caller：event.service.CreateEventService createEvent()
 	*/
-	public void createEvent(EventsPO eventsPO) throws Exception {
+	public void createEvent(EventsPO eventsPO) {
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		
-		try {
-			session.persist(eventsPO);
-			
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-		    throw e;
-		}
+
+		session.persist(eventsPO);
 	}
 	
 	/*
@@ -45,21 +37,10 @@ public class CreateEventDAO {
 	 * Caller：event.service.CreateEventService createEvent()
 	*/
 	public EventTypesPO selectOneEventType(String eventType) {
-		EventTypesPO resultEventType = null;
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		
-		try {
-			resultEventType = session.createQuery("FROM EventTypesPO WHERE eventType = :eventType", EventTypesPO.class)
-					.setParameter("eventType", eventType)
-					.uniqueResult();
-			
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		}
-		
-		return resultEventType;
+
+		return session.createQuery("FROM EventTypesPO WHERE eventType = :eventType", EventTypesPO.class)
+				.setParameter("eventType", eventType)
+				.uniqueResult();
 	}
 }
