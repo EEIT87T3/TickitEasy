@@ -1,11 +1,6 @@
 package event.service;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import event.dao.CreateEventDAO;
 import event.object.dto.createevent.EventDTO;
@@ -82,21 +77,20 @@ public class CreateEventService {
 	 * @param：EventDTO（使用者輸入資料）
 	 * @return：boolean（false 表示發生 SQLException）
 	*/
-	public boolean createEvent(EventDTO eventDTO) {
+	public boolean createEvent(EventDTO eventDTO) {		
 		// 4.1 將三種 DTO 包裝為 PO
-		// 4.2 呼叫 DAO，傳入 EventsPO, Map<Short, SessionsPO>, List<TicketTypesPO>
-		// 4.3 回傳 boolean 或是自定義 Exception
+		// 4.2 呼叫 DAO，傳入 EventsPO
+		// 4.3 回傳 boolean
+		CreateEventDAO createEventDAO = new CreateEventDAO();
 
 
 		// 4.1 將三種 DTO 包裝為 PO
 
 		EventsPO eventsPO = new EventsPO();
-		Map<Short, SessionsPO> sessionsPOMap = new HashMap<>();
-		List<TicketTypesPO> ticketTypesPOList = new ArrayList<>();
 
 		eventsPO.setEventName(eventDTO.getEventName());
 //		eventsPO.setEventPic(eventDTO.getEventPic());
-		eventsPO.setEventType(eventDTO.getEventType());
+		eventsPO.setEventType(createEventDAO.selectOneEventType(eventDTO.getEventType()));
 		eventsPO.setEventDesc(eventDTO.getEventDesc());
 		eventsPO.setTotalReviews(0);
 		eventsPO.setTotalScore(0);
@@ -129,7 +123,6 @@ public class CreateEventService {
 
 			for (TicketTypeDTO ticketTypeDTO : sessionDTO.getTicketTypeList()) {
 				TicketTypesPO ticketTypesPO = new TicketTypesPO();
-				ticketTypesPO.setSessionID(0 - (sessionDTO.getSessionNo()));  // 負數以表示此為暫時儲存 position
 				ticketTypesPO.setTicketTypeNo(ticketTypeDTO.getTicketTypeNo());
 				ticketTypesPO.setTypeName(ticketTypeDTO.getTypeName());
 				ticketTypesPO.setTypeDesc(ticketTypeDTO.getTypeDesc());
@@ -142,18 +135,19 @@ public class CreateEventService {
 				ticketTypesPO.setStartSaleTime(ticketTypeDTO.getStartSaleTime());
 				ticketTypesPO.setEndSaleTime(ticketTypeDTO.getEndSaleTime());
 
-				ticketTypesPOList.add(ticketTypesPO);
+				ticketTypesPO.setSession(sessionsPO);
+				sessionsPO.getTicketTypes().add(ticketTypesPO);
 			}
 
-			sessionsPOMap.put(sessionsPO.getSessionNo(), sessionsPO);
+			sessionsPO.setEvent(eventsPO);
+			eventsPO.getSessions().add(sessionsPO);
 		}
 
 
-		// 4.2 呼叫 DAO，傳入 EventsPO, List<SessionsPO>, List<TicketTypesPO>
-		CreateEventDAO createEventDAO = new CreateEventDAO();
+		// 4.2 呼叫 DAO，傳入 EventsPO
 		try {
-			createEventDAO.createEvent(eventsPO, sessionsPOMap, ticketTypesPOList);
-		} catch (SQLException e) {
+			createEventDAO.createEvent(eventsPO);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}

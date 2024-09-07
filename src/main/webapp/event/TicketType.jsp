@@ -1,6 +1,6 @@
 <%@page import="event.util.TimestampUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="event.object.dto.updateevent.OneTicketTypeDTO" %>
+<%@ page import="event.object.po.TicketTypesPO" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,13 +15,13 @@
 <body style="background-color:#e6f3ff">
 <div align="center">
     <h2>活動票種詳情</h2>
-    <jsp:useBean id="ticketType" scope="request" class="event.object.dto.updateevent.OneTicketTypeDTO" />
+    <jsp:useBean id="ticketType" scope="request" class="event.object.po.TicketTypesPO" />
 	<% TimestampUtil timestampUtil = new TimestampUtil(); %>
     <form id="updateForm" method="post" action="<%= request.getContextPath() %>/event/UpdateTicketType" enctype="multipart/form-data">
         <table>
             <tr><td>票種編號：</td><td><input type="text" disabled value="${ticketType.ticketTypeID}"><input type="hidden" name="ticketTypeID" value="${ticketType.ticketTypeID}"></td></tr>
-            <tr><td>活動名稱：</td><td><input type="text" disabled value="${ticketType.eventName}"><input type="hidden" name="eventName" value="${ticketType.eventName}"></td></tr>
-            <tr><td>場次名稱：</td><td><input type="text" disabled value="${ticketType.sessionName}"><input type="hidden" name="sessionName" value="${ticketType.sessionName}"></td></tr>
+            <tr><td>活動名稱：</td><td><input type="text" disabled value="<%= ticketType.getSession().getEvent().getEventName() %>"><input type="hidden" name="eventName" value="<%= ticketType.getSession().getEvent().getEventName() %>"></td></tr>
+            <tr><td>場次名稱：</td><td><input type="text" disabled value="<%= ticketType.getSession().getSessionName() %>"><input type="hidden" name="sessionName" value="<%= ticketType.getSession().getSessionName() %>"></td></tr>
             <tr class="must"><td>票種名稱：</td><td><input type="text" name="typeName" value="${ticketType.typeName}" disabled></td></tr>
             <tr><td>票種說明：</td><td><textarea name="typeDesc" disabled>${ticketType.typeDesc}</textarea></td></tr>
             <tr class="must"><td>價格：</td><td><input type="number" name="price" value="${ticketType.price}" disabled></td></tr>
