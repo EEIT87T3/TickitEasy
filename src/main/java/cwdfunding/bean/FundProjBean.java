@@ -1,18 +1,72 @@
 package cwdfunding.bean;
 
-public class FundProjBean implements java.io.Serializable{
-	private static final long serialVersionUID = 1L;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity @Table(name = "fundingProj")
+public class FundProjBean{
+
+	
+	@Id @Column(name = "projectID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int projectID;
+	
+	@Column(name = "title")
 	private String title;
+	
+	@Column(name = "description")
 	private String description;
+	
+	@Column(name = "image")
 	private String image;
-	private String startDate;
-	private String endDate;
+	
+	@Column(name = "startDate")
+	private Timestamp startDate;
+	
+	@Column(name = "endDate")
+	private Timestamp endDate;
+	
+	@Column(name = "targetAmount")
 	private String targetAmount;
+	
+	@Column(name = "currentAmount")
 	private String currentAmount;
+	
+	@Column(name = "threshold")
 	private String threshold;
-	private String postponeDate;
+	
+	@Column(name = "postponeDate")
+	private Timestamp postponeDate;
+	
+	@Column(name = "category")
 	private String category;
+	
+	public FundProjBean() {
+		
+	}
+	
+	public FundProjBean(String title, String description, String image, Timestamp startDate, Timestamp endDate,
+			String targetAmount, String currentAmount, String threshold, Timestamp postponeDate, String category) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.image = image;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.targetAmount = targetAmount;
+		this.currentAmount = currentAmount;
+		this.threshold = threshold;
+		this.postponeDate = postponeDate;
+		this.category = category;
+	}
+	
 	public int getProjectID() {
 		return projectID;
 	}
@@ -37,16 +91,16 @@ public class FundProjBean implements java.io.Serializable{
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public String getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(String startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
-	public String getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(String endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 	public String getTargetAmount() {
@@ -67,10 +121,10 @@ public class FundProjBean implements java.io.Serializable{
 	public void setThreshold(String threshold) {
 		this.threshold = threshold;
 	}
-	public String getPostponeDate() {
+	public Timestamp getPostponeDate() {
 		return postponeDate;
 	}
-	public void setPostponeDate(String postponeDate) {
+	public void setPostponeDate(Timestamp postponeDate) {
 		this.postponeDate = postponeDate;
 	}
 	public String getCategory() {
@@ -79,9 +133,25 @@ public class FundProjBean implements java.io.Serializable{
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+	
+    // 返回格式化後的日期
+    public String getFormattedStartDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(startDate);
+    }
 
+    public String getFormattedEndDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(endDate);
+    }
+    
+    public String getFormattedPostponeDate() {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	return sdf.format(postponeDate);
+    }
+//	public static long getSerialversionuid() {
+//		return serialVersionUID;
+//	}
 
+	
 }

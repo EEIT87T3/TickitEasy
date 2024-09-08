@@ -1,184 +1,143 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    import="java.util.*,cwdfunding.bean.FundProjBean"%>
-<%!@SuppressWarnings("unchecked")%>
+	pageEncoding="UTF-8"%>
+<%@ page import="java.util.*,cwdfunding.bean.FundProjBean, java.time.LocalDateTime, java.time.format.DateTimeFormatter"%>
+
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>募資管理 - TickitEasy 管理系統</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活動票種管理 - TickitEasy 管理系統</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/nice-forms.css@0.1.7/dist/nice-forms.css" />
+<style>
 
-    <style>
-        .sidebar {
-            top: 4rem;
-            height: calc(100vh - 4rem);
-        }
-        .content-with-sidebar {
-            padding-top: 4rem;
-        }
-        #sidebarToggle {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 9999;
-            background-color: #3182ce;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
-        }
-        #sidebarToggle:hover {
-            background-color: #2c5282;
-        }
-        #sidebarToggle i {
-            font-size: 1.5rem;
-        }
-        @media (min-width: 1024px) {
-            #sidebarToggle {
-                left: 1rem;
-            }
-            #sidebarToggle.button-shifted {
-                left: 1rem;
-            }
-            .sidebar {
-                position: fixed;
-                left: 0;
-                width: 14rem;
-                z-index: 30;
-                transition: left 0.3s ease-in-out;
-            }
-            .content-with-sidebar {
-                margin-left: 14rem;
-                transition: margin-left 0.3s ease-in-out;
-            }
-            .sidebar-closed {
-                left: -14rem;
-            }
-            .content-full {
-                margin-left: 0;
-            }
-            .button-shifted {
-                left: 1rem;
-            }
-        }
 
-        /* 保留募資管理頁面的原有樣式 */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            /*padding-top: 56px;*/
-            background-color: #f4f4f4;
-            text-align: center;
-        }
+/* 左側選單 */
+.sidebar { /* 預設樣式 與 開啟選單時 */
+	position: fixed;
+	top: 4rem; /* 留出空間給頂部導航欄。 */
+	height: calc(100vh - 4rem); /* 視窗高度 - 頂部導航欄高度，以向下填滿視窗空間。 */
+	left: 0;
+	width: 14rem; /* 224px */
+	z-index: 30;
+	transition: left 0.3s ease-in-out;
+}
 
-        main {
-            padding: 20px;
-        }
+.sidebar-closed { /* 關閉選單時 */
+	left: -14rem;
+}
 
-        body {
-            text-align: center;
-        }
+#sidebarToggle { /* 左側選單的 toggle 按鈕 */
+	position: fixed;
+	top: 0.75rem;
+	left: 1rem;
+	z-index: 9999;
+	background-color: #2563eb;
+	color: white;
+	padding: 0.5rem;
+	border-radius: 0.375rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: all 0.3s ease-in-out;
+}
 
-        .container{
-            position:absolute;
-            top:10%;
-            height: auto;
-            width: auto; 
-            padding: 10px;
-        }
+#sidebarToggle:hover {
+	background-color: #2c5282;
+}
 
-        .top {
-            display: flex;
-            justify-content: center; /* 水平排列 */
-            align-items: center; /* 垂直居中 */
-            padding: 10px;
-        }
+#sidebarToggle i {
+	font-size: 1.5rem;
+	color: white;
+}
 
-        .top h1{
-            margin: 0 auto; /* 自動水平居中 */
-        }
+/* 內容區 */
+.content-with-sidebar { /* 預設樣式 與 開啟選單時 */
+	padding-top: 4rem; /* 留出空間給頂部導航欄。 */
+	margin-left: 14rem; /* 224px */
+	transition: margin-left 0.3s ease-in-out;
+}
 
+.content-full { /* 關閉選單時 */
+	margin-left: 0;
+}
+
+div.container {
+	margin: auto;
+	max-width: 1250px;
+	/* 限制最大寬度，以防左側選單 toggle 影響寬度；但是實際測量 DataTable 寬度為 1500px 多，不懂為什麼在此設 1250px 剛好。 */
+}
+
+/* DataTables */
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+	.dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing,
+	.dataTables_wrapper .dataTables_paginate {
+	color: #4a5568;
+	margin-bottom: 10px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+	.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover
+	{
+	background: #4299e1;
+	border-color: #4299e1;
+	color: white !important;
+}
+
+table.dataTable tbody tr:hover {
+	background-color: #dfe3eb;
+}
+
+/* button */
         .btn {
             cursor: pointer;
-            border-radius: 20px;
-            padding: 5px 10px;
+            border-radius: 10px;
+            padding: 10px 15px;
             background-color: #e7e7e7;
-            border: 2px solid lightgray;
+            border: 0.5px solid lightgray; 
             font-weight: bold;
         }
-
-        .btn-add {
-            font-size: 16px;
+        .btn-X {
+            cursor: pointer;
+			text-font: 30px;
+			font-weight: bold;
+        }
+        /* 確定按鈕 */
+        .btn-check {
+            background-color: #4CAF50; /* 綠色 */
+            color: white;
         }
 
-        .btn-update .btn-delete {
-            /* justify-content: center; */
-            align-items: center;
-        /* 	display: inline;*/
-            padding: 10px;
+        .btn-check:hover {
+            background-color: #45a049; /* 懸停時稍微變深 */
         }
 
-        .btn-delete{
-            border: 2px solid #EF6064;
+        .btn-check:active {
+            transform: scale(0.95); /* 按下時微縮 */
         }
 
-        .btn-update{
-            border: 2px solid #F2BC57;	
+        /* 取消按鈕 */
+        .btn-cancel {
+            background-color: #f44336; /* 紅色 */
+            color: white;
         }
 
-        .btn-update-header{
-            display: flex;
-            justify-content: center; /* 水平排列 */
-            align-items: center; /* 垂直居中 */
-            padding: 20px 20px;
+        .btn-cancel:hover {
+            background-color: #e53935; /* 懸停時稍微變深 */
         }
 
-        .btn-update-header h3{
-            margin: 0 auto; /* 自動水平居中 */
+        .btn-cancel:active {
+            transform: scale(0.95); /* 按下時微縮 */
         }
 
-        .table-projs {
-            border: 2px solid #ffc197;
-            margin: 20px;
-            text-align: center;
-            justify-content: center;	
-            /* white-space: nowrap; */
-        }
-
-        .table-projs thead {
-            background-color: #ffc197;
-            text-align: center;
-        }
-
-        .div-td {
-            height: 20px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-
-        .div-actions {
-            width: 110px;
-            display: flex;
-            justift-content: flex-start;
-            align-items: center;
-        }
-
-        .div-actions-ele{
-            width: 55px;
-            height: 50px;
-        }
-
-        td {
-            word-break: break-all;
-        }
-
-        .formContainer {
+/* Form */
+        .form {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -191,441 +150,508 @@
             padding: 20px;
             border-radius: 10px;
             z-index: 1000;
-        }
-
-        .form-add {
-            border: 5px solid #ffc197;
+            border: 1px solid lightgray; 
             border-radius: 10px;
             padding: 20px;
 			background-color: #f4f4f4;
-        }
-
-        .form-update {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            height: auto;
-            max-height: 90vh;
-            width: 90%;
-            max-width: 600px;
-            padding: 20px;
-            border-radius: 10px;
-            border: 5px dashed #ffc197;
-            background: #f4f4f4;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
-        }
-
-        .formEle {
-            font-size: 18px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 20px;
-        }
-
-        .formEle label {
-            flex-basis: 15%; /* label 占據 15% 的寬度 */
-            text-align: right; /* 文字靠右對齊 */
-            padding-right: 30px; /* 右側增加間距 */
-        }
-
-        .formEle input {
-            flex-basis: 40%; /* input 占據 50% 的寬度  */
-        }
-
-        .formEle textarea {
-            flex-basis: 40%; /* input 占據 50% 的寬度  */
-        }
-
-        .formEle select {
-            flex-basis: 40%; /* input 占據 50% 的寬度  */
-        }
-
-        .formEle-img label{
-            flex-basis: 70%; /* label 占據 15% 的寬度 */
-        }
-
-        .formEle-img img{
-            flex-basis: 5%; /* label 占據 15% 的寬度 */
-        }
-        .formEle-img input{
-            flex-basis: 85%;
-            width: 100px;
-        } 
-
-        #span-ok {
-            display: none;
-            font-size: 20px;
-        }
-
+			box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;         
+		}
+        
         .hidden {
             display: none !important;
         }
-
-        .table-projs img{
-            max-width: 100px;
-            height: auto;
+        
+        .form-header{
+        	display: flex;
+        	justify-content: space-between;
         }
-    </style>
+        
+        .form h3{
+        	font-size: 20px;
+        	font-weight: bold;
+        }
+ 		.sm {
+			color: red;
+		} 
+	
+</style>
 </head>
-<body>
-    <button id="sidebarToggle" class="fixed top-5 left-4 z-50 bg-blue-600 text-white p-2 rounded-md">
-        <i class="fas fa-bars"></i>
-    </button>
-	<!-- 頂部導航欄 -->
-    <nav class="bg-blue-600 text-white shadow-lg fixed top-0 left-0 right-0 z-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <span class="font-semibold text-xl ml-2">TickitEasy 管理系統</span>
-                </div>
-                <div>
-                    <a href="${pageContext.request.contextPath}/admin/adminLogout" class="text-white hover:text-gray-200">登出</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <div class="flex h-screen bg-gray-100">
-        <!-- 側邊欄 -->
-        <div class="bg-gray-800 text-white w-56 flex-shrink-0 sidebar">
-            <div class="p-4">
-                <h2 class="text-2xl font-semibold">管理選單</h2>
-            </div>
-            <nav class="mt-4">
-                <a href="${pageContext.request.contextPath}/admin/dashboard"
+<body class="bg-gray-100">
+	<button id="sidebarToggle"
+		class="fixed top-5 left-4 z-50 bg-blue-600 text-white p-2 rounded-md">
+		<i class="fas fa-bars"></i>
+	</button>
+
+	<!-- 頂部導航欄 -->
+	<nav
+		class="bg-blue-600 text-white shadow-lg fixed top-0 left-0 right-0 z-50">
+		<div class="max-w-7xl mx-auto px-4">
+			<div class="flex items-center justify-between h-16">
+				<div class="flex items-center">
+					<span class="font-semibold text-xl ml-2">TickitEasy 管理系統</span>
+				</div>
+				<div>
+					<a href="${pageContext.request.contextPath}/admin/adminLogout"
+						class="text-white hover:text-gray-200">登出</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<div class="flex h-screen bg-gray-100">
+		<!-- 側邊欄 -->
+		<div class="bg-gray-800 text-white w-56 flex-shrink-0 sidebar">
+			<div class="p-4">
+				<h2 class="text-2xl font-semibold">管理選單</h2>
+			</div>
+			<nav class="mt-4">
+				<a href="${pageContext.request.contextPath}/admin/dashboard"
 					class="block py-2 px-4 hover:bg-gray-700">後台管理首頁</a> <a
 					href="${pageContext.request.contextPath}/admin/memberManagement"
-					class="block py-2 px-4 hover:bg-gray-700 ">會員管理</a>
-					<a
+					class="block py-2 px-4 hover:bg-gray-700 ">會員管理</a> <a
 					href="${pageContext.request.contextPath}/admin/memberStatistics.jsp"
-					class="block py-2 px-4 hover:bg-gray-700">會員統計分析</a>
-					 <a
-					href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp" class="block py-2 px-4 hover:bg-gray-700 ">活動管理</a> <a
-					href="${pageContext.request.contextPath}/order/ordersHTML/prodOrders.html" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a> <a
-					href="${pageContext.request.contextPath}/product/GetAllProducts.jsp" class="block py-2 px-4 hover:bg-gray-700 ">商品管理</a> <a
-					href="${pageContext.request.contextPath}/GetAllPost" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a> <a
-					href="${pageContext.request.contextPath}/FundProjs" class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">募資活動管理</a>
-            </nav>
-        </div>
+					class="block py-2 px-4 hover:bg-gray-700">會員統計分析</a> <a
+					href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp"
+					class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">活動管理</a> <a
+					href="${pageContext.request.contextPath}/order/ordersHTML/prodOrders.html"
+					class="block py-2 px-4 hover:bg-gray-700">訂單管理</a> <a
+					href="${pageContext.request.contextPath}/product/GetAllProducts.jsp"
+					class="block py-2 px-4 hover:bg-gray-700">商品管理</a> <a
+					href="${pageContext.request.contextPath}/GetAllPost"
+					class="block py-2 px-4 hover:bg-gray-700">討論區管理</a> <a
+					href="${pageContext.request.contextPath}/FundProjs"
+					class="block py-2 px-4 hover:bg-gray-700">募資活動管理</a>
+			</nav>
+		</div>
 
-        <div class="flex-1 flex flex-col overflow-hidden content-with-sidebar">
-            <main class="flex-1 overflow-x-hidden overflow-y-auto ">
-                <div class="container mx-auto px-4 py-8">
-        
- 
- <!-- 原有的內容保持不變 -->
-<!--  <main role="main"> -->
-    <div class="container">
-        <div class="top">
-            <button class="btn btn-add">➕ 新增</button>
-            <h1>募資專案</h1>
-        </div>
-        <div class="formContainer hidden">
-            <div class="form-add">
+		<!-- 主要內容區 -->
+		<div class="flex-1 flex flex-col overflow-hidden content-with-sidebar">
+			<main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+				<div class="container mx-auto px-4 py-8">
+					<div class="flex items-center justify-between mb-4">
+						<h1 class="text-3xl font-bold mb-4 ml-4">募資管理</h1>
+						<button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mr-4 rounded btn-add">新增</button>
+					</div>
+					<div class="overflow-x-auto">
+						<table id="table-projs" class="w-full bg-white">
+							<thead class="bg-gray-800 text-white">
+								<tr>
+									<th class="py-3 px-4 text-center" nowrap>編號</th>
+									<th class="py-3 px-4 text-center" nowrap>名稱</th>
+									<th class="py-3 px-4 text-center" nowrap>內容</th>
+									<th class="py-3 px-4 text-center" nowrap>圖片</th>
+									<th class="py-3 px-4 text-center" nowrap>開始時間</th>
+									<th class="py-3 px-4 text-center" nowrap>截止時間</th>
+									<th class="py-3 px-4 text-center" nowrap>目標金額</th>
+									<th class="py-3 px-4 text-center" nowrap>目前金額</th>
+									<th class="py-3 px-4 text-center" nowrap>展延門檻</th>
+									<th class="py-3 px-4 text-center" nowrap>展延到期時間</th>
+									<th class="py-3 px-4 text-center" nowrap>專案類別</th>
+									<th class="py-3 px-4 text-center" nowrap>選項</th>
+								</tr>
+							</thead>
+							<tbody class="text-gray-700">
+								<%
+									List<FundProjBean> projs = (ArrayList<FundProjBean>) request.getAttribute("projs");
+										for (FundProjBean proj : projs) {
+								%>
+								<tr>
+									<td class="py-3 px-4 text-center"><%= proj.getProjectID() %></td>
+									<td class="py-3 px-4 "><%= proj.getTitle() %></td>
+									<td class="py-3 px-4 "><%= proj.getDescription() %></td>
+									<td class="py-3 px-4 text-center">
+										<img src="<%= request.getContextPath() %>/cwdfunding/images/<%=proj.getImage()%>" alt="image" style="max-width:70px; height: auto">
+										<input type="hidden" value="<%=proj.getImage()%>"></td>
+									<td class="py-3 px-4 text-center"><%=proj.getFormattedStartDate() %></td>
+									<td class="py-3 px-4 text-center"><%=proj.getFormattedEndDate()%></td>
+									<td class="py-3 px-4 text-center"><%=proj.getTargetAmount()%></td>
+									<td class="py-3 px-4 text-center"><%=proj.getCurrentAmount()%></td>
+									<td class="py-3 px-4 text-center"><%=proj.getThreshold()%></td>
+									<td class="py-3 px-4 text-center"><%=proj.getFormattedPostponeDate()%></td>
+									<td class="py-3 px-4 text-center"><%=proj.getCategory()%></td>
+									<td class="py-3 px-4 text-center">
+										<div class="div-actions">			
+											<div class="div-actions-ele">
+												<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs btn-update">修改</button>
+											</div>								
+											<div class="div-actions-ele">
+											<form action="<%= request.getContextPath() %>/FundProjs?action=delete" method="post">
+												<input type="hidden" name="del-projectID" value="<%=proj.getProjectID()%>"> 								
+												<button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('確定刪除嗎？')">刪除</button>
+											</form>
+											</div>
+										</div></td> <%}%>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</main>
+		</div>
+		<!-- 新增表單 -->
+		<div class="form form-add hidden">
+				<div class="form-header">
+					<h3>新增</h3>
+					<button class="btn-X btn-close">X</button>
+				</div>
                 <form action="<%= request.getContextPath() %>/FundProjs?action=insert"
                     method="post" enctype="multipart/form-data">
-						<div class="formEle">
-							<label>專案名稱</label><input type="text" id="title" name="title">
+						<div class="nice-form-group">
+							<label>專案名稱</label><small class="sm" id="sp-title" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="title" name="title" data-error="sp-title">
 						</div>
-						<div class="formEle">
-							<label>專案敘述</label>
+						<div class="nice-form-group">
+							<label>專案敘述</label><small class="sm" id="sp-description" style="font-size:12.5px; font-weight: bold"></small>
 							<textarea name="description" maxlength="150"
-								placeholder="上限150個字" name="description"></textarea>
+								placeholder="上限200個字" name="description" data-error="sp-description"></textarea>
 						</div>
-						<div class="formEle">
-							<label>專案圖片</label><input type="file" id="image" name="image">
+						<div class="nice-form-group">
+							<label>專案圖片</label><small class="sm" id="sp-image" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="file" id="image" name="image">
 						</div>
-						<div class="formEle">
-							<label>開始日期</label><input type="text" id="startDate"
+						<div class="nice-form-group">
+							<label>開始日期</label><small class="sm" id="sp-startDate" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="datetime-local" id="startDate"
 								placeholder="yyyy-mm-dd" name="startDate">
 						</div>
-						<div class="formEle">
-							<label>截止日期</label><input type="text" id="endDate"
+						<div class="nice-form-group">
+							<label>截止日期</label><small class="sm" id="sp-endDate" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="datetime-local" id="endDate"
 								placeholder="yyyy-mm-dd" name="endDate">
 						</div>
-						<div class="formEle">
-							<label>目標金額</label><input type="text" id="targetAmount"
+						<div class="nice-form-group">
+							<label>目標金額</label><small class="sm" id="sp-targetAmount" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="targetAmount"
 								name="targetAmount">
 						</div>
-						<div class="formEle">
-							<label>目前金額</label><input type="text" id="currentAmount"
+						<div class="nice-form-group">
+							<label>目前金額</label><small class="sm" id="sp-currentAmount" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="currentAmount"
 								name="currentAmount">
 						</div>
-						<div class="formEle">
-							<label>展延門檻</label><input type="text" id="threshold"
+						<div class="nice-form-group">
+							<label>展延門檻</label><small class="sm" id="sp-threshold" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="threshold"
 								placeholder="0-1" name="threshold">
 						</div>
-						<div class="formEle">
-							<label>展延日期</label><input type="text" id="postponeDate"
+						<div class="nice-form-group">
+							<label>展延日期</label><small class="sm" id="sp-postponeDate" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="datetime-local" id="postponeDate"
 								placeholder="yyyy-mm-dd" name="postponeDate">
 						</div>
-						<div class="formEle">
-							<label>分類</label> <select id="category" name="category">
+						<div class="nice-form-group">
+							<label>分類</label> <small class="sm" id="sp-category" style="font-size:12.5px; font-weight: bold"></small>
+							<select id="category" name="category">
 								<option value="表演" selected>表演</option>
 								<option value="音樂會">音樂會</option>
 								<option value="藝術">藝術</option>
 								<option value="其他">其他</option>
 							</select>
 						</div>
-						<div class="formEle">
+						<div class="nice-form-group">
                             <input class="btn btn-check" type="submit" value="確定" />
-                            <button type="button" class="btn btn-cancel">取消</button>
+                            <button type="button" class="btn btn-close btn-cancel">取消</button>
                         </div>
-                    </form>
-                </div>
+                 </form>
             </div>
-            <table border="1" class="table-projs">
-
-				<thead>
-					<tr>
-						<th nowrap>專案編號
-						<th nowrap>專案名稱
-						<th nowrap>專案內容
-						<th nowrap>專案圖片
-						<th nowrap>開始時間
-						<th nowrap>截止時間
-						<th nowrap>目標金額 
-						<th nowrap>目前金額
-						<th nowrap>展延門檻
-						<th nowrap>展延到期時間
-						<th nowrap>專案類別
-						<th nowrap>選項
-				</thead>
-				<tbody>
-					<%
-					List<FundProjBean> projs = (ArrayList<FundProjBean>) request.getAttribute("projs");
-								for (FundProjBean proj : projs) {
-					%>
-					<tr>
-						<td><div><%=proj.getProjectID()%></div></td>
-						<td><div><%=proj.getTitle()%></div></td>
-						<td><div><%=proj.getDescription()%></div></td>
-						<td><div><img src="<%= request.getContextPath() %>/cwdfunding/images/<%=proj.getImage()%>" alt="image">
-							<input type="hidden" value="<%=proj.getImage()%>"></div></td>
-						<td><%=proj.getStartDate()%></td>
-						<td><%=proj.getEndDate()%></td>
-						<td><%=proj.getTargetAmount()%></td>
-						<td><%=proj.getCurrentAmount()%></td>
-						<td><%=proj.getThreshold()%></td>
-						<td><%=proj.getPostponeDate()%></td>
-						<td><%=proj.getCategory()%></td>
-						<td>
-							<div class="div-actions">			
-								<div class="div-actions-ele">
-									<button class="btn btn-update">修改</button>
-								</div>								
-								<div class="div-actions-ele">
-								<form action="<%= request.getContextPath() %>/FundProjs?action=delete" method="post">
-									<input type="hidden" name="del-projectID" value="<%=proj.getProjectID()%>"> 								
-									<button type="submit" class="btn btn-delete" onclick="return confirm('確定刪除嗎？')">刪除</button>
-								</form>
-								</div>
-							</div> <%}%>
-						
-				</tbody>
-            </table>
-            <h3>共<%=projs.size()%>筆募資專案</h3>
-        </div>
-</div>
-    </main>
-</div>
-</div>
-<!-- </main> -->
-
-			<div class="form-update hidden">
-				<div class="btn-update-header">
-					<button class="btn btn-update-close">➖ 關閉</button>
+       <!-- 修改表單 -->
+       <div class="form form-update hidden">
+				<div class="form-header">
 					<h3>修改</h3>
+					<button class="btn-X btn-close">X</button>
 				</div>
 					<form action="<%= request.getContextPath() %>/FundProjs?action=update" 
 						method="post" enctype="multipart/form-data">
-						<div class="formEle">
+						<div class="nice-form-group">
 							<label>專案編號</label><input type="text" id="udt-projectID" name="udt-projectID" readonly>
 						</div>
-						<div class="formEle">
-							<label>專案名稱</label><input type="text" id="udt-title" name="udt-title">
+						<div class="nice-form-group">
+							<label>專案名稱</label><small class="sm" id="sp-udt-title" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="udt-title" name="udt-title">
 						</div>
-						<div class="formEle">
-							<label>專案敘述</label>
+						<div class="nice-form-group">
+							<label>專案敘述</label><small class="sm" id="sp-udt-description" style="font-size:12.5px; font-weight: bold"></small>
 							<textarea maxlength="150"
 								placeholder="上限150個字" name="udt-description"></textarea>
 						</div>
-						<div class="formEle formEle-img">
-							<label>專案圖片</label><img id="udt-image-preview" src="" alt="專案圖片" style="max-width: 100px; height: auto;">
+						<div class="nice-form-group formEle-img">
+							<label>專案圖片</label><small class="sm" id="sp-udt-image" style="font-size:12.5px; font-weight: bold"></small>
+							<img id="udt-image-preview" src="" alt="專案圖片" style="max-width: 100px; height: auto;">
 							<input type="file" id="udt-image" name="udt-image">
 							<input type="hidden" id="old-image" name="old-image"> 								
 						</div>
-						<div class="formEle">
-							<label>開始日期</label><input type="text" id="udt-startDate"
+						<div class="nice-form-group">
+							<label>開始日期</label><small class="sm" id="sp-udt-startDate" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="datetime-local" id="udt-startDate"
 								placeholder="yyyy-mm-dd" name="udt-startDate">
 						</div>
-						<div class="formEle">
-							<label>截止日期</label><input type="text" id="udt-endDate"
+						<div class="nice-form-group">
+							<label>截止日期</label><small class="sm" id="sp-udt-endDate" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="datetime-local" id="udt-endDate"
 								placeholder="yyyy-mm-dd" name="udt-endDate">
 						</div>
-						<div class="formEle">
-							<label>目標金額</label><input type="text" id="udt-targetAmount"
+						<div class="nice-form-group">
+							<label>目標金額</label><small class="sm" id="sp-udt-targetAmount" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="udt-targetAmount"
 								name="udt-targetAmount">
 						</div>
-						<div class="formEle">
-							<label>目前金額</label><input type="text" id="udt-currentAmount"
+						<div class="nice-form-group">
+							<label>目前金額</label><small class="sm" id="sp-udt-currentAmount" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="udt-currentAmount"
 								name="udt-currentAmount">
 						</div>
-						<div class="formEle">
-							<label>展延門檻</label><input type="text" id="udt-threshold"
+						<div class="nice-form-group">
+							<label>展延門檻</label><small class="sm" id="sp-udt-threshold" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="text" id="udt-threshold"
 								placeholder="0-1" name="udt-threshold">
 						</div>
-						<div class="formEle">
-							<label>展延日期</label><input type="text" id="udt-postponeDate"
+						<div class="nice-form-group">
+							<label>展延日期</label><small class="sm" id="sp-udt-postponeDate" style="font-size:12.5px; font-weight: bold"></small>
+							<input type="datetime-local" id="udt-postponeDate"
 								placeholder="yyyy-mm-dd" name="udt-postponeDate">
 						</div>
-						<div class="formEle">
-							<label>分類</label> <select id="udt-category" name="udt-category">
+						<div class="nice-form-group">
+							<label>分類</label><small class="sm" id="sp-category" style="font-size:12.5px; font-weight: bold"></small>
+							 <select id="udt-category" name="udt-category">
 								<option value="表演" selected>表演</option>
 								<option value="音樂會">音樂會</option>
 								<option value="藝術">藝術</option>
 								<option value="其他">其他</option>
 							</select>
 						</div>
-						<div class="formEle">
+						<div class="nice-form-group">
 							<input class="btn btn-check" type="submit" value="確定" />
+                            <button type="button" class="btn btn-close btn-cancel">取消</button>							
 						</div>
-					</form>
-					</div>
-			
-            <div class="overlay"></div>
-		<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-		<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
-		<script>
-			$(function() {
-				//code
-				 // 側邊欄切換功能
-            $('#sidebarToggle').click(function() {
-                $('.sidebar').toggleClass('sidebar-closed');
-                $('.content-with-sidebar').toggleClass('content-full');
-                $(this).toggleClass('button-shifted');
-            });
+				</form>
+			</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+	
+	<script>
+		$(document)
+			.ready(
+					function() {
+							$('#table-projs').DataTable(
+								{ "language" : 
+								{"url" : "${pageContext.request.contextPath}/resource/Chinese-traditional.json"}
+								});
 
-            // 初始化側邊欄位置
-            function initSidebar() {
-                if (window.innerWidth >= 1024) {
-                    $('.sidebar').removeClass('sidebar-closed');
-                    $('.content-with-sidebar').removeClass('content-full');
-                    $('#sidebarToggle').removeClass('button-shifted');
-                } else {
-                    $('.sidebar').addClass('sidebar-closed');
-                    $('.content-with-sidebar').addClass('content-full');
-                    $('#sidebarToggle').addClass('button-shifted');
-                }
-            }
+							// 側邊欄切換功能
+							$('#sidebarToggle').click(
+									function() {
+										$('.sidebar').toggleClass(
+												'sidebar-closed');
+										$('.content-with-sidebar').toggleClass(
+												'content-full');
+										$(this).toggleClass('button-shifted');
+									});
 
-            // 頁面加載時初始化側邊欄
-            initSidebar();
-            $(window).resize(initSidebar);
-
-
-				$('.btn-add').click(function() {
-                $('.formContainer').toggleClass('hidden');
-                $('.overlay').toggleClass('hidden');
-                $('body').toggleClass('overflow-hidden');
-            });
-
-            $('.btn-cancel').click(function() {
-                $('.formContainer').addClass('hidden');
-                $('.overlay').addClass('hidden');
-                $('body').removeClass('overflow-hidden');
-            });
-
-            // 點擊遮罩層關閉表單
-            $('.overlay').click(function() {
-                $('.formContainer').addClass('hidden');
-                $('.overlay').addClass('hidden');
-                $('body').removeClass('overflow-hidden');
-            });
-
-				$('.btn-check').click(function() {
-					$('.formContainer').addClass("hidden");
-					$('.btn-add').html("➕ 新增");
-					console.log('bye');
-				})
-				$('.btn-update').click(function(){
-					if ($('.form-update').hasClass("hidden")) {
-						    let row = $(this).closest('tr');
-					        
-					        // 取出專案的各個數據
-					        let projectID = row.find('td:eq(0) div').text().trim();
-					        let title = row.find('td:eq(1) div').text().trim();
-					        let description = row.find('td:eq(2) div').text().trim();
-					        let image = row.find('td:eq(3) img').attr('src').trim();
-					        let oldImage = row.find('td:eq(3) input').val().trim();
-					        let startDate = row.find('td:eq(4)').text().trim();
-					        let endDate = row.find('td:eq(5)').text().trim();
-					        let targetAmount = row.find('td:eq(6)').text().trim();
-					        let currentAmount = row.find('td:eq(7)').text().trim();
-					        let threshold = row.find('td:eq(8)').text().trim();
-					        let postponeDate = row.find('td:eq(9)').text().trim();
-					        let category = row.find('td:eq(10)').text().trim();
-
-					        // 將這些數據填充到表單中
-					        $('#udt-projectID').val(projectID);
-					        $('#udt-title').val(title);
-					        $('textarea[name="udt-description"]').val(description);
-					        $('#udt-image-preview').attr('src',image);
-					        $('#old-image').val(oldImage);
-					        $('#udt-startDate').val(startDate);
-					        $('#udt-endDate').val(endDate);
-					        $('#udt-targetAmount').val(targetAmount);
-					        $('#udt-currentAmount').val(currentAmount);
-					        $('#udt-threshold').val(threshold);
-					        $('#udt-postponeDate').val(postponeDate);
-					        $('#udt-category').val(category);
-					        $('.form-update').removeClass("hidden");
-					        $('.container').css({'filter':'blur(20px)'});
- 					} else {
-						$('.form-update').addClass("hidden");
-					}
-				})
-				$('.btn-update-close').click(function(){
-					if(!$('.form-update').hasClass("hidden")){
-						$('.form-update').addClass("hidden");
-						$('.container').css({'filter':''});
-					}
-				})
-
-				 $(document).ready(function() {
-					$('.table-projs').DataTable();
-				}); 
-				 $('.table-projs').DataTable(
-						{
-							//設定屬性(預設功能)區塊
-							"searching" : true, // 預設為true 搜尋功能，若要開啟不用特別設定
-							"paging" : false, // 預設為true 分頁功能，若要開啟不用特別設定
-							"ordering": true, // 預設為true 排序功能，若要開啟不用特別設定
-							"sPaginationType" : "full_numbers", // 分頁樣式 預設為"full_numbers"，若需其他樣式才需設定
-							"lengthMenu" : [ [ 10, 25, 50, -1 ],
-									[ 10, 25, 50, "All" ] ], //顯示筆數設定 預設為[10, 25, 50, 100]
-							"pageLength" : '10'// 預設為'10'，若需更改初始每頁顯示筆數，才需設定
-						   /*  "columnsDefs":[
-								{targets:'_all',
-								 className:'dt-center',
+							// 初始化側邊欄位置
+							function initSidebar() {
+								if (window.innerWidth >= 1024) {
+									$('.sidebar').removeClass('sidebar-closed');
+									$('.content-with-sidebar').removeClass(
+											'content-full');
+									$('#sidebarToggle').removeClass(
+											'button-shifted');
+								} else {
+									$('.sidebar').addClass('sidebar-closed');
+									$('.content-with-sidebar').addClass(
+											'content-full');
+									$('#sidebarToggle').addClass(
+											'button-shifted');
 								}
-							]   */
+							}
+
+							// 頁面加載時初始化側邊欄
+							initSidebar();
+							$(window).resize(initSidebar);
 							
-						})  
-			})
-		</script>
+							//[按鈕]新增表單顯示與隱藏
+							$('.btn-add').click(function() {
+								if ($('.form-add').hasClass('hidden')){
+				                	$('.form-add').removeClass('hidden');
+				                	//$('body').toggleClass('overflow-hidden');
+				                	$('.container').css({'filter':'opacity(20%)'})
+								}
+				            });
+							
+							//[按鈕]關閉X 1.新增表單 2.修改表單
+							$('.btn-close').click(function(event) {
+								event.preventDefault();
+				                $('.form-add').addClass('hidden');
+				                $('.form-update').addClass('hidden');
+				                $('.container').css({'filter':''})				                
+				            });
+							
+							//[按鈕]修改表單顯示與隱藏 & 自動填充數據至修改表單
+							$('.btn-update').click(function(){
+								if ($('.form-update').hasClass("hidden")) {
+						    		let row = $(this).closest('tr');
+							        
+							        // 取出專案的各個數據
+							        let projectID = row.find('td:eq(0)').text().trim();
+							        let title = row.find('td:eq(1)').text().trim();
+							        let description = row.find('td:eq(2)').text().trim();
+							        let image = row.find('td:eq(3) img').attr('src').trim();
+							        let oldImage = row.find('td:eq(3) input').val().trim();
+							        let startDate = row.find('td:eq(4)').text().trim();
+							        let endDate = row.find('td:eq(5)').text().trim();
+							        let targetAmount = row.find('td:eq(6)').text().trim();
+							        let currentAmount = row.find('td:eq(7)').text().trim();
+							        let threshold = row.find('td:eq(8)').text().trim();
+							        let postponeDate = row.find('td:eq(9)').text().trim();
+							        let category = row.find('td:eq(10)').text().trim();
+		
+							        // 將這些數據填充到表單中
+							        $('#udt-projectID').val(projectID);
+							        $('#udt-title').val(title);
+							        $('textarea[name="udt-description"]').val(description);
+							        $('#udt-image-preview').attr('src',image);
+							        $('#old-image').val(oldImage);
+							        $('#udt-startDate').val(startDate);
+							        $('#udt-endDate').val(endDate);
+							        $('#udt-targetAmount').val(targetAmount);
+							        $('#udt-currentAmount').val(currentAmount);
+							        $('#udt-threshold').val(threshold);
+							        $('#udt-postponeDate').val(postponeDate);
+							        $('#udt-category').val(category);
+							        $('.form-update').removeClass("hidden");
+				                	$('.container').css({'filter':'opacity(20%)'})
+ 								} 
+							})
+							
+							/* 表單驗證 */
+							const constraints = {
+					            title: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                length: {
+					                    maximum: 50,
+					                    message: "上限50字"
+					                }
+					            },
+					            description: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                length: {
+					                    maximum: 200,
+					                    message: "上限200字"
+					                }
+					            },
+					            image: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            startDate: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            endDate: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            targetAmount: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                numericality: {
+					                	  onlyInteger: true, // 只能是整數
+					                	  greaterThanOrEqualTo: 0, // 只能大於等於零
+					                	  message: "金額需大於等於0"
+					                }
+					            },
+					            currentAmount: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                numericality: {
+					                	  onlyInteger: true, // 只能是整數
+					                	  greaterThanOrEqualTo: 0, // 只能大於等於零
+					                	  message: "金額需大於等於0"
+					                }
+					            },
+					            threshold: {
+					                presence: { allowEmpty: true, message: "必填" },
+					                numericality: {
+					                	  lessThanOrEqualTo: 1,
+					                	  greaterThanOrEqualTo: 0, // 只能大於等於零
+					                	  message: "介於0-1的小數"
+					                }
+					            },
+					            postponeDate: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            category: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            
+					            ['udt-title']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                length: {
+					                    maximum: 50,
+					                    message: "上限50字"
+					                }
+					            },
+					            ['udt-description']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                length: {
+					                    maximum: 200,
+					                    message: "上限200字"
+					                }
+					            },
+					            ['udt-image']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            ['udt-startDate']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            ['udt-endDate']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            ['udt-targetAmount']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                numericality: {
+					                	  onlyInteger: true, // 只能是整數
+					                	  greaterThanOrEqualTo: 0, // 只能大於等於零
+					                	  message: "金額需大於等於0"
+					                }
+					            },
+					            ['udt-currentAmount']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					                numericality: {
+					                	  onlyInteger: true, // 只能是整數
+					                	  greaterThanOrEqualTo: 0, // 只能大於等於零
+					                	  message: "金額需大於等於0"
+					                }
+					            },
+					            ['udt-threshold']: {
+					                presence: { allowEmpty: true },
+					                numericality: {
+										  lessThenOrEqualTo: 0,
+					                	  greaterThanOrEqualTo: 1, // 只能大於等於零
+					                	  message: "介於0-1的小數"
+					                }
+					            },
+					            ['udt-postponeDate']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            },
+					            ['udt-category']: {
+					                presence: { allowEmpty: false, message: "必填" },
+					            }
+					    	};
+							// Bind blur event to each input and textarea
+					        $('.form-add input, .form-add textarea, .form-add select, .form-update input, .form-update textarea, .form-update select').on('blur', function() {
+					        	console.log('hereee!')
+					            const fieldName = $(this).attr('name');
+					            const fieldErrors = validate.single($(this).val(), constraints[fieldName]);
+					            const errorSpanStr = "#sp-"+fieldName;
+					            const errorSpan = $(errorSpanStr);
+
+					            errorSpan.text(''); 
+					            console.log(errorSpanStr);		            
+					            if (fieldErrors) {
+					            	console.log('errormessage');
+					                errorSpan.text(fieldErrors[0]);
+					            }
+					        });
+							
+				});
+	</script>
 </body>
 </html>

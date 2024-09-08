@@ -1,226 +1,70 @@
 package cwdfunding.dao;
 
-import java.beans.Statement;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import cwdfunding.bean.FundProjBean;
-import jakarta.servlet.ServletException;
+
 
 public class FundProjDao {
 
+	private Session session;
+	
+	public FundProjDao() {
+	}
+	
+	public FundProjDao(Session session) {
+		this.session = session;
+	}
 
-	FileInputStream fileInputStream = null;
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-
-	public List<FundProjBean> getAllFundProjs() {
-		List<FundProjBean> projs = new ArrayList<>();
-		try {
-			Context context = new InitialContext();
-			DataSource ds = (DataSource) context.lookup("java:/comp/env/jdbc/EEIT87-T3");
-			conn = ds.getConnection();
-			// 設定資料庫資訊
-			boolean status = !conn.isClosed();
-			System.out.println("連線狀態:" + status);
-			// 取得連線物件
-			String sql = "SELECT * FROM fundingProj";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-
-			ResultSet rs = stmt.executeQuery();
-			FundProjBean proj = null;
-			while (rs.next()) {
-				proj = new FundProjBean();
-				proj.setProjectID(rs.getInt("projectID"));
-				proj.setTitle(rs.getString("title"));
-				proj.setDescription(rs.getString("description"));
-				proj.setImage(rs.getString("image"));
-				proj.setStartDate(rs.getString("startDate"));
-				proj.setEndDate(rs.getString("endDate"));
-				proj.setTargetAmount(String.valueOf(rs.getInt("targetAmount")));
-				proj.setCurrentAmount(String.valueOf(rs.getInt("currentAmount")));
-				proj.setThreshold(String.valueOf(rs.getDouble("threshold")));
-				proj.setPostponeDate(rs.getString("postponeDate"));
-				proj.setCategory(rs.getString("category"));
-				projs.add(proj);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+	
+	/* Hibernate Dao: 查詢全部*/
+	public List<FundProjBean> selectAll() {
+		Query<FundProjBean> query = session.createQuery("from FundProjBean", FundProjBean.class);
+		return query.list();
+	}
+	
+	/* Hibernate Dao: 插入資料*/
+	public FundProjBean insertFundProj(FundProjBean proj) {
+		if(proj != null) {
+			session.persist(proj);
+			return proj;
 		}
-		return projs;
+		return null;
 	}
 
-	public void insertFundProj(FundProjBean proj) throws IOException, ServletException {
-		String title = proj.getTitle();
-		String description = proj.getDescription();
-		String image = proj.getImage();
-		String startDate = proj.getStartDate();
-		String endDate = proj.getEndDate();
-		String targetAmount = proj.getTargetAmount();
-		String currentAmount = proj.getCurrentAmount();
-		String threshold = proj.getThreshold();
-		String postponeDate = proj.getPostponeDate();
-		String category = proj.getCategory();
-
-		System.out.println("title:"+title);
-		System.out.println("description:"+description);
-
-		try {
-			Context context = new InitialContext();
-			DataSource ds = (DataSource) context.lookup("java:/comp/env/jdbc/EEIT87-T3");
-			conn = ds.getConnection();
-
-			// 設定資料庫資訊
-			boolean status = !conn.isClosed();
-			System.out.println("連線狀態:" + status);
-			// 取得連線物件
-			String sql = "INSERT INTO fundingProj VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement insertStmt = conn.prepareStatement(sql);
-			insertStmt.setString(1, title);
-			insertStmt.setString(2, description);
-			insertStmt.setString(3, image);
-			insertStmt.setString(4, startDate);
-			insertStmt.setString(5, endDate);
-			insertStmt.setString(6, targetAmount);
-			insertStmt.setString(7, currentAmount);
-			insertStmt.setString(8, threshold);
-			insertStmt.setString(9, postponeDate);
-			insertStmt.setString(10, category);
-
-			insertStmt.execute();
-			insertStmt.close();
-		}  catch (SQLException e) {
-			e.printStackTrace();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+	/* Hibernate Dao: 更新資料*/
+	public FundProjBean updateFundProj(FundProjBean proj) {
+		// 先以id查詢資料是否已存在，查詢結果result為永續狀態的物件(persistent object)，
+		FundProjBean result = session.get(FundProjBean.class, proj.getProjectID());
+		
+		// 自動髒減機制：如果永續物件的屬性有更動，Hibernate會偵測到並同步到資料庫
+		//（真正寫進資料庫的在transaction commit時）
+		if(result != null) {			
+			result.setTitle(proj.getTitle());
+			result.setDescription(proj.getDescription());
+			result.setImage(proj.getImage());
+			result.setStartDate(proj.getStartDate());
+			result.setEndDate(proj.getEndDate());
+			result.setTargetAmount(proj.getTargetAmount());
+			result.setCurrentAmount(proj.getCurrentAmount());
+			result.setThreshold(proj.getThreshold());
+			result.setPostponeDate(proj.getPostponeDate());
+			result.setCategory(proj.getCategory());
+			return result;
 		}
+		return null;
 	}
-
-	public void updateFundProj(FundProjBean proj) throws IOException, ServletException {
-		int projectID = proj.getProjectID();
-		String title = proj.getTitle();
-		String description = proj.getDescription();
-		String image = proj.getImage();
-		String startDate = proj.getStartDate();
-		String endDate = proj.getEndDate();
-		String targetAmount = proj.getTargetAmount();
-		String currentAmount = proj.getCurrentAmount();
-		String threshold = proj.getThreshold();
-		String postponeDate = proj.getPostponeDate();
-		String category = proj.getCategory();
-
-
-	    try {
-	        Context context = new InitialContext();
-	        DataSource ds = (DataSource) context.lookup("java:/comp/env/jdbc/EEIT87-T3");
-	        conn = ds.getConnection();
-
-	        String sql = "UPDATE fundingProj SET title=?, description=?, image=?, startDate=?, endDate=?, targetAmount=?, currentAmount=?, threshold=?, postponeDate=?, category=? WHERE projectID=?";
-	        PreparedStatement udtStmt = conn.prepareStatement(sql);
-
-	        udtStmt.setString(1, title);
-	        udtStmt.setString(2, description);
-	        udtStmt.setString(3, image);
-	        udtStmt.setTimestamp(4, Timestamp.valueOf(startDate));
-	        udtStmt.setTimestamp(5, Timestamp.valueOf(endDate));
-	        udtStmt.setInt(6, Integer.parseInt(targetAmount));
-	        udtStmt.setInt(7, Integer.parseInt(currentAmount));
-	        udtStmt.setDouble(8, Double.valueOf(threshold));
-	        udtStmt.setTimestamp(9, Timestamp.valueOf(postponeDate));
-	        udtStmt.setString(10, category);
-	        udtStmt.setInt(11, projectID);
-
-	        udtStmt.execute();
-	        udtStmt.close();
-
-
-	    }  catch (SQLException e) {
-	        e.printStackTrace();
-	    } catch (NamingException e) {
-	        e.printStackTrace();
-	    } finally {
-	        if (conn != null) {
-	            try {
-	                conn.close();
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    }
-	}
-
-
-	public void deleteFundProj(int projectID) throws IOException, ServletException {
-
-		try {
-			Context context = new InitialContext();
-			DataSource ds = (DataSource) context.lookup("java:/comp/env/jdbc/EEIT87-T3");
-			conn = ds.getConnection();
-
-			System.out.println("project ID:"+projectID);
-			// 設定資料庫資訊
-			boolean status = !conn.isClosed();
-			System.out.println("連線狀態:" + status);
-			// 取得連線物件
-			String sql = "DELETE FROM fundingProj WHERE projectID=?";
-			PreparedStatement delStmt = conn.prepareStatement(sql);
-			delStmt.setInt(1, projectID);
-
-			delStmt.execute();
-			delStmt.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+	
+	/* Hibernate Dao: 刪除資料*/
+	public boolean deleteFundProj(int projectID) {
+		// 先以id查詢資料是否已存在，查詢結果result為永續狀態的物件(persistent object)，
+		FundProjBean result = session.get(FundProjBean.class, projectID);
+		
+		if(result != null) {
+			session.remove(result);
+			return true;
 		}
-
+		return false;
 	}
-
 }
