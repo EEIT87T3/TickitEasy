@@ -1,0 +1,162 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+.post {
+    background-color: white;
+    padding: 80px;
+    width: 50%;
+    margin: auto;
+    margin-top: 5%;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.post .author {
+    display: flex;
+    /* align-items: flex-start; */
+    margin-bottom: 0px;
+    position: relative;
+}
+.post .author img {
+    /* width: 50px;
+    height: 50px; */
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.author {
+   display: flex;
+   align-items: center; /* 垂直對齊 */
+ 
+}
+.author ul{
+	
+    margin: 0;
+    margin-top: 10px;
+    list-style-type: none;
+    line-height: 24px;
+    padding-left: 10px;
+}
+.author li{
+	
+      font-size: 1.1em;
+}
+
+.post h2 {
+    margin-top: 15px;
+    font-size: 1.5em;
+    flex-grow: 1;
+
+}
+.post p {
+    font-size: 1em;
+    line-height: 1.5em;
+    
+ 
+}
+.comments {
+    margin-top: 20px;
+}
+.comment {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-left: 3px solid #ccc;
+    /* margin-left: 20px; */
+}
+.comment .author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+   
+    
+}
+.comment .author img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.comment .author .name {
+   
+    font-size: 1em;
+}
+.new-post, .new-comment {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+input[type="text"], textarea {
+    width: 100%;
+    
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* 添加這行 */
+    
+}
+input[type="submit"] {
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+input[type="submit"]:hover {
+    background-color: #555;
+}
+.avatar{
+    background-color: #ffa33a; 
+    object-fit: cover;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.button-group {
+    margin-left: auto; /* 將按鈕組推到右邊 */
+    display: flex; /* 使按鈕組內的按鈕並排 */
+ 
+    gap: 10px; /* 兩個按鈕之間的間距 */
+    margin-top: 10px; /* 根據需要調整上邊距 */
+}
+
+.button-group .button {
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.button {
+ position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    text-decoration: none;
+    cursor: pointer;
+    z-index: 1000; /* 確保按鈕位於最前面 */
+}
+
+.button-group .button:hover {
+    background-color: #555;
+}
+
+.report-button {
+    background-color: #e26703; /* 檢舉按鈕背景色 */
+}
+
+.update-button {
+    background-color: #e26703; /* 修改按鈕背景色 */
+}

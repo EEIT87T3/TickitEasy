@@ -1,0 +1,189 @@
+/* 全域樣式 */
+form {
+    margin: 0; /* 清除外邊距 */
+    padding: 0; /* 清除內邊距 */
+    border: none; /* 清除邊框 */
+    background: none; /* 清除背景 */
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header 樣式 */
+header {
+    background: #333;
+    color: #fff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #bbb 1px solid;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* 主要內容區域 */
+.container {
+    padding-top: 100px;
+    width: 60%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.article-list {
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.article-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    display: flex;
+    align-items: flex-start;
+}
+
+.article-item:last-child {
+    border-bottom: none;
+}
+
+.article-item img {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.article-item h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.article-item p {
+    color: #666;
+    margin: 5px 0;
+}
+
+.article-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.article-item a:hover {
+    text-decoration: underline;
+}
+
+.article-meta {
+    font-size: 14px;
+    color: #999;
+    align-items: center;
+    display: flex;
+}
+
+.article-meta span {
+    margin-right: 10px;
+}
+
+/* 按鈕組樣式 */
+.button-group {
+    margin-left: auto; /* 將按鈕組推到右邊 */
+    display: flex; /* 使按鈕組內的按鈕並排 */
+    gap: 10px; /* 兩個按鈕之間的間距 */
+    margin-top: 10px; /* 根據需要調整上邊距 */
+   
+    
+}
+
+/* 功能按鈕組樣式 */
+.button-group.funtion {
+
+    display: flex; /* 使內部元素並排顯示 */
+    align-items: center; /* 垂直對齊中心 */
+    gap: 10px; /* 兩個表單之間的間距 */
+    background-color: white;
+    padding: 10px; /* 添加內邊距 */
+    padding-left:20px;
+    border-radius: 5px; /* 添加圓角 */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+     
+}
+
+.bor{
+	border-left : 1px solid gray;
+	padding-left:14px;
+	padding-right:14px;
+}
+.button-group.funtion form {
+    margin: 0; /* 去除默認外邊距 */
+}
+
+.button-group.funtion input[type="text"],
+.button-group.funtion select {
+    height: 30px; /* 統一高度 */
+    padding: 5px; /* 統一內邊距 */
+    margin-right: 10px; /* 統一右邊距 */
+    border: 1px solid #ccc; /* 統一邊框樣式 */
+    border-radius: 4px; /* 統一圓角樣式 */
+    box-sizing: border-box; /* 包含內邊距和邊框在內的總寬度 */
+}
+
+/* 按鈕樣式 */
+.button-group.funtion .button {
+    margin-left: 10px; /* 確保按鈕有適當的左邊距 */
+}
+
+.button {
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none; /* 去掉 <a> 標籤的下劃線 */
+    display: inline-block; /* 確保 <a> 和 <input> 按鈕樣式一致 */
+    text-align: center; /* 使按鈕文字置中 */
+    font-size: 14px; /* 確保字型大小一致 */
+    box-sizing: border-box; /* 確保內邊距和邊框不影響總寬度 */
+    vertical-align: middle; /* 使按鈕垂直對齊 */
+}
+.sort-button {
+    background-color: gray;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none; /* 去掉 <a> 標籤的下劃線 */
+    display: inline-block; /* 確保 <a> 和 <input> 按鈕樣式一致 */
+    text-align: center; /* 使按鈕文字置中 */
+    font-size: 14px; /* 確保字型大小一致 */
+    box-sizing: border-box; /* 確保內邊距和邊框不影響總寬度 */
+    vertical-align: middle; /* 使按鈕垂直對齊 */
+}
+
+.button:hover {
+    background-color: #555;
+}
+img{
+	background-color:rgba(0,0,0,0.1);
+	
+}
+a{
+	font-weight:bold;
+}
+.theme{
+	background-color:rgba(0,0,0,0.1);
+	border-radius: 2px; /* 添加圓角 */
+	padding:2px 5px;
+	font-size:14px;
+	margin-right:5px;
+}
