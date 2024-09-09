@@ -2,18 +2,47 @@ package product.bean;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity @Table(name="products")
 public class Products implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Id @Column(name = "productID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int productID;
+	
+	@Column(name = "category")
     private String category;
+	
+	@Column(name = "productName")
     private String productName;
+	
+	@Column(name = "productPic")
     private String productPic;
+	
+	@Column(name = "productDesc")
     private String productDesc;
+	
+	@Column(name = "price")
     private int price;
+	
+	@Column(name = "stock")
     private int stock;
+	
+	@Column(name = "status")
     private String status;
+	
+	@Column(name = "prodTotalReviews")
     private int prodTotalReviews;
+	
+	@Column(name = "prodTotalScore")
     private int prodTotalScore;
 
     public Products() {
@@ -69,9 +98,6 @@ public class Products implements Serializable {
 		this.prodTotalScore = prodTotalScore;
 	}
 
-
-
-    // getter 和 setter 方法
     public int getProductID() {
         return productID;
     }
