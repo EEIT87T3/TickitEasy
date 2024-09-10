@@ -11,11 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import product.bean.Products;
 import product.dao.ProductDao;
+import product.service.ProductService;
 
 @WebServlet("/GetProduct")
 public class GetProduct extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	ProductDao productDao = new ProductDao();
+	ProductService productService=new ProductService();
     public GetProduct() {
         super();
     }
@@ -25,14 +26,10 @@ public class GetProduct extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		String productName = request.getParameter("productName");
 
-		try {
-			// 使用 findProductsByName 方法進行模糊查詢
-			List<Products> products = productDao.findProductsByName(productName);
-			request.setAttribute("products", products);
-			request.getRequestDispatcher("/product/GetProduct.jsp").forward(request, response);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		// 使用 findProductsByName 方法進行模糊查詢
+		List<Products> products = productService.findProductsByName(productName);
+		request.setAttribute("products", products);
+		request.getRequestDispatcher("/product/GetProduct.jsp").forward(request, response);
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

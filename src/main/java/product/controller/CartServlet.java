@@ -36,11 +36,7 @@ public class CartServlet extends HttpServlet {
 	    protected void addItem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	        String productIDStr = request.getParameter("id");
 	        int id = Integer.parseInt(productIDStr);
-	        try {
-	            products = productDao.findProductById(id);
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
+	        products = productDao.findProductById(id);
 	        CartItem carItem = new CartItem(products.getProductID(), products.getProductName(), 1, products.getPrice(), products.getStock());
 	        Cart cart = (Cart) request.getSession().getAttribute("cart");
 	        if (cart == null) {
