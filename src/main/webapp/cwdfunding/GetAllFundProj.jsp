@@ -278,7 +278,7 @@ table.dataTable tbody tr:hover {
 											<div class="div-actions-ele">
 											<form action="<%= request.getContextPath() %>/FundProjs?action=delete" method="post">
 												<input type="hidden" name="del-projectID" value="<%=proj.getProjectID()%>"> 								
-												<button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('確定刪除嗎？')">刪除</button>
+												<button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs btn-delete">刪除</button>
 											</form>
 											</div>
 										</div></td> <%}%>
@@ -430,6 +430,8 @@ table.dataTable tbody tr:hover {
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
 	
 	<script>
 		$(document)
@@ -487,6 +489,26 @@ table.dataTable tbody tr:hover {
 				                $('.form-update').addClass('hidden');
 				                $('.container').css({'filter':''})				                
 				            });
+							
+							//[按鈕]刪除按鈕使用sweetalert風格
+							$('.btn-delete').click(function(event){
+								event.preventDefault();
+								swal({
+									title: "確定刪除？",
+									icon: "warning",
+									buttons: {
+										cancel:{
+											text:"取消",
+											visible: true
+										},
+										confirm:{
+											text:"刪除",
+											visible: true
+										}
+									},
+									dangerMode: true
+								})
+							})
 							
 							//[按鈕]修改表單顯示與隱藏 & 自動填充數據至修改表單
 							$('.btn-update').click(function(){
