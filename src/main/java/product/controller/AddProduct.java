@@ -14,11 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import product.bean.Products;
 import product.dao.ProductDao;
+import product.service.ProductService;
 @MultipartConfig
 @WebServlet("/AddProduct")
 public class AddProduct extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	ProductDao productDao = new ProductDao();
+	ProductService productService=new ProductService();
+	
     public AddProduct() {
         super();
     }
@@ -55,13 +57,10 @@ public class AddProduct extends HttpServlet {
      // 確保儲存到資料庫的路徑是相對於 web 應用根目錄的路徑
         String relativePath = "product/images/" + fileName;
         Products newProduct = new Products(category, productName, relativePath, productDesc, price, stock, status, prodTotalReviews, prodTotalScore);
-        try {
-            productDao.addProducts(newProduct);
-            // 新增完成後跳轉到顯示該商品詳情的頁面
-            request.setAttribute("product", newProduct);
-            request.getRequestDispatcher("/product/AddProduct.jsp").forward(request, response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        
+        productService.addProducts(newProduct);
+		// 新增完成後跳轉到顯示該商品詳情的頁面
+		request.setAttribute("product", newProduct);
+		request.getRequestDispatcher("/product/AddProduct.jsp").forward(request, response);
     }
 }
