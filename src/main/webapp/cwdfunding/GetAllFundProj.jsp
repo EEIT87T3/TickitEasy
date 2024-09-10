@@ -173,7 +173,7 @@ table.dataTable tbody tr:hover {
  		.sm {
 			color: red;
 		} 
-	
+			
 </style>
 </head>
 
@@ -278,7 +278,7 @@ table.dataTable tbody tr:hover {
 											<div class="div-actions-ele">
 											<form action="<%= request.getContextPath() %>/FundProjs?action=delete" method="post">
 												<input type="hidden" name="del-projectID" value="<%=proj.getProjectID()%>"> 								
-												<button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('確定刪除嗎？')">刪除</button>
+												<button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs btn-delete">刪除</button>
 											</form>
 											</div>
 										</div></td> <%}%>
@@ -299,36 +299,36 @@ table.dataTable tbody tr:hover {
                     method="post" enctype="multipart/form-data">
 						<div class="nice-form-group">
 							<label>專案名稱</label><small class="sm" id="sp-title" style="font-size:12.5px; font-weight: bold"></small>
-							<input type="text" id="title" name="title" data-error="sp-title">
+							<input type="text" id="title" name="title" data-error="sp-title" >
 						</div>
 						<div class="nice-form-group">
 							<label>專案敘述</label><small class="sm" id="sp-description" style="font-size:12.5px; font-weight: bold"></small>
 							<textarea name="description" maxlength="150"
-								placeholder="上限200個字" name="description" data-error="sp-description"></textarea>
+								placeholder="上限200個字" name="description" data-error="sp-description" ></textarea>
 						</div>
 						<div class="nice-form-group">
 							<label>專案圖片</label><small class="sm" id="sp-image" style="font-size:12.5px; font-weight: bold"></small>
-							<input type="file" id="image" name="image">
+							<input type="file" id="image" name="image" >
 						</div>
 						<div class="nice-form-group">
 							<label>開始日期</label><small class="sm" id="sp-startDate" style="font-size:12.5px; font-weight: bold"></small>
 							<input type="datetime-local" id="startDate"
-								placeholder="yyyy-mm-dd" name="startDate">
+								placeholder="yyyy-mm-dd" name="startDate" >
 						</div>
 						<div class="nice-form-group">
 							<label>截止日期</label><small class="sm" id="sp-endDate" style="font-size:12.5px; font-weight: bold"></small>
 							<input type="datetime-local" id="endDate"
-								placeholder="yyyy-mm-dd" name="endDate">
+								placeholder="yyyy-mm-dd" name="endDate" >
 						</div>
 						<div class="nice-form-group">
 							<label>目標金額</label><small class="sm" id="sp-targetAmount" style="font-size:12.5px; font-weight: bold"></small>
 							<input type="text" id="targetAmount"
-								name="targetAmount">
+								name="targetAmount" >
 						</div>
 						<div class="nice-form-group">
 							<label>目前金額</label><small class="sm" id="sp-currentAmount" style="font-size:12.5px; font-weight: bold"></small>
 							<input type="text" id="currentAmount"
-								name="currentAmount">
+								name="currentAmount" >
 						</div>
 						<div class="nice-form-group">
 							<label>展延門檻</label><small class="sm" id="sp-threshold" style="font-size:12.5px; font-weight: bold"></small>
@@ -342,7 +342,7 @@ table.dataTable tbody tr:hover {
 						</div>
 						<div class="nice-form-group">
 							<label>分類</label> <small class="sm" id="sp-category" style="font-size:12.5px; font-weight: bold"></small>
-							<select id="category" name="category">
+							<select id="category" name="category" >
 								<option value="表演" selected>表演</option>
 								<option value="音樂會">音樂會</option>
 								<option value="藝術">藝術</option>
@@ -372,8 +372,8 @@ table.dataTable tbody tr:hover {
 						</div>
 						<div class="nice-form-group">
 							<label>專案敘述</label><small class="sm" id="sp-udt-description" style="font-size:12.5px; font-weight: bold"></small>
-							<textarea maxlength="150"
-								placeholder="上限150個字" name="udt-description"></textarea>
+							<textarea maxlength="200"
+								placeholder="上限200個字" name="udt-description"></textarea>
 						</div>
 						<div class="nice-form-group formEle-img">
 							<label>專案圖片</label><small class="sm" id="sp-udt-image" style="font-size:12.5px; font-weight: bold"></small>
@@ -430,6 +430,8 @@ table.dataTable tbody tr:hover {
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
 	
 	<script>
 		$(document)
@@ -488,6 +490,26 @@ table.dataTable tbody tr:hover {
 				                $('.container').css({'filter':''})				                
 				            });
 							
+							//[按鈕]刪除按鈕使用sweetalert風格
+							$('.btn-delete').click(function(event){
+								event.preventDefault();
+								swal({
+									title: "確定刪除？",
+									icon: "warning",
+									buttons: {
+										cancel:{
+											text:"取消",
+											visible: true
+										},
+										confirm:{
+											text:"刪除",
+											visible: true
+										}
+									},
+									dangerMode: true
+								})
+							})
+							
 							//[按鈕]修改表單顯示與隱藏 & 自動填充數據至修改表單
 							$('.btn-update').click(function(){
 								if ($('.form-update').hasClass("hidden")) {
@@ -526,7 +548,7 @@ table.dataTable tbody tr:hover {
 							})
 							
 							/* 表單驗證 */
-							const constraints = {
+							const constraint_add = {
 					            title: {
 					                presence: { allowEmpty: false, message: "必填" },
 					                length: {
@@ -580,7 +602,9 @@ table.dataTable tbody tr:hover {
 					            category: {
 					                presence: { allowEmpty: false, message: "必填" },
 					            },
-					            
+							};
+							
+							const constraint_update = {
 					            ['udt-title']: {
 					                presence: { allowEmpty: false, message: "必填" },
 					                length: {
@@ -594,9 +618,6 @@ table.dataTable tbody tr:hover {
 					                    maximum: 200,
 					                    message: "上限200字"
 					                }
-					            },
-					            ['udt-image']: {
-					                presence: { allowEmpty: false, message: "必填" },
 					            },
 					            ['udt-startDate']: {
 					                presence: { allowEmpty: false, message: "必填" },
@@ -623,8 +644,8 @@ table.dataTable tbody tr:hover {
 					            ['udt-threshold']: {
 					                presence: { allowEmpty: true },
 					                numericality: {
-										  lessThenOrEqualTo: 0,
-					                	  greaterThanOrEqualTo: 1, // 只能大於等於零
+					                	  lessThanOrEqualTo: 1,
+					                	  greaterThanOrEqualTo: 0, // 只能大於等於零
 					                	  message: "介於0-1的小數"
 					                }
 					            },
@@ -635,22 +656,66 @@ table.dataTable tbody tr:hover {
 					                presence: { allowEmpty: false, message: "必填" },
 					            }
 					    	};
-							// Bind blur event to each input and textarea
-					        $('.form-add input, .form-add textarea, .form-add select, .form-update input, .form-update textarea, .form-update select').on('blur', function() {
-					        	console.log('hereee!')
+
+
+							// 表單整體驗證的函數，檢查是否所有欄位通過驗證
+							function checkFormValidation(constraints) {
+							    const formValues = {};
+							    $(this).closest('form').find('input, textarea, select').each(function() {
+							        formValues[$(this).attr('name')] = $(this).val();
+							    });
+
+							    const errors = validate(formValues, constraints);
+
+							    if (!errors) {
+							        // 如果表單沒有任何錯誤，啟用按鈕
+							        $('.btn-check').prop('disabled', false)
+							     	$('.btn-check').css({'background-color':'#4CAF50'});
+							    } else {
+							        // 如果有錯誤，保持按鈕禁用
+							        $('.btn-check').prop('disabled', true);
+							     	$('.btn-check').css({'background-color':'gray'});
+							    }
+							}
+
+							
+ 							// Bind blur event to each input, textarea and select
+					        $('.form-add input, .form-add textarea, .form-add select').on('blur', function() {
 					            const fieldName = $(this).attr('name');
-					            const fieldErrors = validate.single($(this).val(), constraints[fieldName]);
+					            const fieldErrors = validate.single($(this).val(), constraint_add[fieldName]);
 					            const errorSpanStr = "#sp-"+fieldName;
 					            const errorSpan = $(errorSpanStr);
 
 					            errorSpan.text(''); 
-					            console.log(errorSpanStr);		            
 					            if (fieldErrors) {
-					            	console.log('errormessage');
 					                errorSpan.text(fieldErrors[0]);
 					            }
-					        });
-							
+					            checkFormValidation.call(this, constraint_add);
+					        });   
+ 							
+					        $('.form-update input, .form-update textarea, .form-update select').on('blur', function() {
+					            const fieldName = $(this).attr('name');
+					            const fieldErrors = validate.single($(this).val(), constraint_update[fieldName]);
+					            const errorSpanStr = "#sp-"+fieldName;
+					            const errorSpan = $(errorSpanStr);
+								console.log(fieldErrors);
+					            
+					            errorSpan.text(''); 
+					            if (fieldErrors) {
+					                errorSpan.text(fieldErrors[0]);
+					            }
+					            checkFormValidation.call(this, constraint_update);
+					        });   
+ 							
+					     	// 預設禁用按鈕
+					        $('.btn-check').prop('disabled', true);
+					     	$('.btn-check').css({'background-color':'gray'});
+
+					        // 初始化時檢查表單，防止一開始就啟用按鈕
+					        checkFormValidation.call($('.form-add input:first'), constraint_add);
+					        checkFormValidation.call($('.form-update input:first'), constraint_update);
+
+
 				});
 	</script>
 </body>
