@@ -295,9 +295,8 @@ table.dataTable tbody tr:hover {
 					<h3>新增</h3>
 					<button class="btn-X btn-close">X</button>
 				</div>
-                <form id="id-form-add" enctype="multipart/form-data">
-                		<input name="action" value="insert" type="hidden">
-						<div class="nice-form-group">
+				<form action="<%= request.getContextPath() %>/FundProjs?action=insert" 
+						method="post" enctype="multipart/form-data">						<div class="nice-form-group">
 							<label>專案名稱</label><small class="sm" id="sp-title" style="font-size:12.5px; font-weight: bold"></small>
 							<input type="text" id="title" name="title" data-error="sp-title" >
 						</div>
