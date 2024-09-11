@@ -1,30 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="post.bean.PostBean"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="post.bean.ThemeBean"%>
-<%@page import="java.util.List"%>
+<%@ page import="post.model.Post"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.List"%>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.sql.Timestamp" %>
+
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    List<Post> posts = (List<Post>)request.getAttribute("posts");
 %>
-    <%! @SuppressWarnings("unchecked") %>
-    
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>論壇文章列表</title>
-    <link rel="stylesheet" href="post/css/list.css">
-    <link rel="stylesheet" href="post/css/nav.css">
-    <style>
-
-    </style>
+    <title>討論區列表</title>
+     <link rel="stylesheet" href="${pageContext.request.contextPath}/post/css/post.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/post/css/list.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/post/css/nav.css">
+ 
 </head>
 <body>
     <nav>
-    
         <a class="navbar-brand" href="${pageContext.request.contextPath}/admin/dashboard">後台主頁</a>
         <ul class="navbar-nav">
             <li class="nav-item active">
@@ -33,7 +31,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="GetAllTheme">文章分類</a>
             </li>
-           
         </ul>
         
         <div class="auth-buttons">
@@ -103,99 +100,73 @@
 		    </div>
 		</div>
         <div class="article-list">
-		  <% List<PostBean> posts = (ArrayList<PostBean>)request.getAttribute("post");%>
-		  <%if(posts.size()==0){
-			 
-		  %> 
-		   
-				  <div class="article-item" >
-
-			          <div class="article-meta">
-			          <h2>查無文章</h2>
-
-			          </div>
-			      </div>
-		 <%}else{ 
-			for(PostBean post : posts){ %> 
-			
-            <div class="article-item"  onclick="submitForm(<%= post.getPostID() %>)" 
-            data-likes="<%= post.getLikesCount() %>" data-views="<%= post.getViewCount() %>" data-date="<%= post.getPostTime() %>">
-                <img src="path/to/thumbnail1.jpg" alt="文章縮略圖">
-                <div>
-           
-                   <span class="theme"><%= post.getThemeName() %></span> <a href="GetPost?postID=<%=post.getPostID()%>"><%= post.getPostTitle() %></a> 
-                        
-                    <p><%= post.getPostContent() %></p>
+            <% if (posts != null && !posts.isEmpty()) { %>
+                <% for (Post post : posts) { %> 
+                    <div class="article-item" onclick="submitForm(<%= post.getPostID() %>)" 
+                        data-likes="<%= post.getLikesCount() %>" data-views="<%= post.getViewCount() %>" data-date="<%= post.getPostTime() %>">
+                        <img src="path/to/thumbnail1.jpg" alt="文章縮略圖">
+                        <div>
+                            <span class="theme"><%= post.getThemeName() %></span> 
+                            <a href="GetPost?postID=<%=post.getPostID()%>"><%= post.getPostTitle() %></a> 
+                            <p><%= post.getPostContent() %></p>
+                            <div class="article-meta">
+                                <span>喜歡：<%= post.getLikesCount() %></span>
+                                <span>瀏覽次數：<%= post.getViewCount() %></span>
+                                <span>發佈日期：<%= sdf.format(post.getPostTime()) %></span>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <form action="GetUpdatePost" method="post">
+                                <input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
+                                <input class="button" type="submit" value="修改" />
+                            </form>
+                            <form action="DeletePost" method="post">
+                                <input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
+                                <input class="button" type="submit" value="刪除" />
+                            </form>
+                        </div>
+                        <form id="postForm_<%= post.getPostID() %>" action="GetPost" method="get" style="display: none;">
+                            <input type="hidden" name="postID" value="<%= post.getPostID() %>" />
+                        </form>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <div class="article-item">
                     <div class="article-meta">
-                        <span>喜歡：<%= post.getLikesCount() %></span>
-                        <span>瀏覽次數：<%= post.getViewCount() %></span>
-                        <span>發佈日期：<%= sdf.format(post.getPostTime()) %></span>
-                       
+                        <h2>查無文章</h2>
                     </div>
                 </div>
-             
-                        <div class="button-group ">
-	                        <form action="GetUpdatePost" method="post" >
-							<input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
-							<input class="button" type="submit" value="修改" /></form>
-	                        <form action="DeletePost" method="post" style="">
-							<input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
-							<input class="button" type="submit" value="刪除" /></form>
-						</div>
-	                <form id="postForm_<%= post.getPostID() %>" action="GetPost" method="get" style="display: none;">
-					    <input type="hidden" name="postID" value="<%= post.getPostID() %>" />
-					</form>
-            </div>
-			    <%       }  
-			        } 
-			    %>
-         
-   		 </div>
-     </div>
+            <% } %>
+        </div>
+    </div>
+
     <script>
     function submitForm(postID) {
         var form = document.getElementById('postForm_' + postID);
         form.submit();
-        
     }
 
     function sortArticlesBySelect() {
-        // 取得選擇的排序條件
         const criteria = document.getElementById('sortCriteria').value;
+        let articles = Array.from(document.querySelectorAll('.article-item'));
 
-        // 取得所有文章項目
-        let articles = document.querySelectorAll('.article-item');
-        articles = Array.from(articles);
-
-        // 根據選擇的條件進行排序
         articles.sort((a, b) => {
             switch (criteria) {
                 case 'date':
-                    // 根據發佈日期排序
                     return new Date(b.dataset.date) - new Date(a.dataset.date);
                 case 'views':
-                    // 根據瀏覽次數排序
                     return b.dataset.views - a.dataset.views;
                 case 'likes':
-                    // 根據喜歡數量排序
                     return b.dataset.likes - a.dataset.likes;
                 default:
                     return 0;
             }
         });
 
-        // 取得文章列表容器
         const container = document.querySelector('.article-list');
-        // 清空容器
         container.innerHTML = '';
-
-        // 按照排序後的順序重新附加文章項目
-        articles.forEach(article => {
-            container.appendChild(article);
-        });
+        articles.forEach(article => container.appendChild(article));
     }
-
-	</script>
+    </script>
 </body>
 </html>
-

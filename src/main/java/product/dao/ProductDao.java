@@ -1,6 +1,5 @@
 package product.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,26 +9,35 @@ import util.HibernateUtil;
 
 public class ProductDao {
 	
+	private Session session;
+	
+	public ProductDao(Session session) {
+		this.session = session;
+	}
+	
 	private SessionFactory sessionFactory;
 
 	public ProductDao() {
 		this.sessionFactory = HibernateUtil.getSessionFactory();
 	}
 	// 新增商品
-	public void addProducts(Products product) throws SQLException {
+	public Products addProducts(Products product){
 		Session session = sessionFactory.getCurrentSession();
+		if(product!=null) {
 		session.persist(product);
+		return product;
 	}
-
+		return null;
+	}
 	// 查詢所有商品
-	public List<Products> findAll() throws SQLException {
+	public List<Products> findAll(){
 		Session session = sessionFactory.getCurrentSession();
 		
 		return session.createQuery("from Products ",Products.class).list();
 	}
 
 	// 利用 productName 進行模糊查詢商品
-    public List<Products> findProductsByName(String productName) throws SQLException {
+    public List<Products> findProductsByName(String productName){
 		Session session = sessionFactory.getCurrentSession();
 		
 		 return session.createQuery("from Products WHERE productName LIKE :name", Products.class)
@@ -38,7 +46,7 @@ public class ProductDao {
     }
 
  // 利用 Category 分類進行模糊查詢商品
-    public List<Products> findProductsByCategory(String category) throws SQLException {
+    public List<Products> findProductsByCategory(String category){
     	Session session = sessionFactory.getCurrentSession();
 		
 		 return session.createQuery("from Products WHERE category LIKE :name", Products.class)
@@ -47,14 +55,14 @@ public class ProductDao {
     }
 
 	// productID 查詢單筆商品
-	public Products findProductById(int productID) throws SQLException {
+	public Products findProductById(int productID){
 		Session session = sessionFactory.getCurrentSession();
 		
 		return session.get(Products.class, productID);
 	}
 	
 	//刪除商品
-	public Products deleteProductById(int productID) throws SQLException {
+	public Products deleteProductById(int productID){
 		Session session = sessionFactory.getCurrentSession();
 		Products product = session.get(Products.class, productID);
 		
@@ -65,7 +73,7 @@ public class ProductDao {
 	}
 
 	// productID 更新商品
-	public Products updateProductById(int productID, Products updatedProduct) throws SQLException {
+	public Products updateProductById(int productID, Products updatedProduct){
 		Session session = sessionFactory.getCurrentSession();
 	    Products product = session.get(Products.class, productID);
 

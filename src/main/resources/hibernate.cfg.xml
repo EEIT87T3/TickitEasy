@@ -28,7 +28,9 @@
 		<mapping class="order.bean.ProdOrderDetailsBean"/>
 		<mapping class="order.bean.TicketOrdersBean"/>
 		<mapping class="order.bean.TicketOrderDetailsBean"/>
-		
+		<mapping class="post.model.Post"/>
+		<mapping class="post.model.Theme"/>
+		<mapping class="post.model.Member"/>
 		
 	</session-factory>
 </hibernate-configuration>
