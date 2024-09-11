@@ -14,13 +14,13 @@ public class AdminBean {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int adminID;
 	
-	@Column(name = "email" , unique = true, nullable = false)
+	@Column(name = "email")
 	private String email;
 	
-	@Column(name = "password", nullable = false)
+	@Column(name = "password")
 	private String password;
 	
-	@Column(name = "name", nullable = false)
+	@Column(name = "name")
 	private String name;
 
 	public AdminBean() {
