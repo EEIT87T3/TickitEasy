@@ -1,6 +1,7 @@
 package cwdfunding.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -70,6 +71,8 @@ public class FundProjController extends HttpServlet {
 		List<FundProjBean> projs = fundProjService.selectAll();
 		request.setAttribute("projs", projs);
 		request.getRequestDispatcher("/cwdfunding/GetAllFundProj.jsp").forward(request, response);
+
+		
 	}
 	
 	/* 新增資料 */
@@ -127,6 +130,7 @@ public class FundProjController extends HttpServlet {
         // 執行請求
         fundProjService.insertFundProj(proj);
 		response.sendRedirect(request.getContextPath() + "/FundProjs");
+		
 	}
 
 	/* 更新資料 */
