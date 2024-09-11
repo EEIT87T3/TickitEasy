@@ -295,9 +295,8 @@ table.dataTable tbody tr:hover {
 					<h3>新增</h3>
 					<button class="btn-X btn-close">X</button>
 				</div>
-                <form action="<%= request.getContextPath() %>/FundProjs?action=insert"
-                    method="post" enctype="multipart/form-data">
-						<div class="nice-form-group">
+				<form action="<%= request.getContextPath() %>/FundProjs?action=insert" 
+						method="post" enctype="multipart/form-data">						<div class="nice-form-group">
 							<label>專案名稱</label><small class="sm" id="sp-title" style="font-size:12.5px; font-weight: bold"></small>
 							<input type="text" id="title" name="title" data-error="sp-title" >
 						</div>
@@ -350,7 +349,7 @@ table.dataTable tbody tr:hover {
 							</select>
 						</div>
 						<div class="nice-form-group">
-                            <input class="btn btn-check" type="submit" value="確定" />
+                            <input id="id-btn-add" class="btn btn-check" type="submit" value="確定" />
                             <button type="button" class="btn btn-close btn-cancel">取消</button>
                         </div>
                  </form>
@@ -427,16 +426,16 @@ table.dataTable tbody tr:hover {
 				</form>
 			</div>
 	</div>
+	
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	
-	
 	<script>
-		$(document)
-			.ready(
+		$(document).ready(	
 					function() {
+
+							
 							$('#table-projs').DataTable(
 								{ "language" : 
 								{"url" : "${pageContext.request.contextPath}/resource/Chinese-traditional.json"}
@@ -482,6 +481,17 @@ table.dataTable tbody tr:hover {
 								}
 				            });
 							
+/* 							//[按鈕] 表單送出後隱藏表單
+							$('.btn-check').click(function(event){
+								event.preventDefault();
+								if( !$('.form-add').hasClass('hidden')){
+					                $('.form-add').addClass('hidden');
+								}
+								if( !$('.form-update').hasClass('hidden')){
+					                $('.form-update').addClass('hidden');
+								}
+							}) */
+							
 							//[按鈕]關閉X 1.新增表單 2.修改表單
 							$('.btn-close').click(function(event) {
 								event.preventDefault();
@@ -507,7 +517,11 @@ table.dataTable tbody tr:hover {
 										}
 									},
 									dangerMode: true
-								})
+								}).then((willDelete) => {
+									if (willDelete) {
+										$(this).closest('form').submit();  
+									}
+								});
 							})
 							
 							//[按鈕]修改表單顯示與隱藏 & 自動填充數據至修改表單
@@ -542,6 +556,8 @@ table.dataTable tbody tr:hover {
 							        $('#udt-threshold').val(threshold);
 							        $('#udt-postponeDate').val(postponeDate);
 							        $('#udt-category').val(category);
+							        
+							        //顯示表單
 							        $('.form-update').removeClass("hidden");
 				                	$('.container').css({'filter':'opacity(20%)'})
  								} 
@@ -714,8 +730,6 @@ table.dataTable tbody tr:hover {
 					        // 初始化時檢查表單，防止一開始就啟用按鈕
 					        checkFormValidation.call($('.form-add input:first'), constraint_add);
 					        checkFormValidation.call($('.form-update input:first'), constraint_update);
-
-
 				});
 	</script>
 </body>
