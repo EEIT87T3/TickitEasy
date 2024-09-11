@@ -2,17 +2,45 @@ package order.bean;
 
 import java.sql.Date;
 
-public class TicketOrderDetailsBean {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity @Table(name = "tickedOrderDetails")
+public class TicketOrderDetailsBean {
+		@Id
+		@Column(name = "ticketOrderDetailID")
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		int	ticketOrderDetailID;
+		
+		@Column(name = "ticketOrderID")
 	    int ticketOrderID;
+	    
+		@Column(name = "ticketTypeID")
 	    int ticketTypeID;
+	    
+		@Column(name = "ticketCollectionMethod")
 	    String ticketCollectionMethod;
+	 
+		@Column(name = "price")
 	    int price;
+		
+		@Column(name = "ticketUUID")
 	    String ticketUUID;
+		
+		@Column(name = "ticketStatus")
 	    int ticketStatus;
+		
+		@Column(name = "content")
 	    String content;
+		
+		@Column(name = "reviewTime")
 	    Date reviewTime;
+		
+		@Column(name = "score")
 	    int score;
 
 

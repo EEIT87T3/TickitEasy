@@ -1,22 +1,53 @@
 package order.bean;
 
 import java.sql.Date;
+import java.util.List;
+
+import jakarta.persistence.*;
 
 //封裝prodOrder的數據
+@Entity @Table(name = "prodOrders")
 public class ProdOrdersBean {
-	int prodOrderID; //自動生成 PK
-	int memberID; //FK
-	Date orderDate;
-	String payments;
-	String paymenInfo;
-	String status;
-	int totalAmount;
-	String shippingStatus;
-	int shippingID;
-	String recipientName;
-	String address;
-	String phone;
-
+	@Id
+	@Column(name = "prodOrderID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer prodOrderID; //自動生成 PK
+	
+    @Column(name = "memberID")
+	private int memberID; //FK
+	
+	@Column(name = "orderDate")
+	private Date orderDate;
+	
+	@Column(name = "payments")
+	private String payments;
+	
+	@Column(name = "paymentInfo")
+	private String paymenInfo;
+	
+	@Column(name = "status")
+	private String status;
+	
+	@Column(name = "totalAmount")
+	private int totalAmount;
+	
+	@Column(name = "shippingStatus")
+	private String shippingStatus;
+	
+	@Column(name = "shippingID")
+	private int shippingID;
+	
+	@Column(name = "recipientName")
+	private String recipientName;
+	
+	@Column(name = "address")
+	private String address;
+	
+	@Column(name = "phone")
+	private String phone;
+	
+    @OneToMany(mappedBy = "prodOrderID", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ProdOrderDetailsBean> prodOrderDetailsBean;
 	//不含prodOrderID
 	public ProdOrdersBean(int memberID, Date orderDate, String payments, String paymenInfo, String status,
 			int totalAmount, String shippingStatus, int shippingID, String recipientName, String address,
@@ -51,6 +82,9 @@ public class ProdOrdersBean {
 		this.recipientName = recipientName;
 		this.address = address;
 		this.phone = phone;
+	}
+	public ProdOrdersBean() {
+		
 	}
 	//含prodOrderID set get
 	public int getProdOrderID() {

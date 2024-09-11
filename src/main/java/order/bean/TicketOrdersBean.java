@@ -2,13 +2,35 @@ package order.bean;
 
 import java.sql.Date;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 //封裝ticketOrder的數據
+@Entity @Table(name = "tickedOrders")
 public class TicketOrdersBean {
+	
+	@Id
+	@Column(name = "tickedOrderID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int tickedOrderID; //自動生成 PK
+	
+	@Column(name = "memberID")
 	int memberID; //FK
+	
+	@Column(name = "orderDate")
 	Date orderDate;
+	
+	@Column(name = "payments")
 	String payments;
+	
+	@Column(name = "status")
 	String status;
+	
+	@Column(name = "totalAmount")
 	int totalAmount;
 
 	//不含tickedOrderID

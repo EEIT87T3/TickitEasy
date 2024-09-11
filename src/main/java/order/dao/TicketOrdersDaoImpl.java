@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import order.bean.TicketOrdersBean;
+import order.dao.base.TickitOrdersDAO;
 import util.ConnectionUtil;
 
 //票券的CRUD
-public class TicketOrdersDAO {
+public class TicketOrdersDaoImpl implements TickitOrdersDAO{
 
 	public static int ticketOrderAdd(TicketOrdersBean ticketOrderBean) { //新增
 		Connection connection = ConnectionUtil.getConnection();
