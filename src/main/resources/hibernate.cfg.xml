@@ -27,7 +27,12 @@
 		<mapping class="post.bean.PostBean"/>
 		<mapping class="post.bean.ThemeBean"/>
 		<mapping class="post.bean.CommentBean"/>
-		
+		<mapping class="order.bean.ProdOrdersBean"/>
+		<mapping class="order.bean.ProdOrderDetailsBean"/>
+		<mapping class="order.bean.TicketOrdersBean"/>
+		<mapping class="order.bean.TicketOrderDetailsBean"/>
+
+
 		
 	</session-factory>
 </hibernate-configuration>

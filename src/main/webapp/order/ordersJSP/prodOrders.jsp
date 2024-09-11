@@ -80,7 +80,7 @@
             <h2>嗨！陳予鈞</h2>
             <ul>
                 
-                <li><a href="http://localhost:8080/Project2Combine/order/ordersHTML/prodOrders.html">訂單紀錄</a></li>
+                <li><a href="order/ordersHTML/prodOrders.html">訂單紀錄</a></li>
                 <li><a href="#">票匣</a></li>
                 <li><a href="#">點數</a></li>
                 <li><a href="#">優惠券</a></li>

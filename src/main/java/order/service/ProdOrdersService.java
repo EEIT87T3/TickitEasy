@@ -2,43 +2,51 @@ package order.service;
 
 import java.util.List;
 
+import org.hibernate.Session;
+
 import order.bean.ProdOrdersBean;
-import order.dao.ProdOrdersDAO;
+import order.dao.ProdOrdersDaoImpl;
 
 public class ProdOrdersService {
+	
+	public ProdOrdersDaoImpl prodOrdersDAO;
+	
+	public ProdOrdersService(Session session) {
+		prodOrdersDAO = new ProdOrdersDaoImpl(session);
+	}
+	
+	public ProdOrdersBean add(ProdOrdersBean prodOrderBean) {
+		int newID = prodOrdersDAO.prodOrderAdd(prodOrderBean); //獲取自增長的主鍵
 
-	public static ProdOrdersBean add(ProdOrdersBean prodOrderBean) {
-		int newID = ProdOrdersDAO.prodOrderAdd(prodOrderBean); //獲取自增長的主鍵
-
-		return ProdOrdersDAO.prodOrderSelect(newID);
+		return prodOrdersDAO.prodOrderSelect(newID);
 	}
 
-	public static ProdOrdersBean delete(ProdOrdersBean prodOrderBean) {
+	public ProdOrdersBean delete(ProdOrdersBean prodOrderBean) {
 		int prodOrderID = prodOrderBean.getProdOrderID();
-		ProdOrdersBean prodOrderBeanNew = ProdOrdersDAO.prodOrderSelect(prodOrderID);
-		ProdOrdersDAO.prodOrderDelete(prodOrderID);
+		ProdOrdersBean prodOrderBeanNew = prodOrdersDAO.prodOrderSelect(prodOrderID);
+		prodOrdersDAO.prodOrderDelete(prodOrderID);
 
 		return prodOrderBeanNew;
 	}
 
-	public static ProdOrdersBean update(ProdOrdersBean prodOrderBean) {
-		int prodOrderID = ProdOrdersDAO.prodOrderUpdate(prodOrderBean);
+	public ProdOrdersBean update(ProdOrdersBean prodOrderBean) {
+		prodOrdersDAO.prodOrderUpdate(prodOrderBean);
 
-		return ProdOrdersDAO.prodOrderSelect(prodOrderID);
+		return prodOrdersDAO.prodOrderSelect(prodOrderBean.getProdOrderID());
 	}
 
-	public static ProdOrdersBean select(ProdOrdersBean prodOrderBean) {
+	public ProdOrdersBean select(ProdOrdersBean prodOrderBean) {
 		int prodOrderID = prodOrderBean.getProdOrderID();
 
-		return ProdOrdersDAO.prodOrderSelect(prodOrderID);
+		return prodOrdersDAO.prodOrderSelect(prodOrderID);
 	}
 
-	public static List<ProdOrdersBean> selectAll(int memberID) {
-		return ProdOrdersDAO.prodOrderSelectAll(memberID);
+	public List<ProdOrdersBean> selectAll(int memberID) {
+		return prodOrdersDAO.prodOrderSelectAll(memberID);
 	}
 
-	public static int addReturnID(ProdOrdersBean prodOrderBean) {
-		int newID = ProdOrdersDAO.prodOrderAdd(prodOrderBean); //獲取自增長的主鍵
+	public int addReturnID(ProdOrdersBean prodOrderBean) {
+		int newID = prodOrdersDAO.prodOrderAdd(prodOrderBean); //獲取自增長的主鍵
 
 		return newID;
 	}

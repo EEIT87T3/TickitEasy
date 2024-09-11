@@ -14,28 +14,28 @@ public class MemberBean {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int memberID;
 	
-	@Column(name = "email" , unique = true, nullable = false)
+	@Column(name = "email")
     private String email;
 	
-	@Column(name = "password", nullable = false)
+	@Column(name = "password")
     private String password;
 	
-	@Column(name = "name", nullable = false)
+	@Column(name = "name")
     private String name;
 	
 	@Column(name = "nickname")
     private String nickname;
 	
-	@Column(name = "birthDate", nullable = false)
+	@Column(name = "birthDate")
     private LocalDate birthDate;
 	
 	@Column(name = "phone")
     private String phone;
 	
-	@Column(name = "registerDate", nullable = false)
+	@Column(name = "registerDate")
     private LocalDate registerDate;
 	
-	@Column(name = "status", nullable = false)
+	@Column(name = "status")
     private String status;
 	
 	@Column(name = "profilePic")
@@ -44,6 +44,8 @@ public class MemberBean {
 	@Column(name = "verificationToken")
     private String verificationToken;
 	
+	/*使用@Transient 可簡化僅在應用程式執行期間才重要的資料管理，並有助於避免不必要的資料庫資源使用，以儲存不需要長期保存的資料。*/
+	//預設頭貼不需要存在資料庫故使用Transient
 	@Transient
     private static final String DEFAULT_PROFILE_PIC = "/images/default-avatar.png"; // 預設頭貼路徑
 	public MemberBean() {

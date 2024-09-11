@@ -18,22 +18,22 @@ public class FundProjService {
 		this.fundProjDao = new FundProjDao(session);
 	}
 
-	/* Hibernate Dao: 查詢全部*/
+	/* Hibernate Service: 查詢全部*/
 	public List<FundProjBean> selectAll() {
 		return fundProjDao.selectAll();
 	}
 
-	/* Hibernate Dao: 插入資料*/
+	/* Hibernate Service: 插入資料*/
 	public FundProjBean insertFundProj(FundProjBean proj) {
 		return fundProjDao.insertFundProj(proj);
 	}
 
-	/* Hibernate Dao: 更新資料*/
+	/* Hibernate Service: 更新資料*/
 	public FundProjBean updateFundProj(FundProjBean proj) {
 		return fundProjDao.updateFundProj(proj);
 	}
 	
-	/* Hibernate Dao: 更新資料*/
+	/* Hibernate Service: 更新資料*/
 	public boolean deleteFundProj(int projectID) {
 		return fundProjDao.deleteFundProj(projectID);
 	}	
