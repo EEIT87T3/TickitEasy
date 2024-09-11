@@ -1,6 +1,8 @@
 package post.model;
 
+
 import java.sql.Timestamp;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import member.bean.MemberBean;
 
 @Entity
 @Table(name = "post")
@@ -46,16 +51,22 @@ public class Post {
 	@Column(name = "status")
 	private Integer status;
 	
-	// 正確使用 @ManyToOne 關聯到 Theme 實體
+	//  @ManyToOne 關聯到 Theme 實體
 	@ManyToOne
-	@JoinColumn(name = "themeID", referencedColumnName = "themeID", insertable = false, updatable = false)
-    private Theme theme;  // 這裡關聯到 Theme 實體
+	@JoinColumn(name = "themeID", referencedColumnName = "themeID", insertable = false, updatable = false)//避免重複映射
+    private Theme theme;  
 
-    // 正確使用 @ManyToOne 關聯到 Member 實體
-	@ManyToOne
-	@JoinColumn(name = "memberID", referencedColumnName = "memberID", insertable = false, updatable = false)
-    private Member member;  // 這裡關聯到 Member 實體
+
+    @OneToMany(mappedBy = "post")
+    private Set<Comment> comments;  // 使用 Set 來避免重複
 	
+	//  @ManyToOne 關聯到 Member 實體
+	@ManyToOne
+	@JoinColumn(name = "memberID", referencedColumnName = "memberID", insertable = false, updatable = false)//避免重複映射
+	private MemberBean member;  
+	
+	@Transient
+    private static final String DEFAULT_PROFILE_PIC = "/images/default-avatar.png"; // 預設頭貼路徑
 	
 	public Post() {
 		super();
@@ -89,14 +100,53 @@ public class Post {
 	public void setThemeName(Theme theme) {
 		this.theme = theme;
 	}
-	public Member getMember() {
+	public MemberBean getMember() {
 		return member;
 	}
-	public void setMember(Member member) {
+	public void setMember(MemberBean member) {
 		this.member = member;
 	}
     
+	public Set<Comment> getComments() {
+	        return comments;
+	}
+	public void setComments(Set<Comment> comments) {
+	        this.comments = comments;
+	}
+	  
+	// 會員頭貼
 
+	public String getMemberProfilePic() {
+		if (member != null) {
+			return member.getProfilePic();
+		}
+		return null; // 或者返回一個預設值
+	}
 	
+	public void setMemberProfilePic(String profilePic) {
+		if (member != null) {
+				member.setProfilePic(profilePic);
+		} else {
+			// 處理 member 為 null 的情況
+			// 例如可以拋出異常或者設置一個默認值
+			throw new IllegalStateException("MemberBean is not initialized.");
+		}
+	}
+	public String getMemberNickname() {
+		if (member != null) {
+			return member.getNickname();
+		}
+		return null; // 或者返回一個預設值
+	}
+	
+	public void setMemberNickname(String nickname) {
+		if (member != null) {
+			member.setNickname(nickname);
+		} else {
+			// 處理 member 為 null 的情況
+			// 例如可以拋出異常或者設置一個默認值
+			throw new IllegalStateException("MemberBean is not initialized.");
+		}
+	}
 	
 }
