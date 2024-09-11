@@ -34,28 +34,28 @@ public class OrderController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		if (request.getParameter("order") != null) {
-			ProdOrdersBean prodOrderBeanNew = null;
-			ProdOrdersService prodOrdersService = new ProdOrdersService(session);
-			switch (request.getParameter("order")) {
-			case "products":
-				ProdOrdersBean prodOrderBean = prodOrderBean(request);
-				// 調用ProdOrdersService.add，回傳的int給予list
-				int newID = prodOrdersService.addReturnID(prodOrderBean); // 獲取prodOrder insert後 pk自增長鍵值
-				// 將新的prodOrderID賦予list每一個ProdOrderDetailsBean
-				List<ProdOrderDetailsBean> list = (List<ProdOrderDetailsBean>) request.getSession()
-						.getAttribute("listNew");
-				// 新List，已經prodOrderID給予每一個對象
-				List<ProdOrderDetailsBean> listNew = encapsulation(list, newID);
-				List<ProdOrderDetailsBean> listNewAll = ProdOrderDetailsService.addAll(listNew); //返回加成功的List
-				request.setAttribute("listNewAll", listNewAll);
-				request.getRequestDispatcher("order/ordersJSP/CartAddSuccess.jsp").forward(request,
-						response);
-
-				break;
-			}
-
-		}
+//		if (request.getParameter("order") != null) {
+//			ProdOrdersBean prodOrderBeanNew = null;
+//			ProdOrdersService prodOrdersService = new ProdOrdersService(session);
+//			switch (request.getParameter("order")) {
+//			case "products":
+//				ProdOrdersBean prodOrderBean = prodOrderBean(request);
+//				// 調用ProdOrdersService.add，回傳的int給予list
+//				int newID = prodOrdersService.addReturnID(prodOrderBean); // 獲取prodOrder insert後 pk自增長鍵值
+//				// 將新的prodOrderID賦予list每一個ProdOrderDetailsBean
+//				List<ProdOrderDetailsBean> list = (List<ProdOrderDetailsBean>) request.getSession()
+//						.getAttribute("listNew");
+//				// 新List，已經prodOrderID給予每一個對象
+//				List<ProdOrderDetailsBean> listNew = encapsulation(list, newID);
+//				List<ProdOrderDetailsBean> listNewAll = ProdOrderDetailsService.addAll(listNew); //返回加成功的List
+//				request.setAttribute("listNewAll", listNewAll);
+//				request.getRequestDispatcher("order/ordersJSP/CartAddSuccess.jsp").forward(request,
+//						response);
+//
+//				break;
+//			}
+//
+//		}
 
 
 
@@ -184,21 +184,23 @@ public class OrderController extends HttpServlet {
 	public ProdOrderDetailsBean prodOrderDetails(String method, ProdOrderDetailsBean prodOrderDetailsBean,
 			HttpServletRequest request) { //
 		ProdOrderDetailsBean prodOrderDetailsBeanNew = null;
+		session = sessionFactory.getCurrentSession();
+		ProdOrderDetailsService prodOrderDetailsService = new ProdOrderDetailsService(session);
 		switch (method) {
-		case "add":
-			prodOrderDetailsBeanNew = ProdOrderDetailsService.add(prodOrderDetailsBean);
-			break;
-		case "delete":
-			prodOrderDetailsBeanNew = ProdOrderDetailsService.delete(prodOrderDetailsBean);
-			break;
-		case "update":
-			prodOrderDetailsBeanNew = ProdOrderDetailsService.update(prodOrderDetailsBean);
-			break;
+//		case "add":
+//			prodOrderDetailsBeanNew = ProdOrderDetailsService.add(prodOrderDetailsBean);
+//			break;
+//		case "delete":
+//			prodOrderDetailsBeanNew = ProdOrderDetailsService.delete(prodOrderDetailsBean);
+//			break;
+//		case "update":
+//			prodOrderDetailsBeanNew = ProdOrderDetailsService.update(prodOrderDetailsBean);
+//			break;
 		case "select":
-			prodOrderDetailsBeanNew = ProdOrderDetailsService.select(prodOrderDetailsBean);
+			prodOrderDetailsBeanNew = prodOrderDetailsService.select(prodOrderDetailsBean);
 			break;
 		case "selectAll":
-			List<ProdOrderDetailsBean> list = ProdOrderDetailsService.selectAll(prodOrderDetailsBean.getProdOrderID());
+			List<ProdOrderDetailsBean> list = prodOrderDetailsService.selectAll(prodOrderDetailsBean.getProdOrderID());
 			request.setAttribute("list", list);
 			break;
 		}
@@ -210,8 +212,10 @@ public class OrderController extends HttpServlet {
 		int prodOrderDetailID = Integer.parseInt(
 				prodOrderDetailIDStr != null && !prodOrderDetailIDStr.trim().isEmpty() ? prodOrderDetailIDStr : "0");
 		String prodOrderIDStr = request.getParameter("prodOrderID");
+		ProdOrdersBean prodOrdersBean = new ProdOrdersBean();
 		int prodOrderID = Integer
 				.parseInt(prodOrderIDStr != null && !prodOrderIDStr.trim().isEmpty() ? prodOrderIDStr : "0");
+		prodOrdersBean.setProdOrderID(prodOrderID);
 		String productIDStr = request.getParameter("productID");
 		int productID = Integer.parseInt(productIDStr != null && !productIDStr.trim().isEmpty() ? productIDStr : "0");
 		String priceStr = request.getParameter("price");
@@ -226,7 +230,7 @@ public class OrderController extends HttpServlet {
 		String scoreStr = request.getParameter("score");
 		int score = Integer.parseInt(scoreStr != null && !scoreStr.trim().isEmpty() ? scoreStr : "0");
 
-		ProdOrderDetailsBean prodOrderDetailsBean = new ProdOrderDetailsBean(prodOrderDetailID, prodOrderID, productID,
+		ProdOrderDetailsBean prodOrderDetailsBean = new ProdOrderDetailsBean(prodOrderDetailID, prodOrdersBean, productID,
 				price, quantity, content, reviewTime, score);
 
 		return prodOrderDetailsBean;

@@ -28,7 +28,7 @@ public class ProdOrderDetailsBean {
     @Column(name = "price")
     int price;
 
-    @Column(name = "quantity")
+	@Column(name = "quantity")
     int quantity;
     
     @Column(name = "content")
@@ -42,6 +42,19 @@ public class ProdOrderDetailsBean {
     public ProdOrderDetailsBean() {
     	
     }
+    
+     public ProdOrderDetailsBean(int prodOrderDetailID, ProdOrdersBean prodOrderID, int productID, int price,
+			int quantity, String content, Date reviewTime, int score) {
+		super();
+		this.prodOrderDetailID = prodOrderDetailID;
+		this.prodOrderID = prodOrderID;
+		this.productID = productID;
+		this.price = price;
+		this.quantity = quantity;
+		this.content = content;
+		this.reviewTime = reviewTime;
+		this.score = score;
+	}
     //配合購物車
     public ProdOrderDetailsBean(int productID, int price, int quantity) {
 		super();
@@ -88,8 +101,8 @@ public class ProdOrderDetailsBean {
 	public void setProdOrderDetailID(int prodOrderDetailID) {
 		this.prodOrderDetailID = prodOrderDetailID;
 	}
-	public int getProdOrderID() {
-		return prodOrderID.getProdOrderID();
+	public ProdOrdersBean getProdOrderID() {
+		return prodOrderID;
 	}
 	public void setProdOrderID(int prodOrderID) {
 		this.prodOrderID.setProdOrderID(prodOrderID);

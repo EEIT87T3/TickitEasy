@@ -44,7 +44,7 @@ td {
 				%>
 			<tr align="center">
 				<td><%=prodOrderDetailsBean.getProdOrderDetailID()%></td>
-				<td><%=prodOrderDetailsBean.getProdOrderID()%></td>
+				<td><%=prodOrderDetailsBean.getProdOrderID().getProdOrderID()%></td>
 				<td><%=prodOrderDetailsBean.getProductID()%></td>
 				<td><%=prodOrderDetailsBean.getPrice()%></td>
 				<td><%=prodOrderDetailsBean.getQuantity()%></td>
