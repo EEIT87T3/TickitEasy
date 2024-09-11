@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import order.bean.ProdOrderDetailsBean;
+import order.dao.base.ProdOrderDetailsDao;
 import util.ConnectionUtil;
 
-public class ProdOrderDetailsDAO {
+public class ProdOrderDetailsDaoImpl implements ProdOrderDetailsDao{
 
 	public static int prodOrderDetailsAdd(ProdOrderDetailsBean prodOrderDetailsBean) { //新增
 		Connection connection = ConnectionUtil.getConnection();

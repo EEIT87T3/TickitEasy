@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import order.bean.TicketOrderDetailsBean;
+import order.dao.base.TickitOrderDetailsDao;
 import util.ConnectionUtil;
 
-public class TicketOrderDetailsDAO {
+public class TicketOrderDetailsDaoImpl implements TickitOrderDetailsDao{
 
 	public static int ticketOrderDetailsAdd(TicketOrderDetailsBean ticketOrderDetailsBean) { //新增
 		Connection connection = ConnectionUtil.getConnection();

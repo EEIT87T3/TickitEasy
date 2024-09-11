@@ -5,6 +5,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,22 +21,27 @@ import order.service.ProdOrderDetailsService;
 import order.service.ProdOrdersService;
 import order.service.TicketOrderDetailsService;
 import order.service.TicketOrdersService;
+import util.HibernateUtil;
 
 //接收所有客戶端傳來的資料，並分發下去給service
 @WebServlet("/OrderController")
 public class OrderController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	private Session session;
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
 		if (request.getParameter("order") != null) {
+			ProdOrdersBean prodOrderBeanNew = null;
+			ProdOrdersService prodOrdersService = new ProdOrdersService(session);
 			switch (request.getParameter("order")) {
 			case "products":
 				ProdOrdersBean prodOrderBean = prodOrderBean(request);
 				// 調用ProdOrdersService.add，回傳的int給予list
-				int newID = ProdOrdersService.addReturnID(prodOrderBean); // 獲取prodOrder insert後 pk自增長鍵值
+				int newID = prodOrdersService.addReturnID(prodOrderBean); // 獲取prodOrder insert後 pk自增長鍵值
 				// 將新的prodOrderID賦予list每一個ProdOrderDetailsBean
 				List<ProdOrderDetailsBean> list = (List<ProdOrderDetailsBean>) request.getSession()
 						.getAttribute("listNew");
@@ -112,21 +120,23 @@ public class OrderController extends HttpServlet {
 
 	public ProdOrdersBean prodOrders(String method, ProdOrdersBean prodOrderBean, HttpServletRequest request) { // request為了selectAll而塞入
 		ProdOrdersBean prodOrderBeanNew = null;
+		session = sessionFactory.getCurrentSession();
+		ProdOrdersService prodOrdersService = new ProdOrdersService(session);
 		switch (method) {
 		case "add":
-			prodOrderBeanNew = ProdOrdersService.add(prodOrderBean);
+			prodOrderBeanNew = prodOrdersService.add(prodOrderBean);
 			break;
 		case "delete":
-			prodOrderBeanNew = ProdOrdersService.delete(prodOrderBean);
+			prodOrderBeanNew = prodOrdersService.delete(prodOrderBean);
 			break;
 		case "update":
-			prodOrderBeanNew = ProdOrdersService.update(prodOrderBean);
+			prodOrderBeanNew = prodOrdersService.update(prodOrderBean);
 			break;
 		case "select":
-			prodOrderBeanNew = ProdOrdersService.select(prodOrderBean);
+			prodOrderBeanNew = prodOrdersService.select(prodOrderBean);
 			break;
 		case "selectAll":
-			List<ProdOrdersBean> list = ProdOrdersService.selectAll(prodOrderBean.getMemberID());
+			List<ProdOrdersBean> list = prodOrdersService.selectAll(prodOrderBean.getMemberID());
 			request.setAttribute("list", list);
 			break;
 		}

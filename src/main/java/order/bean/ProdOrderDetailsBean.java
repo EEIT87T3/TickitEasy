@@ -2,17 +2,46 @@ package order.bean;
 
 import java.sql.Date;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+@Entity @Table(name = "prodOrderDetails")
 public class ProdOrderDetailsBean {
 
 //封裝prodOrderDetails的數據
+	@Id @Column
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	int prodOrderDetailID;
-    int prodOrderID;
+	
+	@ManyToOne
+	@JoinColumn(name = "prodOrderID", referencedColumnName = "prodOrderID")
+	ProdOrdersBean prodOrderID;
+	
+	@Column(name = "productID")
     int productID;
+    
+    @Column(name = "price")
     int price;
+
+    @Column(name = "quantity")
     int quantity;
+    
+    @Column(name = "content")
     String content;
+    
+    @Column(name = "reviewTime")
     Date reviewTime;
+    
+    @Column(name = "score")
     int score;
+    public ProdOrderDetailsBean() {
+    	
+    }
     //配合購物車
     public ProdOrderDetailsBean(int productID, int price, int quantity) {
 		super();
@@ -23,7 +52,7 @@ public class ProdOrderDetailsBean {
    //配合購物車
 	public ProdOrderDetailsBean(int prodOrderID, int productID, int price, int quantity) {
 		super();
-		this.prodOrderID = prodOrderID;
+		this.prodOrderID.setProdOrderID(prodOrderID);
 		this.productID = productID;
 		this.price = price;
 		this.quantity = quantity;
@@ -32,7 +61,7 @@ public class ProdOrderDetailsBean {
     public ProdOrderDetailsBean(int prodOrderID, int productID, int price, int quantity, String content,
 			Date reviewTime, int score) {
 		super();
-		this.prodOrderID = prodOrderID;
+		this.prodOrderID.setProdOrderID(prodOrderID);
 		this.productID = productID;
 		this.price = price;
 		this.quantity = quantity;
@@ -45,7 +74,7 @@ public class ProdOrderDetailsBean {
 			String content, Date reviewTime, int score) {
 		super();
 		this.prodOrderDetailID = prodOrderDetailID;
-		this.prodOrderID = prodOrderID;
+		this.prodOrderID.setProdOrderID(prodOrderID);
 		this.productID = productID;
 		this.price = price;
 		this.quantity = quantity;
@@ -60,10 +89,10 @@ public class ProdOrderDetailsBean {
 		this.prodOrderDetailID = prodOrderDetailID;
 	}
 	public int getProdOrderID() {
-		return prodOrderID;
+		return prodOrderID.getProdOrderID();
 	}
 	public void setProdOrderID(int prodOrderID) {
-		this.prodOrderID = prodOrderID;
+		this.prodOrderID.setProdOrderID(prodOrderID);
 	}
 	public int getProductID() {
 		return productID;

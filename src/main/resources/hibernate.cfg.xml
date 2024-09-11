@@ -24,6 +24,11 @@
 		<mapping class="event.object.po.TicketTypesPO"/>
 		<mapping class="cwdfunding.bean.FundProjBean"/> 
 		<mapping class="product.bean.Products"/>
+		<mapping class="order.bean.ProdOrdersBean"/>
+		<mapping class="order.bean.ProdOrderDetailsBean"/>
+		<mapping class="order.bean.TicketOrdersBean"/>
+		<mapping class="order.bean.TicketOrderDetailsBean"/>
+		
 		
 	</session-factory>
 </hibernate-configuration>
