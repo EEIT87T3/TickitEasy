@@ -4,6 +4,7 @@
 <%@page import="post.bean.ThemeBean"%>
 <%@page import="java.util.List"%>
     <%! @SuppressWarnings("unchecked") %>
+       <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,7 @@
 <body style="background-color:#fdf5e6">
 	<div align="center">
 		<h2>主題列表</h2>
-		<table border="1">
+		<table border="1" id="table_id" class="display">
 		<tr style="background-color:#a8fefa">
 		<th>主題編號<th>主題名稱<th>動作
 		<%ThemeBean theme = (ThemeBean) request.getAttribute("themes");
@@ -51,5 +52,10 @@
 						<input type="hidden" name="themeID" />
 						<input type="submit" value="回上頁" /></form>
 						</div>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+	<script>$(document).ready( function () {
+	    $('#table_id').DataTable(); 
+	} );</script>
 </body>
 </html>

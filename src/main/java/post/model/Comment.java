@@ -1,4 +1,4 @@
-package post.bean;
+package post.model;
 
 
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ import member.bean.MemberBean;
 
 @Entity
 @Table(name = "postComment")
-public class CommentBean implements java.io.Serializable  {
+public class Comment implements java.io.Serializable  {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -38,7 +38,7 @@ public class CommentBean implements java.io.Serializable  {
 
 	@ManyToOne
 	@JoinColumn(name = "postID", insertable = false, updatable = false)
-	private PostBean post;  // 使用 @ManyToOne 來表示多對一關聯
+	private Post post;  // 使用 @ManyToOne 來表示多對一關聯
 	
 	@ManyToOne
 	@JoinColumn(name = "memberID", insertable = false, updatable = false)
@@ -104,7 +104,7 @@ public class CommentBean implements java.io.Serializable  {
 	}
 
 	
-	public CommentBean() {
+	public Comment() {
 		
 		
 	}

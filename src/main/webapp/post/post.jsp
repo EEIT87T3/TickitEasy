@@ -48,9 +48,9 @@
                 <h1><%= post.getPostTitle() %></h1>
             </div>
             <div class="author">
-                <img class="avatar" src="<%= post.getProfilePic() %>" alt="頭像">
+                <img class="avatar" src="<%= post.getMemberProfilePic() %>" alt="頭像">
                 <ul>
-                    <li><div ><%= post.getName() %></div></li>
+                    <li><div ><%= post.getMemberNickname() %></div></li>
                     <li><div><%= sdf.format(post.getPostTime()) %></div></li>
                 </ul>
                 <div class="button-group">
@@ -88,7 +88,7 @@
                 <div class="comment">
                     <div class="author">
                         <img class="avatar" src="Img/gal_o_man.png" alt="頭像">
-                        <div class="name"><%= comment.getName() %></div>
+                        <div class="name"><%= comment.getMemberNickname() %></div>
                     </div>
                     <p><%= comment.getContent() %></p>
                     <p><%= sdf.format(comment.getCommentDate() )%></p>
