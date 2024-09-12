@@ -134,6 +134,7 @@
                         	 <form method = "post" action = "OrderController">
                         	 <input type = 'hidden' name = 'form' value = 'prodOrderDetails'>
                         	 <input type = 'hidden' name = 'prodOrderID' value = '<%= prodOrderBean.getProdOrderID() %>'>
+                
                             <td><%=prodOrderBean.getProdOrderID()%></td>
                             <td><%=prodOrderBean.getMemberID()%></td>
                             <td><%=prodOrderBean.getOrderDate()%></td>
