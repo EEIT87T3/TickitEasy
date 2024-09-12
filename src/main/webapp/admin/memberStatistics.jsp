@@ -117,9 +117,9 @@
 					href="${pageContext.request.contextPath}/admin/memberStatistics.jsp"
 					class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">會員統計分析</a> <a
 					href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp" class="block py-2 px-4 hover:bg-gray-700">活動管理</a> <a
-					href="#" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a> <a
+					href="${pageContext.request.contextPath}/order/ordersHTML/prodOrders.html" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a> <a
 					href="${pageContext.request.contextPath}/product/GetAllProducts.jsp" class="block py-2 px-4 hover:bg-gray-700">商品管理</a> <a
-					href="#" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a> <a
+					href="${pageContext.request.contextPath}/GetAllPost" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a> <a
 					href="${pageContext.request.contextPath}/FundProjs" class="block py-2 px-4 hover:bg-gray-700">募資活動管理</a>
             </nav>
         </div>
