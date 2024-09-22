@@ -47,6 +47,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 	public StandardServletMultipartResolver multipartResolver() {
 		return new StandardServletMultipartResolver();
 	}
+
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -93,6 +94,5 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addInterceptor(lci).addPathPatterns("/**");
 	}
 
-	
 	
 }

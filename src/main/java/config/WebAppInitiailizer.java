@@ -35,8 +35,14 @@ public class WebAppInitiailizer extends AbstractAnnotationConfigDispatcherServle
 	}
 
 	@Override
-	protected void customizeRegistration(Dynamic registration) {
-		registration.setMultipartConfig(new MultipartConfigElement("c:/temp/upload/"));
-	}
+    protected void customizeRegistration(Dynamic registration) {
+        // 設定 multipart-config
+        registration.setMultipartConfig(new MultipartConfigElement(
+            null, // maxFileSize
+            5000000, // 5MB maxFileSize
+            10000000, // 10MB maxRequestSize
+            0 // fileSizeThreshold
+        ));
+    }
 
 }

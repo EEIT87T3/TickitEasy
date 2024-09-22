@@ -1,110 +1,74 @@
 package cwdfunding.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import cwdfunding.bean.FundProjBean;
 import cwdfunding.service.*;
 
 import java.io.File;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import util.HibernateUtil;
-
-@WebServlet("/FundProjs")
-@MultipartConfig
-public class FundProjController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	public FundProjController() {
-		super();
-	}
 
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		//在test05.html中以<a>超連結方式連進來，此請求只能使用doGet()處理
-		get(request, response);
-		
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		//在test.jsp中以<form action="" method="post">方法傳送請求，只能用doPost()處理
-		String action = request.getParameter("action");
-		switch (action) {
-		case "get":
-			get(request, response);
-			break;
-		case "insert":
-			insert(request, response);
-			break;
-		case "delete":
-			delete(request, response);
-			break;
-		case "update":
-			update(request, response);
-			break;
-		}
-	}
+@Controller
+@RequestMapping("/FundProj")
+public class FundProjController{
 	
-	/* 查詢全部 */
-	private void get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		SessionFactory factory = HibernateUtil.getSessionFactory();
-		Session session = factory.getCurrentSession();
-		System.out.println("hereee!!");
-		FundProjService fundProjService = new FundProjService(session);
-		List<FundProjBean> projs = fundProjService.selectAll();
-		request.setAttribute("projs", projs);
-		request.getRequestDispatcher("/cwdfunding/GetAllFundProj.jsp").forward(request, response);
+	@Autowired
+	private FundProjService fundProjService;
+	
 
-		
+	/* 查詢全部 */
+	@GetMapping
+	private String get(Model model){
+
+		List<FundProjBean> projs = fundProjService.selectAll();
+		model.addAttribute("projs", projs);
+		return "GetAllFundProj";
 	}
 	
 	/* 新增資料 */
-	private void insert(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		SessionFactory factory = HibernateUtil.getSessionFactory();
-		Session session = factory.getCurrentSession();
-
-		FundProjService fundProjService = new FundProjService(session);
+	@PostMapping("/insert")
+	private String insert(
+			@RequestParam("title") String title,
+			@RequestParam("description") String description,
+			@RequestParam("startDate") String startDateStr,
+			@RequestParam("endDate") String endDateStr,
+			@RequestParam("targetAmount") String targetAmount,
+			@RequestParam("currentAmount") String currentAmount,
+			@RequestParam("threshold") String threshold,
+			@RequestParam("postponeDate") String postponeDateStr,
+			@RequestParam("category") String category,
+			@RequestParam("image") MultipartFile image,
+			HttpServletRequest request
+			) throws IllegalStateException, IOException{
 		FundProjBean proj = new FundProjBean();
-		
-		// 接收請求
-		String title = request.getParameter("title");
-		String description = request.getParameter("description");
-		String startDateStr = request.getParameter("startDate");
-		String endDateStr = request.getParameter("endDate");
-		String targetAmount = request.getParameter("targetAmount");
-		String currentAmount = request.getParameter("currentAmount");
-		String threshold = request.getParameter("threshold");
-		String postponeDateStr = request.getParameter("postponeDate");
-		String category = request.getParameter("category");
-		
 		// 處理圖片（存進本端、將檔名寫進資料庫）
-		Part filePart= request.getPart("image");
-        String uploadPath = getServletContext().getRealPath("") + "cwdfunding/images";
+        String filename = image.getOriginalFilename();
+        proj.setImage(filename);
+
+        //存進本端
+        String uploadPath = request.getServletContext().getRealPath("") + "/WEB-INF/resources/images";
+        System.out.println("uploadPath:"+uploadPath);
+        
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs(); // 如果目錄不存在，則創建目錄
         }
-
-        String filename = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); 
-        String filePath = uploadPath + File.separator + filename;
-        filePart.write(filePath);
+        File dest = new File(uploadPath + File.separator + filename);
+        image.transferTo(dest);
         
         // 將請求中的日期先格式化再轉換成LocalDateTime
         // 定義datetime-local格式
@@ -118,7 +82,6 @@ public class FundProjController extends HttpServlet {
         // 設定FundProjBean屬性，日期轉成.sql.TimeStamp
         proj.setTitle(title);
         proj.setDescription(description);
-        proj.setImage(filename);
         proj.setStartDate(Timestamp.valueOf(startDateTime));
         proj.setEndDate(Timestamp.valueOf(endDateTime));
         proj.setTargetAmount(targetAmount);
@@ -127,44 +90,46 @@ public class FundProjController extends HttpServlet {
         proj.setPostponeDate(Timestamp.valueOf(postponeDateTime));
         proj.setCategory(category);
         
+        System.out.println("title"+proj.getTitle());
+        System.out.println("description"+proj.getDescription());
+        System.out.println("start"+proj.getStartDate());
+        System.out.println("target"+proj.getTargetAmount());
+        System.out.println("current"+proj.getCurrentAmount());
         // 執行請求
         fundProjService.insertFundProj(proj);
-		response.sendRedirect(request.getContextPath() + "/FundProjs");
-		
+        return "redirect:/FundProj";
 	}
+//
+//	/* 更新資料 */
+	@PostMapping("/update")
+	private String update(
+			@RequestParam("udt-projectID") Integer projectID,
+			@RequestParam("udt-title") String title,
+			@RequestParam("udt-description") String description,
+			@RequestParam("udt-startDate") String startDateStr,
+			@RequestParam("udt-endDate") String endDateStr,
+			@RequestParam("udt-targetAmount") String targetAmount,
+			@RequestParam("udt-currentAmount") String currentAmount,
+			@RequestParam("udt-threshold") String threshold,
+			@RequestParam("udt-postponeDate") String postponeDateStr,
+			@RequestParam("udt-category") String category,
+			@RequestParam("old-image") String oldImage,
+			@RequestParam("udt-image") MultipartFile filePart,
+			HttpServletRequest request
+			) throws IllegalStateException, IOException {
 
-	/* 更新資料 */
-	private void update(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		SessionFactory factory = HibernateUtil.getSessionFactory();
-		Session session = factory.getCurrentSession();
-
-		FundProjService fundProjService = new FundProjService(session);
 		FundProjBean proj = new FundProjBean();
-	
-		int projectID = Integer.valueOf(request.getParameter("udt-projectID"));
-		String title = request.getParameter("udt-title");
-		String description = request.getParameter("udt-description");
-		String startDateStr = request.getParameter("udt-startDate");
-		String endDateStr = request.getParameter("udt-endDate");
-		String targetAmount = request.getParameter("udt-targetAmount");
-		String currentAmount = request.getParameter("udt-currentAmount");
-		String threshold = request.getParameter("udt-threshold");
-		String postponeDateStr = request.getParameter("udt-postponeDate");
-		String category = request.getParameter("udt-category");
-		String oldImage = request.getParameter("old-image");
-		Part filePart= request.getPart("udt-image");
-		
+
 		String filename="";
-		if (!filePart.getSubmittedFileName().isEmpty()) {
-	        String uploadPath = getServletContext().getRealPath("") + "cwdfunding/images";
+		if (!filePart.getOriginalFilename().isEmpty()) {
+	        String uploadPath = request.getServletContext().getRealPath("") + "/WEB-INF/resources/images";
 	        File uploadDir = new File(uploadPath);
 	        if (!uploadDir.exists()) {
 	            uploadDir.mkdirs(); // 如果目錄不存在，則創建目錄
 	        }
-	        filename = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); 
-	        String filePath = uploadPath + File.separator + filename;
-	        filePart.write(filePath);;
-	        System.out.println(filePath);
+	        filename = filePart.getOriginalFilename();
+	        File dest = new File(uploadPath + File.separator + filename);
+	        filePart.transferTo(dest);
 		}else {
 			System.out.println(oldImage);
 			filename = oldImage;
@@ -193,20 +158,14 @@ public class FundProjController extends HttpServlet {
 	    proj.setCategory(category);
 	    
 	    fundProjService.updateFundProj(proj);
-		
-		response.sendRedirect(request.getContextPath() + "/FundProjs");	
+        return "redirect:/FundProj";
 	}
 	
-	/* 刪除資料 */
-	private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		SessionFactory factory = HibernateUtil.getSessionFactory();
-		Session session = factory.getCurrentSession();
-
-		FundProjService fundProjService = new FundProjService(session);
-		
-		int projectID = Integer.valueOf(request.getParameter("del-projectID"));
+//	/* 刪除資料 */
+	@PostMapping("/delete")
+	private String delete(@RequestParam("del-projectID") Integer projectID) {
+		System.out.println("delID:"+projectID);
 		fundProjService.deleteFundProj(projectID);
-		
-		response.sendRedirect(request.getContextPath() + "/FundProjs");	
+        return "redirect:/FundProj";
 	}
 }

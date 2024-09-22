@@ -3,21 +3,17 @@ package cwdfunding.service;
 import cwdfunding.dao.FundProjDao;
 import cwdfunding.bean.*;
 import java.util.List;
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class FundProjService {
 	
-	
+	@Autowired
 	private FundProjDao fundProjDao;
 	
-	public FundProjService() {
-		this.fundProjDao = new FundProjDao();
-	}
-	
-	public FundProjService(Session session) {
-		this.fundProjDao = new FundProjDao(session);
-	}
-
 	/* Hibernate Service: 查詢全部*/
 	public List<FundProjBean> selectAll() {
 		return fundProjDao.selectAll();
@@ -33,7 +29,7 @@ public class FundProjService {
 		return fundProjDao.updateFundProj(proj);
 	}
 	
-	/* Hibernate Service: 更新資料*/
+	/* Hibernate Service: 刪除資料*/
 	public boolean deleteFundProj(int projectID) {
 		return fundProjDao.deleteFundProj(projectID);
 	}	
