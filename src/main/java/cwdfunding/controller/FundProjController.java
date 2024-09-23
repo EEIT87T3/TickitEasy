@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 @Controller
-@RequestMapping("/FundProj")
+@RequestMapping("/FundProjs")
 public class FundProjController{
 	
 	@Autowired
@@ -89,15 +89,9 @@ public class FundProjController{
         proj.setThreshold(threshold);
         proj.setPostponeDate(Timestamp.valueOf(postponeDateTime));
         proj.setCategory(category);
-        
-        System.out.println("title"+proj.getTitle());
-        System.out.println("description"+proj.getDescription());
-        System.out.println("start"+proj.getStartDate());
-        System.out.println("target"+proj.getTargetAmount());
-        System.out.println("current"+proj.getCurrentAmount());
         // 執行請求
         fundProjService.insertFundProj(proj);
-        return "redirect:/FundProj";
+        return "redirect:/FundProjs";
 	}
 //
 //	/* 更新資料 */
@@ -158,14 +152,13 @@ public class FundProjController{
 	    proj.setCategory(category);
 	    
 	    fundProjService.updateFundProj(proj);
-        return "redirect:/FundProj";
+        return "redirect:/FundProjs";
 	}
 	
 //	/* 刪除資料 */
 	@PostMapping("/delete")
 	private String delete(@RequestParam("del-projectID") Integer projectID) {
-		System.out.println("delID:"+projectID);
 		fundProjService.deleteFundProj(projectID);
-        return "redirect:/FundProj";
+        return "redirect:/FundProjs";
 	}
 }

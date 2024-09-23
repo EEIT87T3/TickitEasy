@@ -17,9 +17,8 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/nice-forms.css@0.1.7/dist/nice-forms.css" />
+<script src="https://kit.fontawesome.com/25f666e987.js" crossorigin="anonymous"></script>
 <style>
-
-
 /* 左側選單 */
 .sidebar { /* 預設樣式 與 開啟選單時 */
 	position: fixed;
@@ -108,6 +107,19 @@ table.dataTable tbody tr:hover {
 			text-font: 30px;
 			font-weight: bold;
         }
+        
+        /* 操作按鈕 */
+        .btn-action{
+        	padding: 3px;
+        	display: inline-block;
+        }
+        .btn-delete{
+        	color: #FF2D2D;
+        }
+        .btn-update{
+        	color: #009100;
+        }
+        
         /* 確定按鈕 */
         .btn-check {
             background-color: #4CAF50; /* 綠色 */
@@ -272,15 +284,14 @@ table.dataTable tbody tr:hover {
 									<td class="py-3 px-4 text-center"><%=proj.getCategory()%></td>
 									<td class="py-3 px-4 text-center">
 										<div class="div-actions">			
-											<div class="div-actions-ele">
-												<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs btn-update">修改</button>
-											</div>								
-											<div class="div-actions-ele">
-											<form action="<%= request.getContextPath() %>/FundProj/delete" method="post">
-												<input type="hidden" name="del-projectID" value="<%=proj.getProjectID()%>"> 								
-												<button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs btn-delete">刪除</button>
-											</form>
-											</div>
+												<!-- <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs btn-update"><i class="fa-solid fa-pen-to-square"></i></button> -->
+												<button class="btn-action btn-update"><i class="fa-solid fa-pen-to-square"></i></button>
+
+												<form action="<%= request.getContextPath() %>/FundProjs/delete" method="post">
+													<input type="hidden" name="del-projectID" value="<%=proj.getProjectID()%>"> 								
+													<!-- <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs btn-delete"><i class="fa-solid fa-trash"></i></button> -->
+													<button type="submit" class="btn-action btn-delete"><i class="fa-solid fa-trash"></i></button>
+												</form>
 										</div></td> <%}%>
 								</tr>
 							</tbody>
@@ -295,7 +306,7 @@ table.dataTable tbody tr:hover {
 					<h3>新增</h3>
 					<button class="btn-X btn-close">X</button>
 				</div>
-				<form action="<%= request.getContextPath() %>/FundProj/insert" method="post" enctype="multipart/form-data">						<div class="nice-form-group">
+				<form action="<%= request.getContextPath() %>/FundProjs/insert" method="post" enctype="multipart/form-data">						<div class="nice-form-group">
 							<label>專案名稱</label><small class="sm" id="sp-title" style="font-size:12.5px; font-weight: bold"></small>
 							<input type="text" id="title" name="title" data-error="sp-title" >
 						</div>
@@ -359,7 +370,7 @@ table.dataTable tbody tr:hover {
 					<h3>修改</h3>
 					<button class="btn-X btn-close">X</button>
 				</div>
-					<form action="<%= request.getContextPath() %>/FundProj/update" 
+					<form action="<%= request.getContextPath() %>/FundProjs/update" 
 						method="post" enctype="multipart/form-data">
 						<div class="nice-form-group">
 							<label>專案編號</label><input type="text" id="udt-projectID" name="udt-projectID" readonly>
