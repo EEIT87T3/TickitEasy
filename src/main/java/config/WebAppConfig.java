@@ -75,13 +75,20 @@ public class WebAppConfig implements WebMvcConfigurer {
 		return ms;
 	}
 	
+
 	@Bean
-	public InternalResourceViewResolver irViewResolver() {
-//		InternalResourceViewResolver irv1 = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
+	public InternalResourceViewResolver irViewResolver1() {
+		InternalResourceViewResolver irv1 = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
+    		irv1.setOrder(5);  // 優先度較高
+		return irv1;
+	}
+
+	@Bean
+	public InternalResourceViewResolver irViewResolver2() {
 		InternalResourceViewResolver irv1 = new InternalResourceViewResolver();
 		irv1.setSuffix(".jsp");
+    		irv1.setOrder(6);  // 優先度較低
 		return irv1;
-		
 	}
 	
 	
