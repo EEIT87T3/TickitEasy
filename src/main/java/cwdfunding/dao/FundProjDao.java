@@ -2,39 +2,46 @@ package cwdfunding.dao;
 
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import cwdfunding.bean.FundProjBean;
 
+@Repository
 
 public class FundProjDao {
 
-	private Session session;
+	@Autowired
+	private SessionFactory factory;
 	
-	public FundProjDao() {
-	}
-	
-	public FundProjDao(Session session) {
-		this.session = session;
-	}
-
 	
 	/* Hibernate Dao: 查詢全部*/
+	@Transactional(readOnly = true)
 	public List<FundProjBean> selectAll() {
+		Session session = factory.openSession();
 		Query<FundProjBean> query = session.createQuery("from FundProjBean", FundProjBean.class);
 		return query.list();
 	}
 	
 	/* Hibernate Dao: 插入資料*/
+	@Transactional
 	public FundProjBean insertFundProj(FundProjBean proj) {
+		Session session = factory.openSession();
 		if(proj != null) {
 			session.persist(proj);
+			session.flush();
 			return proj;
 		}
 		return null;
 	}
 
 	/* Hibernate Dao: 更新資料*/
+	@Transactional
 	public FundProjBean updateFundProj(FundProjBean proj) {
+		Session session = factory.openSession();
 		// 先以id查詢資料是否已存在，查詢結果result為永續狀態的物件(persistent object)，
 		FundProjBean result = session.get(FundProjBean.class, proj.getProjectID());
 		
@@ -51,18 +58,23 @@ public class FundProjDao {
 			result.setThreshold(proj.getThreshold());
 			result.setPostponeDate(proj.getPostponeDate());
 			result.setCategory(proj.getCategory());
+			session.flush();
 			return result;
 		}
 		return null;
 	}
 	
 	/* Hibernate Dao: 刪除資料*/
+	@Transactional
 	public boolean deleteFundProj(int projectID) {
+		Session session = factory.openSession();
+
 		// 先以id查詢資料是否已存在，查詢結果result為永續狀態的物件(persistent object)，
 		FundProjBean result = session.get(FundProjBean.class, projectID);
 		
 		if(result != null) {
 			session.remove(result);
+			session.flush();
 			return true;
 		}
 		return false;
