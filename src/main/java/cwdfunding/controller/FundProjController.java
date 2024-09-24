@@ -60,7 +60,7 @@ public class FundProjController{
         proj.setImage(filename);
 
         //存進本端
-        String uploadPath = request.getServletContext().getRealPath("") + "/WEB-INF/resources/images";
+        String uploadPath = request.getServletContext().getRealPath("") + "/cwdfunding/images";
         System.out.println("uploadPath:"+uploadPath);
         
         File uploadDir = new File(uploadPath);
@@ -116,7 +116,7 @@ public class FundProjController{
 
 		String filename="";
 		if (!filePart.getOriginalFilename().isEmpty()) {
-	        String uploadPath = request.getServletContext().getRealPath("") + "/WEB-INF/resources/images";
+	        String uploadPath = request.getServletContext().getRealPath("") + "/cwdfunding/images";
 	        File uploadDir = new File(uploadPath);
 	        if (!uploadDir.exists()) {
 	            uploadDir.mkdirs(); // 如果目錄不存在，則創建目錄

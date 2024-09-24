@@ -273,7 +273,7 @@ table.dataTable tbody tr:hover {
 									<td class="py-3 px-4 "><%= proj.getTitle() %></td>
 									<td class="py-3 px-4 "><%= proj.getDescription() %></td>
 									<td class="py-3 px-4 text-center">
-									<img src="<%= request.getContextPath() %>/images/<%=proj.getImage()%>" alt="image" style="max-width:70px; height: auto"> 
+									<img src="<%= request.getContextPath() %>/cwdfunding/images/<%=proj.getImage()%>" alt="image" style="max-width:70px; height: auto"> 
 										<input type="hidden" value="<%=proj.getImage()%>"></td>
 									<td class="py-3 px-4 text-center"><%=proj.getFormattedStartDate() %></td>
 									<td class="py-3 px-4 text-center"><%=proj.getFormattedEndDate()%></td>
