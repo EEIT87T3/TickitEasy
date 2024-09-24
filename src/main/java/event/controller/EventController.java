@@ -33,7 +33,7 @@ public class EventController {
 		return "forward:/event/CreateEvent.html";
 	}
 	
-	@PostMapping
+	@PostMapping("/event/CreateEventPost")
 	public String createEvent(Model model, @RequestParam Map<String, String> allParams) {
 		// 1. 從 request getParameter("structure")，判斷出結構
 
