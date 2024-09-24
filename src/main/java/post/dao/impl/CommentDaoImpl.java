@@ -10,13 +10,14 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import post.bean.CommentBean;
 import post.bean.PostBean;
 import post.model.Comment;
 import util.HibernateUtil;
 import post.dao.CommentDao;
-
+@Repository
 public class CommentDaoImpl implements CommentDao {
 	private Session session;
 	private SessionFactory sessionFactory;

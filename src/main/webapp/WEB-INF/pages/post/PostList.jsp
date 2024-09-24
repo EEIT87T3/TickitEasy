@@ -16,8 +16,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>論壇文章列表</title>
-    <link rel="stylesheet" href="post/css/list.css">
-    <link rel="stylesheet" href="post/css/nav.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/mycss/list.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/mycss/nav.css">
     <style>
 
     </style>
@@ -51,7 +51,7 @@
 		    
 		    
 	
-			<form method="post" action="GetPostByTheme" >
+			<form method="get" action="findByTheme" >
 				<span>選擇主題:</span>
 				<select name="themeID" onchange="this.form.submit()">
 					<option value="" selected>請選擇主題</option>
@@ -87,14 +87,14 @@
 			</div>
 			
 			<div class="bor ">
-				<form method="post" action="GetPostByEnter"  >
+				<form method="get" action="findByEnter"  >
 			    <span>搜尋:</span>
 			    <input  type="text" name="enter" />
 			    <input  class="button" type="submit" value="確定" />
 		    </form>
 			</div>
 			<div class="bor ">
-				<a class="button" href="post/insertpost.html">新增文章</a>
+				<a class="button" href="showInsertForm">新增文章</a>
 				 
 				<div id="selectedTheme" class="selected-theme">
 			            <!-- 這裡將顯示選擇的主題 -->
@@ -103,7 +103,7 @@
 		    </div>
 		</div>
         <div class="article-list">
-		  <% List<PostBean> posts = (ArrayList<PostBean>)request.getAttribute("post");%>
+		  <% List<PostBean> posts = (ArrayList<PostBean>)request.getAttribute("posts");%>
 		  <%if(posts.size()==0){
 			 
 		  %> 
@@ -135,14 +135,14 @@
                 </div>
              
                         <div class="button-group ">
-	                        <form action="GetUpdatePost" method="post" >
+	                        <form action="getUpdatePost" method="post" >
 							<input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
 							<input class="button" type="submit" value="修改" /></form>
-	                        <form action="DeletePost" method="post" style="">
+	                        <form action="deletePost" method="post" style="">
 							<input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
 							<input class="button" type="submit" value="刪除" /></form>
 						</div>
-	                <form id="postForm_<%= post.getPostID() %>" action="GetPost" method="get" style="display: none;">
+	                <form id="postForm_<%= post.getPostID() %>" action="findById" method="get" style="display: none;">
 					    <input type="hidden" name="postID" value="<%= post.getPostID() %>" />
 					</form>
             </div>
