@@ -1,8 +1,10 @@
+<%@page import="org.springframework.beans.factory.annotation.Autowired"%>
 <%@page import="event.dao.TicketTypesDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="event.object.po.TicketTypesPO" %>
 <%@ page import="event.dao.TicketTypesDAO" %>
+
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
@@ -108,7 +110,7 @@
 				<a href="${pageContext.request.contextPath}/admin/dashboard" class="block py-2 px-4 hover:bg-gray-700">後台管理首頁</a>
 				<a href="${pageContext.request.contextPath}/admin/memberManagement" class="block py-2 px-4 hover:bg-gray-700 ">會員管理</a>
 				<a href="${pageContext.request.contextPath}/admin/memberStatistics.jsp" class="block py-2 px-4 hover:bg-gray-700">會員統計分析</a>
-				<a href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp" class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">活動管理</a>
+				<a href="${pageContext.request.contextPath}/event/TicketType" class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">活動管理</a>
 				<a href="${pageContext.request.contextPath}/order/ordersHTML/prodOrders.html" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a>
 				<a href="${pageContext.request.contextPath}/product/GetAllProducts.jsp" class="block py-2 px-4 hover:bg-gray-700">商品管理</a>
 				<a href="${pageContext.request.contextPath}/GetAllPost" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a>
@@ -122,7 +124,7 @@
                 <div class="container mx-auto px-4 py-8">
                     <div class="flex items-center justify-between mb-4">
                     	<h1 class="text-3xl font-bold mb-4 ml-4">活動票種管理</h1>
-                        <a href="<%= request.getContextPath() %>/event/CreateEvent.html" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded">新增活動</a>
+                        <a href="<%= request.getContextPath() %>/event/CreateEvent" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded">新增活動</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table id="ticketTypesTable" class="w-full bg-white">
@@ -140,22 +142,20 @@
                             </thead>
                             <tbody class="text-gray-700">
                                 <%
-	                                TicketTypesDAO ticketTypesDAO = new TicketTypesDAO();
-                                	List<TicketTypesPO> ticketTypeslist = ticketTypesDAO.readAll();
+                                	List<TicketTypesPO> ticketTypeslist = (List<TicketTypesPO>) request.getAttribute("ticketTypes");
 	                                if (ticketTypeslist != null) {
 	                                    for (TicketTypesPO ticketType : ticketTypeslist) {
                                 %>
                                 <tr>
-                                    <td class="py-3 px-4"><%= ticketType.getSession().getEvent().getEventName() %></td>
-                                    <td class="py-3 px-4"><%= ticketType.getSession().getSessionName() %></td>
+                                    <td class="py-3 px-4"><%= /*ticketType.getSession().getEvent().getEventName()*/ "（活動名稱）" %></td>
+                                    <td class="py-3 px-4"><%= /*ticketType.getSession().getSessionName()*/ "（場次名稱）" %></td>
                                     <td class="py-3 px-4"><%= ticketType.getTypeName() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getPrice() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getQuantityAvailable() == null ? "（未限制）" : ticketType.getQuantityAvailable() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getStartSaleTime() %></td>
                                     <td class="py-3 px-4 text-center"><%= ticketType.getEndSaleTime() %></td>
                                     <td class="py-3 px-4 text-center">
-                                        <form method="get" action="<%= request.getContextPath() %>/event/ReadOneTicketType" style="display:inline;">
-                                            <input type="hidden" name="ticketTypeID" value="<%= ticketType.getTicketTypeID() %>">
+                                        <form method="get" action="<%= request.getContextPath() %>/event/TicketType/<%= ticketType.getTicketTypeID() %>" style="display:inline;">
                                             <input type="submit" value="查看" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs">
                                         </form>
                                     </td>

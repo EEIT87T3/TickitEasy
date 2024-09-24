@@ -1,5 +1,5 @@
-<%@page import="event.util.TimestampUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="event.util.TimestampUtil"%>
 <%@ page import="event.object.po.TicketTypesPO" %>
 <!DOCTYPE html>
 <html>
@@ -17,11 +17,11 @@
     <h2>活動票種詳情</h2>
     <jsp:useBean id="ticketType" scope="request" class="event.object.po.TicketTypesPO" />
 	<% TimestampUtil timestampUtil = new TimestampUtil(); %>
-    <form id="updateForm" method="post" action="<%= request.getContextPath() %>/event/UpdateTicketType" enctype="multipart/form-data">
+    <form id="updateForm" method="post" action="<%= request.getContextPath() %>/event/UpdateTicketTypeMvc" enctype="multipart/form-data"><input type="hidden" name="_method" value="PUT">
         <table>
             <tr><td>票種編號：</td><td><input type="text" disabled value="${ticketType.ticketTypeID}"><input type="hidden" name="ticketTypeID" value="${ticketType.ticketTypeID}"></td></tr>
-            <tr><td>活動名稱：</td><td><input type="text" disabled value="<%= ticketType.getSession().getEvent().getEventName() %>"><input type="hidden" name="eventName" value="<%= ticketType.getSession().getEvent().getEventName() %>"></td></tr>
-            <tr><td>場次名稱：</td><td><input type="text" disabled value="<%= ticketType.getSession().getSessionName() %>"><input type="hidden" name="sessionName" value="<%= ticketType.getSession().getSessionName() %>"></td></tr>
+            <tr><td>活動名稱：</td><td><input type="text" disabled value="<%= /*ticketType.getSession().getEvent().getEventName()*/ "（活動名稱）" %>"><input type="hidden" name="eventName" value="<%= /*ticketType.getSession().getEvent().getEventName()*/ "（活動名稱）" %>"></td></tr>
+            <tr><td>場次名稱：</td><td><input type="text" disabled value="<%= /*ticketType.getSession().getSessionName()*/ "（場次名稱）" %>"><input type="hidden" name="sessionName" value="<%= /*ticketType.getSession().getSessionName()*/ "（場次名稱）" %>"></td></tr>
             <tr class="must"><td>票種名稱：</td><td><input type="text" name="typeName" value="${ticketType.typeName}" disabled></td></tr>
             <tr><td>票種說明：</td><td><textarea name="typeDesc" disabled>${ticketType.typeDesc}</textarea></td></tr>
             <tr class="must"><td>價格：</td><td><input type="number" name="price" value="${ticketType.price}" disabled></td></tr>
@@ -33,13 +33,14 @@
         <button type="button" id="update">修改</button>
         <input type="submit" id="updateSubmit" value="儲存修改" disabled>
     </form>
-    <form id="deleteForm" method="post" action="<%= request.getContextPath() %>/event/DeleteTicketType">
+    <form id="deleteForm" method="post" action="<%= request.getContextPath() %>/event/DeleteTicketTypeMvc">
+        <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" name="ticketTypeID" value="${ticketType.ticketTypeID}">
         <input type="submit" id="deleteSubmit" value="刪除此票種">
         <span id="deleteMessage"></span>
     </form>
 </div>
-<script src="../jslib/jquery-3.7.1.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
     $(document).ready(function() {
         let mustMark = '<span class="mustMark">*</span>';

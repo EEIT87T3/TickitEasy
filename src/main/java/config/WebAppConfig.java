@@ -1,9 +1,6 @@
 package config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,19 +8,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.ViewResolverComposite;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 //相當於mvc-servlet.xml的Java程式組態
@@ -59,12 +53,15 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/resources/images/");
 		registry.addResourceHandler("/mycss/**").addResourceLocations("/WEB-INF/resources/mycss/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
+		
+		// 繞行、取得在 WEB-INF 底下的靜態資源
+		registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/pages/");
 	}
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addRedirectViewController("/", "membersmain.controller");
-		registry.addViewController("/wonderland").setViewName("loginSystem");
+//		registry.addRedirectViewController("/", "membersmain.controller");
+//		registry.addViewController("/wonderland").setViewName("loginSystem");
 	}
 
 	@Bean
@@ -82,20 +79,18 @@ public class WebAppConfig implements WebMvcConfigurer {
 	
 
 	@Bean
-	public InternalResourceViewResolver irViewResolver1() {
-		InternalResourceViewResolver irv1 = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
-    		irv1.setOrder(5);  // 優先度較高
-		return irv1;
+	public InternalResourceViewResolver irViewResolver() {
+		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
+		irv.setOrder(1);
+		return irv;
 	}
-
-	@Bean
-	public InternalResourceViewResolver irViewResolver2() {
-		InternalResourceViewResolver irv1 = new InternalResourceViewResolver();
-		irv1.setSuffix(".jsp");
-		irv1.setOrder(6);  // 優先度較低
-		return irv1;
-	}
-	
+//	@Bean
+//	public InternalResourceViewResolver irViewResolverHtml() {
+//	    InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/", ".html");
+//	    irv.setOrder(2); // 在 JSP 之後
+//	    return irv;
+//	}
+	// 沒用？
 	
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
