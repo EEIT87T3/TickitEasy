@@ -3,18 +3,18 @@ package event.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import event.object.po.EventTypesPO;
 import event.object.po.EventsPO;
 import util.HibernateUtil;
 
+@Repository
 public class CreateEventDAO {
+	
+	@Autowired
 	private SessionFactory sessionFactory;
-
-	public CreateEventDAO() {
-		super();
-		this.sessionFactory = HibernateUtil.getSessionFactory();
-	}
 
 	/*
 	 * method 名稱：createEvent

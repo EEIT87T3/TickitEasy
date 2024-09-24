@@ -18,10 +18,10 @@
 		<!--在下方添加物件與資料庫表格映射文件 ex.<mapping class="tw.leonchen.model.House"/>-->
 		<mapping class="admin.bean.AdminBean"/>
 		<mapping class="member.bean.MemberBean"/>
-		<mapping class="event.object.po.EventTypesPO"/>
+		<!-- <mapping class="event.object.po.EventTypesPO"/>
 		<mapping class="event.object.po.EventsPO"/>
 		<mapping class="event.object.po.SessionsPO"/>
-		<mapping class="event.object.po.TicketTypesPO"/>
+		<mapping class="event.object.po.TicketTypesPO"/> -->
 		<mapping class="cwdfunding.bean.FundProjBean"/> 
 		<mapping class="product.bean.Products"/>
 		<mapping class="post.bean.PostBean"/>

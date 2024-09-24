@@ -5,17 +5,26 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import event.object.po.TicketTypesPO;
-import util.HibernateUtil;
+import jakarta.annotation.PostConstruct;
 
+@Repository
 public class TicketTypesDAO {
+	
+	@Autowired
 	private SessionFactory sessionFactory;
-
-	public TicketTypesDAO() {
-		super();
-		this.sessionFactory = HibernateUtil.getSessionFactory();
-	}
+	
+    @PostConstruct
+    public void init() {
+    	// 測試用
+//    	System.out.println("TicketTypesDAO init()");
+//        if (sessionFactory == null) {
+//        	System.out.println("在 init()，sessionFactory 目前為 null");
+//        }
+    }
 
 	/*
 	 * method 名稱：readAll
@@ -25,6 +34,9 @@ public class TicketTypesDAO {
 	 * Caller：webapp/event/ReadAllTicketTypes.jsp
 	*/
 	public List<TicketTypesPO> readAll() {
+		if (sessionFactory == null) {
+			System.out.println("在 readAll()，sessionFactory 目前為 null");
+		}
 		Session session = sessionFactory.getCurrentSession();
 
 		return session.createQuery("FROM TicketTypesPO", TicketTypesPO.class).list();

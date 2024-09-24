@@ -2,6 +2,10 @@ package event.service;
 
 import java.sql.Timestamp;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import event.dao.CreateEventDAO;
 import event.object.dto.createevent.EventDTO;
 import event.object.dto.createevent.SessionDTO;
@@ -10,7 +14,12 @@ import event.object.po.EventsPO;
 import event.object.po.SessionsPO;
 import event.object.po.TicketTypesPO;
 
+@Service
+@Transactional
 public class CreateEventService {
+	
+	@Autowired
+	private CreateEventDAO createEventDAO;
 
 	/*
 	 * method 名稱：validate
@@ -81,7 +90,6 @@ public class CreateEventService {
 		// 4.1 將三種 DTO 包裝為 PO
 		// 4.2 呼叫 DAO，傳入 EventsPO
 		// 4.3 回傳 boolean
-		CreateEventDAO createEventDAO = new CreateEventDAO();
 
 
 		// 4.1 將三種 DTO 包裝為 PO
