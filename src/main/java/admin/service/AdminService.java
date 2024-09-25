@@ -1,16 +1,21 @@
 package admin.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import admin.bean.AdminBean;
 import admin.dao.AdminDAO;
 import util.PasswordUtil;
 
+@Service
+@Transactional
 public class AdminService {
+    
+    @Autowired
     private AdminDAO adminDAO;
 
-    public AdminService() {
-        this.adminDAO = new AdminDAO();
-    }
-
+    // 管理員登入
     public AdminBean login(String email, String password) {
         try {
             AdminBean admin = adminDAO.getAdminByEmail(email);
@@ -23,4 +28,5 @@ public class AdminService {
         }
         return null;
     }
+
 }

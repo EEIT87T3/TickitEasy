@@ -183,7 +183,7 @@
 					href="${pageContext.request.contextPath}/admin/memberManagement"
 					class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">會員管理</a>
 					<a
-					href="${pageContext.request.contextPath}/admin/memberStatistics.jsp"
+					href="${pageContext.request.contextPath}/admin/memberStatistics"
 					class="block py-2 px-4 hover:bg-gray-700">會員統計分析</a>
 					 <a
 					href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp" class="block py-2 px-4 hover:bg-gray-700">活動管理</a> <a
@@ -256,7 +256,7 @@
 													class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs">更新狀態</button>
 												<button onclick="removeProfilePic(${member.memberID})"
 													class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">移除頭貼</button>
-												<button onclick="editMember(${member.memberID})"
+												<button onclick="edit(${member.memberID})"
 													class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded text-xs">編輯</button>
 											</div>
 										</td>
@@ -338,14 +338,14 @@
 	    }
 	}
 
-	function editMember(memberId) {
-	    window.location.href = contextPath + '/admin/memberManagement?action=edit&memberId=' + memberId;
+	function edit(memberId) {
+	    window.location.href = contextPath + '/admin/memberManagement/edit?action=edit&memberId=' + memberId;
 	}
 
 	function updateMemberStatus(memberId) {
 	    var newStatus = document.getElementById('status_' + memberId).value;
 	    $.ajax({
-	        url: contextPath + '/admin/memberManagement',
+	        url: contextPath + '/admin/memberManagement/updateStatus',
 	        type: 'POST',
 	        data: {
 	            action: 'updateStatus',
@@ -365,7 +365,7 @@
 	function removeProfilePic(memberId) {
 	    if (confirm('確定要移除此會員的頭貼嗎？')) {
 	        $.ajax({
-	            url: contextPath + '/admin/memberManagement',
+	            url: contextPath + '/admin/memberManagement/removeProfilePic',
 	            type: 'POST',
 	            data: {
 	                action: 'removeProfilePic',

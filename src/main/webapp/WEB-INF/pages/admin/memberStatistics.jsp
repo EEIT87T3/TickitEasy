@@ -171,7 +171,7 @@
 
         // 獲取統計資料並繪製圖表chart.js
         $.ajax({
-            url: '${pageContext.request.contextPath}/admin/memberStatistics',
+            url: '${pageContext.request.contextPath}/admin/memberStatistics/data',
             method: 'GET',
             dataType: 'json',
             success: function(statisticsData) {

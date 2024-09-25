@@ -35,7 +35,37 @@
         </div> --%>
     </div>
 
-<script src="${pageContext.request.contextPath}/jslib/adminLogin.js">
+    <script>
+    /*
+     * 處理登入表單的提交,使用 AJAX 發送登入請求,
+     */
+    $(document).ready(function() {
+        $("#loginForm").submit(function(event) {
+            // 阻止表單的默認提交行為
+            event.preventDefault();
+            
+            // 使用 AJAX 發送登入請求
+            $.ajax({
+                url: "${pageContext.request.contextPath}/admin/login",
+                type: "POST",
+                data: $(this).serialize(), // 序列化表單數據
+                success: function(response) {
+                    if(response === "success") {
+                        // 登入成功,重定向到管理員儀表板
+                        window.location.href = "${pageContext.request.contextPath}/admin/dashboard";
+                    } else {
+                        // 登入失敗,顯示錯誤消息
+                        alert("登入失敗：" + response);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // 添加錯誤處理
+                    console.error("AJAX 請求失敗:", status, error);
+                    alert("發生錯誤,請稍後再試");
+                }
+            });
+        });
+    });
     </script>
 </body>
 </html>
