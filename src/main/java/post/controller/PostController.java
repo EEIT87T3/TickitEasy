@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import post.bean.CommentBean;
 import post.bean.PostBean;
+import post.service.CommentService;
 import post.service.PostService;
 
 @Controller
@@ -21,6 +23,8 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService ;
+	@Autowired
+	private CommentService commentService ;
 	
 	//新增貼文
 	@GetMapping("/showInsertForm")
@@ -43,11 +47,13 @@ public class PostController {
  			@RequestParam("postID")Integer postID,
  			Model model) {
  		
- 		PostBean findpost = postService.findById(postID);
+ 		PostBean findPost = postService.findById(postID);
  	
- 		model.addAttribute("post",findpost);
+ 		model.addAttribute("post",findPost);
+	    
+ 		List<CommentBean> findComments = commentService.findById(postID);
  		
- 		
+ 		model.addAttribute("comment", findComments);
  		return "post/post";	
  		
  	}

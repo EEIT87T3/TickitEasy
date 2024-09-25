@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import member.bean.MemberBean;
 import post.bean.CommentBean;
@@ -13,8 +14,10 @@ import post.bean.CommentBean;
 import post.dao.CommentDao ;
 import post.dao.impl.CommentDaoImpl ;
 import util.PasswordUtil;
+
 @Service
 public class CommentService {
+	
 	@Autowired
 	private CommentDao commentDao;
 	//impl->dao才能抓到autowired
@@ -23,6 +26,7 @@ public class CommentService {
 	}
 	
 	//根據貼文ID取得多筆留言
+	@Transactional(readOnly = true)
 	public List<CommentBean> findById(int id){
 		return commentDao.findById(id);
 	}

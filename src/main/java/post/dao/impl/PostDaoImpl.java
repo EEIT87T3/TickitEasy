@@ -33,8 +33,8 @@ public class PostDaoImpl implements PostDao {
     
     @Override
 	public List<PostBean> findAll() {
-    	Session session = sessionFactory.getCurrentSession();
-    	Query<PostBean> query = session.createQuery("from PostBean", PostBean.class);
+    	
+    	Query<PostBean> query = getCurrentSession().createQuery("from PostBean", PostBean.class);
 		return query.list();
     }
     
