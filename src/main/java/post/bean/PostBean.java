@@ -4,6 +4,8 @@ package post.bean;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,6 +42,7 @@ public class PostBean {
 	@Column(name = "postImgUrl")
 	private String postImgUrl;
 	
+	@CreationTimestamp
 	@Column(name = "postTime")
 	private Timestamp postTime;
 	

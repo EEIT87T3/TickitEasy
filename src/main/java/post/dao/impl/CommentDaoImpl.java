@@ -1,38 +1,34 @@
 package post.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import post.bean.CommentBean;
 import post.bean.PostBean;
 import post.model.Comment;
 import util.HibernateUtil;
 import post.dao.CommentDao;
 
+@Repository
 public class CommentDaoImpl implements CommentDao {
-	private Session session;
+	
+	@Autowired
 	private SessionFactory sessionFactory;
 	
-    public CommentDaoImpl() {
-    	  this.sessionFactory = HibernateUtil.getSessionFactory();//取得SessionFactory
+    public Session getCurrentSession() {
+    	return sessionFactory.getCurrentSession();
     }
 
 
     @Override
-    public List<CommentBean> findById(int postID) {
-    	Session session = sessionFactory.getCurrentSession();
-    	String hql="FROM CommentBean WHERE postID=:postID";//跟javabean一樣
-		return session.createQuery(hql, CommentBean.class)
-				.setParameter("postID", postID)
-				.list();
+    public List<CommentBean> findById(int postID) {//                                      bean    自訂義變數                                    自訂義變數  傳入值
+    	Query<CommentBean> query = getCurrentSession().createQuery("from CommentBean where postID=:postID", CommentBean.class).setParameter("postID",postID);
+		return query.list();
     }
 //        public List<CommentBean> findAll(){
 //        	return comment;

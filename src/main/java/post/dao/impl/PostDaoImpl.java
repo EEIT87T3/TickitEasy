@@ -5,78 +5,71 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import jakarta.transaction.Transactional;
 import member.bean.MemberBean;
 import post.dao.PostDao;
 import post.bean.PostBean;
 import util.HibernateUtil;
 
+@Repository
 public class PostDaoImpl implements PostDao {
-	private Session session;
+	
+
+	@Autowired
 	private SessionFactory sessionFactory;
 	
-	
-	 //建構子
-    public PostDaoImpl() {
-        this.sessionFactory = HibernateUtil.getSessionFactory();//取得SessionFactory
+    private Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
     }
-//	public PostDaoImpl() {
-//		SessionFactory factory = HibernateUtil.getSessionFactory();
-//		session = factory.getCurrentSession();
-//	}
-    
-//	public PostDaoImpl(Session session) {
-//		this.session = session;
-//	}
-
 
 	@Override
-	public PostBean findById(int id) {
-		Session session = sessionFactory.getCurrentSession();
-		return session.get(PostBean.class, id);
+	public PostBean findById(Integer id) {
+		return getCurrentSession().get(PostBean.class, id);
 	}
 
     
     @Override
 	public List<PostBean> findAll() {
-    	Session session = sessionFactory.getCurrentSession();
-    	Query<PostBean> query = session.createQuery("from PostBean", PostBean.class);
+    	
+    	Query<PostBean> query = getCurrentSession().createQuery("from PostBean", PostBean.class);
 		return query.list();
     }
     
     
     @Override
-	public List<PostBean> findByTheme(int themeID) {
-    	Session session = sessionFactory.getCurrentSession();
+	public List<PostBean> findByTheme(Integer themeID) {
     	String hql="FROM PostBean WHERE themeID=:themeID";//跟javabean一樣
-		return session.createQuery(hql, PostBean.class)
+		return getCurrentSession().createQuery(hql, PostBean.class)
 				.setParameter("themeID", themeID)
 				.list();
     }
 
     @Override
 	public List<PostBean> findByEnter(String enter) {
-     	Session session = sessionFactory.getCurrentSession();
+     
      	String hql = "FROM PostBean p WHERE p.postTitle LIKE :enter";
      	//只抓部分欄位 回傳值不是bean 會壞掉
-		return session.createQuery(hql, PostBean.class)
+     	return getCurrentSession().createQuery(hql, PostBean.class)
 				.setParameter("enter", "%"+enter+"%")
 				.list();
     }
-
+    
+    @Transactional
     @Override
     public PostBean insert(PostBean post) {
-    	  Session session = sessionFactory.getCurrentSession();
-          session.save(post);
+    	  getCurrentSession().save(post);
           System.out.println("impl");
           return post ;
     }
-
+    
+    @Transactional
     @Override
-    public PostBean update(int postID,PostBean post) {
-    	   Session session = sessionFactory.getCurrentSession();
+    public PostBean update(Integer postID,PostBean post) {
            
-           PostBean updatepost = session.get(PostBean.class, postID);
+           PostBean updatepost = getCurrentSession().get(PostBean.class, postID);
            
            updatepost.setPostTitle(post.getPostTitle());
            updatepost.setPostContent(post.getPostContent());
@@ -87,17 +80,18 @@ public class PostDaoImpl implements PostDao {
            updatepost.setStatus(post.getStatus()); 
            updatepost.setThemeID(post.getThemeID()); 
 
-           session.merge(updatepost);
-           
+           getCurrentSession().merge(updatepost);
+           //update?
            return updatepost ;
     }
 
+    @Transactional
     @Override
-    public void delete(int id) {
-    	 Session session = sessionFactory.getCurrentSession();
-         PostBean post = session.get(PostBean.class, id);
+    public void delete(Integer id) {
+
+         PostBean post = getCurrentSession().get(PostBean.class, id);
          if (post != null) {
-        	 session.remove(post);
+        	 getCurrentSession().remove(post);
          }
     }
 

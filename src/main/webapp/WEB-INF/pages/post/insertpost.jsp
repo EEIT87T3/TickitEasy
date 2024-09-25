@@ -1,11 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="post.bean.PostBean"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="post.bean.ThemeBean"%>
+<%@page import="java.util.List"%>
+    <%! @SuppressWarnings("unchecked") %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
- <link rel="stylesheet" href="${pageContext.request.contextPath}/post/css/post.css">
- <link rel="stylesheet" href="${pageContext.request.contextPath}/post/css/nav.css">
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/mycss/post.css">
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/mycss/nav.css">
  <style>
  body {
     font-family: Arial, sans-serif;
@@ -18,7 +22,7 @@
     padding: 80px;
     width: 50%;
     margin: auto;
-    margin-top: 5%;
+    margin-top: 100px;
     margin-bottom: 15px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -26,25 +30,24 @@
  </style>
 <title>insert post</title>
    <script>
-     
+        function setCurrentTime() {
+            const now = new Date();
+            const timeString = now.toISOString(); // 使用 ISO 格式的時間
+            document.getElementById('current-time').value = timeString;
+        }
     </script>
 </head>
 
 <body>
-   <%
-        PostBean post = (PostBean) request.getAttribute("post");
-        //comment
-        if (post != null) {
-    %>
    <nav>
- 		<a href="GetPost?postID=<%=post.getPostID()%>" class="button">回貼文</a>
-  <a class="navbar-brand" href="${pageContext.request.contextPath}/admin/dashboard">後台主頁</a>
+   <a href="findAll" class="button">回列表</a>
+         <a class="navbar-brand" href="../admin/dashboard">後台主頁</a>
         <ul class="navbar-nav">
             <li class="nav-item active">
                 <a class="nav-link" href="#">購票首頁</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="GetAllTheme">文章分類</a>
+                <a class="nav-link" href="../GetAllTheme">文章分類</a>
             </li>
         </ul>
         <div class="auth-buttons">
@@ -53,17 +56,16 @@
             <a class="auth-button" href="#">登出</a>
         </div>
     </nav>
-   
 <div class="post">
-<h2>編輯貼文</h2>
-	<form method="post" action="UpdatePost" >
-	<input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
-	<input type="hidden" name="memberID" value="<%=post.getMemberID()%>"/>
+<h2>新增貼文</h2>
+	<form method="post" action="insertPost" onsubmit="setCurrentTime()">
+	
 
-	輸入貼文標題 : <input type="text" name="postTitle" value="<%= post.getPostTitle() %>"/><p>
+	<input type="hidden"  name="memberID" value="1" /><p>
+	輸入貼文標題 : <input type="text" name="postTitle" /><p>
 	選擇主題分類 :
 	<select name="themeID">
-    <option value="<%= post.getThemeID() %>" selected><%= post.getThemeName() %></option>
+    <option value="" selected>請選擇主題</option>
     <option value="1">音樂</option>
     <option value="2" >舞蹈</option>
     <option value="3">戲劇</option>
@@ -77,19 +79,17 @@
     <option value="11">其他</option>
 	</select>
 	<br><br>
-	輸入貼文內容 :<br><textarea style="resize:none;width:100%;" name="postContent" rows="10" cols="40" ><%= post.getPostContent() %></textarea>
+	輸入貼文內容 :<br><textarea style="resize:none;width:100%;" name="postContent" rows="10" cols="40"></textarea>
 	<br><br>
 	輸入圖片網址 : <input type="text" name="postImgUrl" /><p>
-	
-	狀態 : <input type="text" name="status" value="1" readonly/><p>
+	狀態 : 	
+	<select name="status">
+    <option value="1">顯示</option>
+    <option value="2" >隱藏</option>
+	</select>
 	<input type="submit" value="確定" />
 	</form>
 </div>
-   <%
-        } else {
-            out.println("未找到相關帖子");
-        }
-    %>
  <script>
    function textareaHeight(box){
        let obj =$(box);
@@ -102,4 +102,3 @@
    </script>
 </body>
 </html>
-

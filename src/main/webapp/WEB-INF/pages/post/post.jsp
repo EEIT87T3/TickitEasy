@@ -12,14 +12,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/post/css/post.css">
-    <link rel="stylesheet" href="post/css/nav.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/mycss/post.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/mycss/nav.css">
     <title>論壇</title>
 </head>
 <body>
     <!-- Your navigation and other elements go here -->
      <nav>
-    <a href="GetAllPost" class="button">回列表</a>
+    <a href="findAll" class="button">回列表</a>
     
         <a class="navbar-brand" href="${pageContext.request.contextPath}/admin/dashboard">後台主頁</a>
         <ul class="navbar-nav">
@@ -59,11 +59,12 @@
                         <input type="submit" value="檢舉"/>
                     </form>
                     
-                    <form action="GetUpdatePost" method="post">
+                    <form action="getUpdatePost" method="post">
                         <input type="hidden" name="postID" value="<%= post.getPostID() %>"/>
+              
                         <input type="submit" value="修改"/>
                     </form>
-                      <form action="DeletePost" method="post" style="">
+                      <form action="deletePost" method="post" style="">
 							<input type="hidden" name="postID" value="<%=post.getPostID()%>"/>
 							<input  type="submit" value="刪除" />
 					</form>
