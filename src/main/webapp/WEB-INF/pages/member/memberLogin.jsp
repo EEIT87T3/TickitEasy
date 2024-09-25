@@ -27,12 +27,12 @@
                 background-image: url(images/fb.svg);
             } */
 .dowebok .google {
-	background-image: url("${pageContext.request.contextPath}/images/g.png");
+	background-image: url("${pageContext.request.contextPath}/resources/images/g.png");
 }
 
 .dowebok .fb {
 	background-image:
-		url("${pageContext.request.contextPath}/images/fb.svg");
+		url("${pageContext.request.contextPath}/resources/images/fb.svg");
 }
 </style>
 </head>
@@ -90,23 +90,33 @@
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-		$(document).ready(function() {
-			$("#loginForm").submit(function(event) {
-				event.preventDefault();
-				$.ajax({
-					url : "login",
-					type : "POST",
-					data : $(this).serialize(),
-					success : function(response) {
-						if (response === "success") {
-							window.location.href = "memberDashboard.jsp";
-						} else {
-							alert(response);
-						}
-					}
-				});
-			});
-		});
+	 $(document).ready(function() {
+	        $("#loginForm").submit(function(event) {
+	            // 阻止表單的默認提交行為
+	            event.preventDefault();
+	            
+	            // 使用 AJAX 發送登入請求
+	            $.ajax({
+	                url: "${pageContext.request.contextPath}/member/login",
+	                type: "POST",
+	                data: $(this).serialize(), // 序列化表單數據
+	                success: function(response) {
+	                    if(response === "success") {
+	                        // 登入成功,重定向到管理員儀表板
+	                        window.location.href = "${pageContext.request.contextPath}/member/dashboard";
+	                    } else {
+	                        // 登入失敗,顯示錯誤消息
+	                        alert("登入失敗：" + response);
+	                    }
+	                },
+	                error: function(xhr, status, error) {
+	                    // 添加錯誤處理
+	                    console.error("AJAX 請求失敗:", status, error);
+	                    alert("發生錯誤,請稍後再試");
+	                }
+	            });
+	        });
+	    });
 	</script>
 </body>
 </html>

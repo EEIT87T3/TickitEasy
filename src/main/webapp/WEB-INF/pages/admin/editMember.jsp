@@ -11,7 +11,7 @@
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold mb-4">編輯會員</h1>
-        <form id="editMemberForm" action="${pageContext.request.contextPath}/admin/memberManagement" method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form id="editMemberForm" action="${pageContext.request.contextPath}/admin/memberManagement/update" method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="memberId" value="${member.memberID}">
 

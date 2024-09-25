@@ -50,18 +50,22 @@ public class WebAppConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
 		registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/resources/images/");
 		registry.addResourceHandler("/mycss/**").addResourceLocations("/WEB-INF/resources/mycss/");
-		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
+		registry.addResourceHandler("/jslib/**").addResourceLocations("/WEB-INF/resources/jslib/");
 		
 		// 繞行、取得在 WEB-INF 底下的靜態資源
 		registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/pages/");
+		registry.addResourceHandler("/admin/**").addResourceLocations("/WEB-INF/pages/admin/");
+        registry.addResourceHandler("/member/**").addResourceLocations("/WEB-INF/pages/member/");
 	}
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 //		registry.addRedirectViewController("/", "membersmain.controller");
 //		registry.addViewController("/wonderland").setViewName("loginSystem");
+		registry.addRedirectViewController("/", "/admin/login");
 	}
 
 	@Bean

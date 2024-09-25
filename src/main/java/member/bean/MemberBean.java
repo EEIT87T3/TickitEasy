@@ -3,10 +3,14 @@ package member.bean;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.*;
 
 
-@Entity @Table(name = "members")
+@Entity 
+@Table(name = "members")
+@Component
 public class MemberBean {
 	
 	@Id
