@@ -2,21 +2,30 @@ package product.service;
 
 import java.util.List;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import product.bean.Products;
 import product.dao.ProductDao;
 
+@Service
+@Transactional
 public class ProductService {
 	
+	@Autowired
 	private ProductDao productDao;
 	
+	/*
 	public ProductService() {
 		this.productDao = new ProductDao();
 	}
-	
+	*/
+	/*
 	public ProductService(Session session) {
 		this.productDao = new ProductDao(session);
 	}
-	
+	*/
 	// 新增商品
 	public Products addProducts(Products product) {
 		return productDao.addProducts(product);

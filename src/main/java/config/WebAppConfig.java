@@ -56,7 +56,10 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/jslib/**").addResourceLocations("/WEB-INF/resources/jslib/");
 		
 		// [cwdfunding]訪問/cwdfunding/images/靜態資源
-	    registry.addResourceHandler("/cwdfunding/images/**").addResourceLocations("/cwdfunding/images/");		
+	    registry.addResourceHandler("/cwdfunding/images/**").addResourceLocations("/cwdfunding/images/");	
+	    
+	    // [product]訪問/product/images/靜態資源 測試
+	    registry.addResourceHandler("/product/images/**").addResourceLocations("/product/images/");		
 	    
 		// 繞行、取得在 WEB-INF 底下的靜態資源
 		registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/pages/");
