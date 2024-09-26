@@ -1,5 +1,7 @@
 package config;
 
+import java.io.File;
+
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -34,15 +36,23 @@ public class WebAppInitiailizer extends AbstractAnnotationConfigDispatcherServle
 		return new Filter[] {cef};
 	}
 
-	@Override
-    protected void customizeRegistration(Dynamic registration) {
-        // 設定 multipart-config
-        registration.setMultipartConfig(new MultipartConfigElement(
-            null, // maxFileSize
-            5000000, // 5MB maxFileSize
-            10000000, // 10MB maxRequestSize
-            0 // fileSizeThreshold
-        ));
-    }
+	 @Override
+	    protected void customizeRegistration(Dynamic registration) {
+	        // 使用系統臨時目錄
+	        String tempDir = System.getProperty("java.io.tmpdir");
+	        
+	        // 創建一個專門的子目錄用於文件上傳
+	        File uploadTempDir = new File(tempDir, "tickiteasy-uploads");
+	        if (!uploadTempDir.exists()) {
+	            uploadTempDir.mkdirs();
+	        }
 
+	        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(
+	            uploadTempDir.getAbsolutePath(),
+	            5 * 1024 * 1024,  // 5MB 最大文件大小
+	            10 * 1024 * 1024, // 10MB 最大請求大小
+	            0 // 大小閾值，超過後將內容寫入磁盤
+	        );
+	        registration.setMultipartConfig(multipartConfigElement);
+	    }
 }

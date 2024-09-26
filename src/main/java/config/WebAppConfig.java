@@ -1,5 +1,6 @@
 package config;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,16 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 @EnableWebMvc
 @ComponentScan(basePackages = {"admin", "config", "cwdfunding", "event", "member", "order", "post", "product", "test", "util"})
 public class WebAppConfig implements WebMvcConfigurer {
+	
+	@Bean
+    public String uploadDirectory() {
+        String uploadDir = System.getProperty("user.home") + File.separator + "TickitEasy" + File.separator + "uploads";
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return uploadDir;
+    }
 	
 	@Bean
 	public MappingJackson2JsonView jsonView() {
@@ -54,6 +65,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/resources/images/");
 		registry.addResourceHandler("/mycss/**").addResourceLocations("/WEB-INF/resources/mycss/");
 		registry.addResourceHandler("/jslib/**").addResourceLocations("/WEB-INF/resources/jslib/");
+		registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/resources/").addResourceLocations("/");
 		
 		// [cwdfunding]訪問/cwdfunding/images/靜態資源
 	    registry.addResourceHandler("/cwdfunding/images/**").addResourceLocations("/cwdfunding/images/");	
@@ -65,6 +77,11 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/pages/");
 		registry.addResourceHandler("/admin/**").addResourceLocations("/WEB-INF/pages/admin/");
         registry.addResourceHandler("/member/**").addResourceLocations("/WEB-INF/pages/member/");
+        
+        // 添加上傳目錄的資源處理器
+        String uploadDir = uploadDirectory();
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:" + uploadDir + File.separator);
 	}
 
 	@Override
@@ -113,6 +130,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 		lci.setParamName("locale");
 		registry.addInterceptor(lci).addPathPatterns("/**");
 	}
+	
 
 	
 }
