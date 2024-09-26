@@ -4,6 +4,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,14 +22,26 @@ import product.bean.Products;
 import product.dao.ProductDao;
 import product.service.ProductService;
 
-@WebServlet("/GetProduct")
-public class GetProduct extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	ProductService productService=new ProductService();
+@RequestMapping("/GetProduct/*")
+@Transactional
+@Controller
+public class GetProduct {
+	
+	@Autowired
+	ProductService productService;
     public GetProduct() {
-        super();
     }
-
+    
+    @GetMapping("findProductsById")
+    public String findProductsById(@RequestParam(value = "productID") int productID, Model m) {
+        //List<Products> product = (List<Products>) productService.findProductById(productID);
+    	Products product = productService.findProductById(productID); 
+        System.out.println(product);
+        m.addAttribute("product", product);
+        //return "redirect:/GetProduct/GetProduct";
+        return "product/GetProduct";
+    }
+    /*
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -35,5 +56,5 @@ public class GetProduct extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
+	*/
 }

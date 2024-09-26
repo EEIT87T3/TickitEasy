@@ -3,23 +3,35 @@ package product.dao;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import product.bean.Products;
 import util.HibernateUtil;
 
-
+@Repository
+@Transactional
 public class ProductDao {
-	
+	/*
 	private Session session;
 	
 	public ProductDao(Session session) {
 		this.session = session;
 	}
-	
+	*/
+	@Autowired
 	private SessionFactory sessionFactory;
 
 	public ProductDao() {
-		this.sessionFactory = HibernateUtil.getSessionFactory();
+//		this.sessionFactory = HibernateUtil.getSessionFactory();
+//		this.sessionFactory = sessionFactory;
 	}
+	public ProductDao(SessionFactory sessionFactory) {
+//		this.sessionFactory = HibernateUtil.getSessionFactory();
+		this.sessionFactory = sessionFactory;
+	}
+	
 	// 新增商品
 	public Products addProducts(Products product){
 		Session session = sessionFactory.getCurrentSession();
@@ -29,9 +41,12 @@ public class ProductDao {
 	}
 		return null;
 	}
+	
 	// 查詢所有商品
 	public List<Products> findAll(){
 		Session session = sessionFactory.getCurrentSession();
+//		Session session = sessionFactory.openSession();
+		System.out.println(session);
 		
 		return session.createQuery("from Products ",Products.class).list();
 	}
@@ -64,6 +79,7 @@ public class ProductDao {
 	//刪除商品
 	public Products deleteProductById(int productID){
 		Session session = sessionFactory.getCurrentSession();
+//		Session session = sessionFactory.openSession();
 		Products product = session.get(Products.class, productID);
 		
 		if (product != null) {
@@ -74,6 +90,7 @@ public class ProductDao {
 
 	// productID 更新商品
 	public Products updateProductById(int productID, Products updatedProduct){
+//		Session session = sessionFactory.openSession();
 		Session session = sessionFactory.getCurrentSession();
 	    Products product = session.get(Products.class, productID);
 

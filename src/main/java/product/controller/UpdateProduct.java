@@ -5,6 +5,17 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,63 +27,83 @@ import product.bean.Products;
 import product.dao.ProductDao;
 import product.service.ProductService;
 
-@MultipartConfig
-@WebServlet("/UpdateProduct")
-public class UpdateProduct extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    ProductService productService=new ProductService();
+@RequestMapping("/UpdateProduct/*")
+@Transactional
+@Controller
+public class UpdateProduct {
+	
+	@Autowired
+    ProductService productService;
+	
+	@Autowired
+	    private ServletContext servletContext;
 
     public UpdateProduct() {
-        super();
     }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+    
+    @GetMapping("getProductForUpdate")
+    public String getProductForUpdate(@RequestParam("productID") int productID, Model model) {
+        Products product = productService.findProductById(productID);
+        model.addAttribute("product", product);
+        return "product/UpdateProduct";
     }
+    
+    @PostMapping("updateProductById")
+    public String updateProductById(
+            @RequestParam("productID") int productID,
+            @RequestParam("category") String category,
+            @RequestParam("productName") String productName,
+            @RequestParam("productDesc") String productDesc,
+            @RequestParam("price") int price,
+            @RequestParam("stock") int stock,
+            @RequestParam("status") String status,
+            @RequestParam("prodTotalReviews") int prodTotalReviews,
+            @RequestParam("prodTotalScore") int prodTotalScore,
+            @RequestParam("oldproductPic") String oldproductPic,
+            @RequestParam("newproductPic") MultipartFile filePart,
+            HttpServletRequest request, Model model) throws IllegalStateException, IOException {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String productIDStr = request.getParameter("productID");
-        int productID = Integer.parseInt(productIDStr);
-        String confirmUpdate = request.getParameter("confirmUpdate");
+        Products updatedProduct = new Products();
 
-        if (confirmUpdate == null) {
-            Products product = productService.findProductById(productID);
-			request.setAttribute("product", product);
-			request.getRequestDispatcher("/product/UpdateProduct.jsp").forward(request, response);
+        String filename = "";
+        if (!filePart.getOriginalFilename().isEmpty()) {
+            String uploadPath = servletContext.getRealPath("/") + "product/images";
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+            filename = filePart.getOriginalFilename();
+            File dest = new File(uploadPath + File.separator + filename);
+            filePart.transferTo(dest);
         } else {
-            String category = request.getParameter("category");
-			String productName = request.getParameter("productName");
-			String productDesc = request.getParameter("productDesc");
-			int price = Integer.parseInt(request.getParameter("price"));
-			int stock = Integer.parseInt(request.getParameter("stock"));
-			String status = request.getParameter("status");
-			int prodTotalReviews = Integer.parseInt(request.getParameter("prodTotalReviews"));
-			int prodTotalScore = Integer.parseInt(request.getParameter("prodTotalScore"));
-
-			// 獲取當前商品的舊圖片路徑
-			Products currentProduct = productService.findProductById(productID);
-			String productPic = currentProduct.getProductPic(); // 保持原有路徑
-
-			// 處理上傳的圖片
-			Part filePart = request.getPart("productPicFile"); // 用於文件上傳的 Part
-			if (filePart != null && filePart.getSize() > 0) {
-			    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-			    String uploadPath = getServletContext().getRealPath("/") + "product/images";
-			    File uploadDir = new File(uploadPath);
-			    if (!uploadDir.exists()) {
-			        uploadDir.mkdirs();
-			    }
-			    String filePath = uploadPath + File.separator + fileName;
-			    filePart.write(filePath);
-			    productPic = "product/images/" + fileName; // 更新圖片路徑為相對路徑
-			}
-
-			Products updatedProduct = new Products(productID, category, productName, productPic, productDesc, price, stock, status, prodTotalReviews, prodTotalScore);
-			productService.updateProductById(productID, updatedProduct);
-
-			response.sendRedirect(request.getContextPath() + "/product/GetAllProducts.jsp");
+            System.out.println(oldproductPic);
+            filename = oldproductPic;
         }
+
+        // 設定Products屬性
+        updatedProduct.setProductID(productID);
+        updatedProduct.setCategory(category);
+        updatedProduct.setProductName(productName);
+        updatedProduct.setProductPic(filename);
+        updatedProduct.setProductDesc(productDesc);
+        updatedProduct.setPrice(price);
+        updatedProduct.setStock(stock);
+        updatedProduct.setStatus(status);
+        updatedProduct.setProdTotalReviews(prodTotalReviews);
+        updatedProduct.setProdTotalScore(prodTotalScore);
+        
+        updatedProduct = productService.updateProductById(productID, updatedProduct);
+        
+        if (updatedProduct != null) {
+            // 更新成功，重定向到所有商品列表
+            return "redirect:/GetAllProducts/getAllProducts";
+        } else {
+            // 更新失敗，返回更新頁面並顯示錯誤信息
+            model.addAttribute("error", "更新失敗，請重試。");
+            return "product/UpdateProduct";
         }
+//        productService.updateProductById(productID, updatedProduct);
+//        model.addAttribute("product", updatedProduct);
+//        return "product/UpdateProduct";
+    }
 }
