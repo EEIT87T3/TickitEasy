@@ -21,6 +21,9 @@ public class AdminMemberManagementController {
 
     @Autowired
     private MemberService memberService;
+    
+    @Autowired
+    private String uploadDirectory; // 注入上傳目錄
 
     // 處理GET請求，顯示所有會員
     @GetMapping
@@ -61,20 +64,22 @@ public class AdminMemberManagementController {
             // 如果上傳了新的頭像，則處理頭像上傳
             if (profilePic != null && !profilePic.isEmpty()) {
                 String fileName = UUID.randomUUID().toString() + getFileExtension(profilePic.getOriginalFilename());
-                String uploadPath = "uploads" + File.separator + fileName;
-                profilePic.transferTo(new File(uploadPath));
-                member.setProfilePic(uploadPath);
+                File uploadPath = new File(uploadDirectory, fileName);
+                profilePic.transferTo(uploadPath);
+                
+                // 設置相對路徑，以便於在不同環境中使用
+                String relativePath = "uploads" + File.separator + fileName;
+                member.setProfilePic(relativePath);
             }
 
             memberService.updateMember(member);
-            // 重定向到會員管理頁面
             return "redirect:/admin/memberManagement";
         } catch (Exception e) {
-            // 如果發生錯誤，將錯誤訊息加到model，並返回到編輯頁面
             model.addAttribute("errorMessage", e.getMessage());
             return "admin/editMember";
         }
     }
+    
 
     // 處理POST請求，更新會員狀態
     @PostMapping("/updateStatus")
@@ -95,7 +100,6 @@ public class AdminMemberManagementController {
         return "{\"success\": true}";
     }
 
-    // 輔助方法：獲取文件擴展名
     private String getFileExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf("."));
     }
