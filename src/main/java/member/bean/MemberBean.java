@@ -1,5 +1,6 @@
 package member.bean;
 
+import java.io.File;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -50,8 +51,8 @@ public class MemberBean {
 	
 	/*使用@Transient 可簡化僅在應用程式執行期間才重要的資料管理，並有助於避免不必要的資料庫資源使用，以儲存不需要長期保存的資料。*/
 	//預設頭貼不需要存在資料庫故使用Transient
-	@Transient
-    private static final String DEFAULT_PROFILE_PIC = "/images/default-avatar.png"; // 預設頭貼路徑
+	 @Transient
+	    private static final String DEFAULT_PROFILE_PIC = "/images/default-avatar.png"; // 修改為絕對路徑
 	public MemberBean() {
 	
 	}
@@ -151,17 +152,31 @@ public class MemberBean {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	// 會員頭貼
-	public String getProfilePic() {
-        return (profilePic != null && !profilePic.isEmpty()) ? profilePic : DEFAULT_PROFILE_PIC;
+	 // 修改會員頭貼的獲取方法
+    public String getProfilePic() {
+        if (profilePic != null && !profilePic.isEmpty()) {
+            // 確保返回的是以 /uploads/ 開頭的路徑
+            if (profilePic.startsWith("uploads/") || profilePic.startsWith("/uploads/")) {
+                return "/" + profilePic.replaceAll("^/+", "");
+            } else {
+                return "/uploads/" + new File(profilePic).getName();
+            }
+        }
+        return DEFAULT_PROFILE_PIC;
     }
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
+
     // 是否有自訂頭貼
     public boolean hasCustomProfilePic() {
         return profilePic != null && !profilePic.isEmpty();
+    }
+
+    // 獲取原始的 profilePic 值（用於數據庫操作）
+    public String getRawProfilePic() {
+        return this.profilePic;
     }
 	public String getVerificationToken() {
         return verificationToken;
