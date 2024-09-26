@@ -46,7 +46,7 @@
 				<div class="bg-white rounded-lg shadow-md p-6">
 					<h2 class="text-xl font-semibold mb-4">活動管理</h2>
 					<p class="mb-4">創建和管理活動，設置票種和場次。</p>
-					<br> <a href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp"
+					<br> <a href="${pageContext.request.contextPath}/event/TicketType"
 						class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
 						進入活動管理 </a>
 				</div>
@@ -54,7 +54,7 @@
 				<div class="bg-white rounded-lg shadow-md p-6">
 					<h2 class="text-xl font-semibold mb-4">訂單管理</h2>
 					<p class="mb-4">查看和處理訂單，管理退款請求。</p>
-					<br> <a href="${pageContext.request.contextPath}/order/ordersHTML/prodOrders.html"
+					<br> <a href="${pageContext.request.contextPath}/order"
 						class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
 						進入訂單管理 </a>
 				</div>
@@ -62,7 +62,7 @@
 				<div class="bg-white rounded-lg shadow-md p-6">
 					<h2 class="text-xl font-semibold mb-4">周邊商品管理</h2>
 					<p class="mb-4">上架和管理商品，設置商品種類。</p>
-					<a href="${pageContext.request.contextPath}/product/GetAllProducts.jsp"
+					<a href="${pageContext.request.contextPath}/GetAllProducts/getAllProducts"
 						class="bg-red-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
 						進入商品管理 </a>
 				</div>
@@ -70,7 +70,7 @@
 				<div class="bg-white rounded-lg shadow-md p-6">
 					<h2 class="text-xl font-semibold mb-4">討論區管理</h2>
 					<p class="mb-4">管理討論區文章和回覆。</p>
-					<a href="${pageContext.request.contextPath}/GetAllPost"
+					<a href="${pageContext.request.contextPath}/post/findAll"
 						class="bg-pink-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
 						進入討論區管理 </a>
 				</div>

@@ -109,18 +109,14 @@
                 <h2 class="text-2xl font-semibold">管理選單</h2>
             </div>
             <nav class="mt-4">
-               <a href="${pageContext.request.contextPath}/admin/dashboard"
-					class="block py-2 px-4 hover:bg-gray-700">後台管理首頁</a> <a
-					href="${pageContext.request.contextPath}/admin/memberManagement"
-					class="block py-2 px-4 hover:bg-gray-700">會員管理</a>
-					<a
-					href="${pageContext.request.contextPath}/admin/memberStatistics.jsp"
-					class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">會員統計分析</a> <a
-					href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp" class="block py-2 px-4 hover:bg-gray-700">活動管理</a> <a
-					href="${pageContext.request.contextPath}/order/ordersHTML/prodOrders.html" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a> <a
-					href="${pageContext.request.contextPath}/product/GetAllProducts.jsp" class="block py-2 px-4 hover:bg-gray-700">商品管理</a> <a
-					href="${pageContext.request.contextPath}/GetAllPost" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a> <a
-					href="${pageContext.request.contextPath}/FundProjs" class="block py-2 px-4 hover:bg-gray-700">募資活動管理</a>
+                <a href="${pageContext.request.contextPath}/admin/dashboard" class="block py-2 px-4 hover:bg-gray-700">後台管理首頁</a>
+                <a href="${pageContext.request.contextPath}/admin/memberManagement" class="block py-2 px-4 hover:bg-gray-700">會員管理</a>
+                <a href="${pageContext.request.contextPath}/admin/memberStatistics" class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">會員統計分析</a>
+                <a href="${pageContext.request.contextPath}/event/TicketType" class="block py-2 px-4 hover:bg-gray-700">活動管理</a>
+                <a href="${pageContext.request.contextPath}/order" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a>
+                <a href="${pageContext.request.contextPath}/GetAllProducts/getAllProducts" class="block py-2 px-4 hover:bg-gray-700">商品管理</a>
+                <a href="${pageContext.request.contextPath}/post/findAll" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a>
+                <a href="${pageContext.request.contextPath}/FundProjs" class="block py-2 px-4 hover:bg-gray-700">募資活動管理</a>
             </nav>
         </div>
 
