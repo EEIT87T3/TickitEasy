@@ -9,14 +9,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商品管理 - TickitEasy 管理系統</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- 新增試試看 -->
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script> -->
+	   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         .sidebar {
 	top: 4rem; /* 64px，使它與頂部導航欄高度相同 */
@@ -133,19 +138,14 @@
                 <h2 class="text-2xl font-semibold">管理選單</h2>
             </div>
             <nav class="mt-4">
-               <a href="${pageContext.request.contextPath}/admin/dashboard"
-					class="block py-2 px-4 hover:bg-gray-700">後台管理首頁</a> <a
-					href="${pageContext.request.contextPath}/admin/memberManagement"
-					class="block py-2 px-4 hover:bg-gray-700 ">會員管理</a>
-					<a
-					href="${pageContext.request.contextPath}/admin/memberStatistics.jsp"
-					class="block py-2 px-4 hover:bg-gray-700">會員統計分析</a>
-					 <a
-					href="${pageContext.request.contextPath}/event/ReadAllTicketTypes.jsp" class="block py-2 px-4 hover:bg-gray-700 ">活動管理</a> <a
-					href="${pageContext.request.contextPath}/order/ordersHTML/prodOrders.html" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a> <a
-					href="${pageContext.request.contextPath}/product/GetAllProducts.jsp" class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">商品管理</a> <a
-					href="${pageContext.request.contextPath}/GetAllPost" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a> <a
-					href="${pageContext.request.contextPath}/FundProjs" class="block py-2 px-4 hover:bg-gray-700">募資活動管理</a>
+                <a href="${pageContext.request.contextPath}/admin/dashboard" class="block py-2 px-4 hover:bg-gray-700">後台管理首頁</a>
+                <a href="${pageContext.request.contextPath}/admin/memberManagement" class="block py-2 px-4 hover:bg-gray-700 ">會員管理</a>
+                <a href="${pageContext.request.contextPath}/admin/memberStatistics" class="block py-2 px-4 hover:bg-gray-700">會員統計分析</a>
+                <a href="${pageContext.request.contextPath}/event/TicketType" class="block py-2 px-4 hover:bg-gray-700">活動管理</a>
+                <a href="${pageContext.request.contextPath}/order" class="block py-2 px-4 hover:bg-gray-700">訂單管理</a>
+                <a href="${pageContext.request.contextPath}/GetAllProducts/getAllProducts" class="block py-2 px-4 hover:bg-gray-700 bg-gray-900">商品管理</a>
+                <a href="${pageContext.request.contextPath}/post/findAll" class="block py-2 px-4 hover:bg-gray-700">討論區管理</a>
+                <a href="${pageContext.request.contextPath}/FundProjs" class="block py-2 px-4 hover:bg-gray-700">募資活動管理</a>
             </nav>
         </div>
 
@@ -242,12 +242,9 @@
                                     }
                                 
                                 %>
-                                <tr>
-                                 <!--   <td colspan="11" class="py-3 px-4 text-center">目前沒有商品資料</td>-->  
-                                </tr>
-                                <%
-                                
-                                %>
+                              <!--   <tr>
+                                   <td colspan="11" class="py-3 px-4 text-center">目前沒有商品資料</td>  
+                                </tr>--> 
                             </tbody>
                         </table>
                     </div>
@@ -268,29 +265,48 @@
             "ordering": true, // 确保排序功能开启
             "searching": true  // 确保搜索功能开启
         });
+        
  
 
+     // 側邊欄切換功能
+		$('#sidebarToggle').click(
+				function() {
+					$('.sidebar').toggleClass(
+							'sidebar-closed');
+					$('.content-with-sidebar').toggleClass(
+							'content-full');
+					$(this).toggleClass('button-shifted');
+				});
 
-        $('#sidebarToggle').click(function() {
-            $('.sidebar').toggleClass('sidebar-closed');
-            $('.content-with-sidebar').toggleClass('content-full');
-            $(this).toggleClass('button-shifted');
+		// 初始化側邊欄位置
+		function initSidebar() {
+			if (window.innerWidth >= 1024) {
+				$('.sidebar').removeClass('sidebar-closed');
+				$('.content-with-sidebar').removeClass(
+						'content-full');
+				$('#sidebarToggle').removeClass(
+						'button-shifted');
+			} else {
+				$('.sidebar').addClass('sidebar-closed');
+				$('.content-with-sidebar').addClass(
+						'content-full');
+				$('#sidebarToggle').addClass(
+						'button-shifted');
+			}
+		}
+
+		// 頁面加載時初始化側邊欄
+		initSidebar();
+		$(window).resize(initSidebar);
+		
+		//[按鈕]新增表單顯示與隱藏
+		$('.btn-add').click(function() {
+			if ($('.form-add').hasClass('hidden')){
+            	$('.form-add').removeClass('hidden');
+            	//$('body').toggleClass('overflow-hidden');
+            	$('.container').css({'filter':'opacity(20%)'})
+			}
         });
-
-        function initSidebar() {
-            if (window.innerWidth >= 1024) {
-                $('.sidebar').removeClass('sidebar-closed');
-                $('.content-with-sidebar').removeClass('content-full');
-                $('#sidebarToggle').removeClass('button-shifted');
-            } else {
-                $('.sidebar').addClass('sidebar-closed');
-                $('.content-with-sidebar').addClass('content-full');
-                $('#sidebarToggle').addClass('button-shifted');
-            }
-        }
-
-        initSidebar();
-        $(window).resize(initSidebar);
     });
     </script>
 </body>
